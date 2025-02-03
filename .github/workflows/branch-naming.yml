@@ -10,15 +10,20 @@ on:
 
 jobs:
   validate-branch-name:
-    runs-on: ubuntu-latest
-    runs-on: windows-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Get branch name
         id: branch_name
+        shell: bash
         run: echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
 
       - name: Validate branch naming convention
+        shell: bash
         run: |
           if [[ ! "$BRANCH_NAME" =~ ^(fix|feat|test)/[0-9]+/[^_]+$ ]]; then
             echo "❌ Invalid branch name: '$BRANCH_NAME'"
@@ -30,4 +35,5 @@ jobs:
           fi
 
       - name: Success Message
+        shell: bash
         run: echo "✅ Branch name '$BRANCH_NAME' is valid!"
