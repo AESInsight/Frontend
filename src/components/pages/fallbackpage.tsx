@@ -7,7 +7,7 @@ const DefaultComponent: React.FC = () => {
       <div className="bg-white shadow-lg rounded-lg p-8 max-w-md text-center">
         <h1 className="text-4xl font-bold mb-4">ASEInsight</h1>
         <p className="text-lg mb-4">We are experiencing some difficulties </p>
-        <p className="mb-4">Read more below...</p>
+        <p className="mb-4">Read more below....</p>
         <div className="flex space-x-4 justify-center">
           <div className="flex flex-col w-50 w-full items-center bg-blue-100 p-4 rounded-lg shadow-md">
             <FaEye size={40} className="text-blue-600" />
