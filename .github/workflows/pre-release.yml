@@ -18,14 +18,29 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all tags for versioning
 
-      - name: Set pre-release version
+      - name: Get latest tag
+        id: get_latest_tag
+        shell: bash
+        run: |
+          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
+          echo "Latest tag: $LATEST_TAG"
+
+      - name: Increment patch version for pre-release
         id: set_version
         shell: bash
         run: |
-          VERSION="0.0.1-beta-$(date +'%Y%m%d-%H%M%S')"
+          TAG_WITHOUT_V=${LATEST_TAG#v}
+          MAJOR=$(echo $TAG_WITHOUT_V | cut -d. -f1)
+          MINOR=$(echo $TAG_WITHOUT_V | cut -d. -f2)
+          PATCH=$(echo $TAG_WITHOUT_V | cut -d. -f3)
+          NEW_PATCH=$((PATCH + 1))
+          VERSION="v$MAJOR.$MINOR.$NEW_PATCH-$(date +'%Y%m%d')"
           echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "Pre-release version set to $VERSION"
+          echo "New pre-release version: $VERSION"
 
       - name: Create pre-release tag
         uses: softprops/action-gh-release@v1
