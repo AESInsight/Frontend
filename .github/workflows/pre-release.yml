@@ -7,6 +7,9 @@ on:
     branches:
       - develop
 
+permissions:
+  contents: write # Required for creating releases
+
 jobs:
   pre-release:
     if: github.event.pull_request.merged == true
@@ -15,37 +18,25 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # Ensure we have all tags
 
-      - name: Get latest tag
-        id: get_latest_tag
-        shell: bash
-        run: |
-          LATEST_TAG=$(git tag --sort=-v:refname | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1 || echo "0.0.0")
-          echo "Latest tag found: $LATEST_TAG"
-          echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
-
-      - name: Increment patch version
+      - name: Set pre-release version
         id: set_version
         shell: bash
         run: |
-          VERSION_PARTS=(${LATEST_TAG//./ })
-          MAJOR=${VERSION_PARTS[0]}
-          MINOR=${VERSION_PARTS[1]}
-          PATCH=$((VERSION_PARTS[2] + 1))
-          NEW_VERSION="$MAJOR.$MINOR.$PATCH-beta"
-          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
-          echo "New pre-release version: $NEW_VERSION"
+          VERSION="0.0.1-beta-$(date +'%Y%m%d-%H%M%S')"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "Pre-release version set to $VERSION"
 
       - name: Create pre-release tag
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ env.NEW_VERSION }}
-          name: "Pre-release ${{ env.NEW_VERSION }}"
+          tag_name: ${{ env.VERSION }}
+          name: "Pre-release ${{ env.VERSION }}"
           draft: false
           prerelease: true
           generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Success Message
-        run: echo "✅ Pre-release ${{ env.NEW_VERSION }} created successfully!"
+        run: echo "✅ Pre-release ${{ env.VERSION }} created successfully!"
