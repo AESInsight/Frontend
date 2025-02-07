@@ -2,7 +2,8 @@ name: Branch Naming Convention
 
 on:
   push:
-    branches-ignore:
+    branches:
+      - main
       - develop
   pull_request:
     branches-ignore:
@@ -18,6 +19,17 @@ jobs:
         shell: bash
         run: echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
 
+      - name: Check if merge from develop into main
+        shell: bash
+        run: |
+          if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
+            MERGE_COMMIT_MSG=$(git log -1 --pretty=%B)
+            if [[ "$MERGE_COMMIT_MSG" == *"Merge branch 'develop'"* ]]; then
+              echo "Skipping branch name validation for develop merge into main."
+              exit 0
+            fi
+          fi
+
       - name: Validate branch naming convention
         shell: bash
         run: |
@@ -29,7 +41,3 @@ jobs:
             echo "🔹 Branch name must use '-' instead of '_'"
             exit 1
           fi
-
-      - name: Success Message
-        shell: bash
-        run: echo "✅ Branch name '$BRANCH_NAME' is valid!"
