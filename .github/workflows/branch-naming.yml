@@ -2,21 +2,46 @@ name: Branch Naming Convention
 
 on:
   push:
-    branches-ignore:
+    branches:
+      - main
       - develop
   pull_request:
-    branches-ignore:
+    branches:
       - develop
+      - main
 
 jobs:
   validate-branch-name:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Get branch name
         id: branch_name
         shell: bash
-        run: echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+        run: |
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            echo "BRANCH_NAME=${{ github.head_ref }}" >> $GITHUB_ENV
+          else
+            echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+          fi
+
+      - name: Debug branch name
+        shell: bash
+        run: "echo 'Branch name detected: $BRANCH_NAME'"
+
+      - name: Check if merge from develop into main
+        shell: bash
+        run: |
+          if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
+            LAST_COMMIT_MSG=$(git log -1 --pretty=%B)
+            if [[ "$LAST_COMMIT_MSG" == *"Merge branch 'develop'"* ]]; then
+              echo "Skipping branch name validation for develop merge into main."
+              exit 0
+            fi
+          fi
 
       - name: Validate branch naming convention
         shell: bash
