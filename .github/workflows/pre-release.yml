@@ -1,0 +1,51 @@
+name: Pre-release
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - develop
+
+jobs:
+  pre-release:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Ensure we have all tags
+
+      - name: Get latest tag
+        id: get_latest_tag
+        shell: bash
+        run: |
+          LATEST_TAG=$(git tag --sort=-v:refname | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1 || echo "0.0.0")
+          echo "Latest tag found: $LATEST_TAG"
+          echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
+
+      - name: Increment patch version
+        id: set_version
+        shell: bash
+        run: |
+          VERSION_PARTS=(${LATEST_TAG//./ })
+          MAJOR=${VERSION_PARTS[0]}
+          MINOR=${VERSION_PARTS[1]}
+          PATCH=$((VERSION_PARTS[2] + 1))
+          NEW_VERSION="$MAJOR.$MINOR.$PATCH-beta"
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+          echo "New pre-release version: $NEW_VERSION"
+
+      - name: Create pre-release tag
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.NEW_VERSION }}
+          name: "Pre-release ${{ env.NEW_VERSION }}"
+          draft: false
+          prerelease: true
+          generate_release_notes: true
+
+      - name: Success Message
+        run: echo "✅ Pre-release ${{ env.NEW_VERSION }} created successfully!"
