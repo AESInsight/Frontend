@@ -6,14 +6,20 @@ on:
       - main
       - develop
   pull_request:
-    branches-ignore:
+    branches:
       - develop
+      - main
 
 jobs:
   validate-branch-name:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
       - name: Get branch name
         id: branch_name
         shell: bash
@@ -23,8 +29,8 @@ jobs:
         shell: bash
         run: |
           if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
-            MERGE_COMMIT_MSG=$(git log -1 --pretty=%B)
-            if [[ "$MERGE_COMMIT_MSG" == *"Merge branch 'develop'"* ]]; then
+            LAST_COMMIT_MSG=$(git log -1 --pretty=%B)
+            if [[ "$LAST_COMMIT_MSG" == *"Merge branch 'develop'"* ]]; then
               echo "Skipping branch name validation for develop merge into main."
               exit 0
             fi
@@ -41,3 +47,7 @@ jobs:
             echo "🔹 Branch name must use '-' instead of '_'"
             exit 1
           fi
+
+      - name: Success Message
+        shell: bash
+        run: echo "✅ Branch name '$BRANCH_NAME' is valid!"
