@@ -17,13 +17,20 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 2
 
       - name: Get branch name
         id: branch_name
         shell: bash
-        run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | sed 's#refs/heads/##')" >> $GITHUB_ENV
+        run: |
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            echo "BRANCH_NAME=${{ github.head_ref }}" >> $GITHUB_ENV
+          else
+            echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+          fi
+
+      - name: Debug branch name
+        shell: bash
+        run: "echo 'Branch name detected: $BRANCH_NAME'"
 
       - name: Check if merge from develop into main
         shell: bash
@@ -39,7 +46,7 @@ jobs:
       - name: Validate branch naming convention
         shell: bash
         run: |
-          if [[ ! "$BRANCH_NAME" =~ ^(fix|feat|test|pull)/[0-9]+/[^_]+$ ]]; then
+          if [[ ! "$BRANCH_NAME" =~ ^(fix|feat|test)/[0-9]+/[^_]+$ ]]; then
             echo "❌ Invalid branch name: '$BRANCH_NAME'"
             echo "✅ Expected format: '<scope>/<issue number>/<branch-name>'"
             echo "🔹 Scope must be 'fix', 'feat', or 'test'"
