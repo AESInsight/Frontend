@@ -3,10 +3,10 @@ name: Branch Naming Convention
 on:
   push:
     branches-ignore:
-      - main
+      - develop
   pull_request:
     branches-ignore:
-      - main
+      - develop
 
 jobs:
   validate-branch-name:
