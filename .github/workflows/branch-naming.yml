@@ -39,7 +39,7 @@ jobs:
       - name: Validate branch naming convention
         shell: bash
         run: |
-          if [[ ! "$BRANCH_NAME" =~ ^(fix|feat|test)/[0-9]+/[^_]+$ ]]; then
+          if [[ ! "$BRANCH_NAME" =~ ^(fix|feat|test|pull)/[0-9]+/[^_]+$ ]]; then
             echo "❌ Invalid branch name: '$BRANCH_NAME'"
             echo "✅ Expected format: '<scope>/<issue number>/<branch-name>'"
             echo "🔹 Scope must be 'fix', 'feat', or 'test'"
