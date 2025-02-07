@@ -1,0 +1,42 @@
+name: Release
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
+
+permissions:
+  contents: write # Required for creating releases
+
+jobs:
+  release:
+    if: github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'develop'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set release version
+        id: set_version
+        shell: bash
+        run: |
+          VERSION="v$(date +'%Y.%m.%d')"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "Release version set to $VERSION"
+
+      - name: Create official release tag
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.VERSION }}
+          name: "Release ${{ env.VERSION }}"
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Success Message
+        run: echo "✅ Official release ${{ env.VERSION }} created successfully!"

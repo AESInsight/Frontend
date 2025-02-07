@@ -1,0 +1,42 @@
+name: Pre-release
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - develop
+
+permissions:
+  contents: write # Required for creating releases
+
+jobs:
+  pre-release:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set pre-release version
+        id: set_version
+        shell: bash
+        run: |
+          VERSION="0.0.1-beta-$(date +'%Y%m%d-%H%M%S')"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "Pre-release version set to $VERSION"
+
+      - name: Create pre-release tag
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.VERSION }}
+          name: "Pre-release ${{ env.VERSION }}"
+          draft: false
+          prerelease: true
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Success Message
+        run: echo "✅ Pre-release ${{ env.VERSION }} created successfully!"
