@@ -1,10 +1,6 @@
 name: Branch Naming Convention
 
 on:
-  push:
-    branches:
-      - main
-      - develop
   pull_request:
     branches:
       - develop
@@ -15,35 +11,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Get branch name
+      - name: Get source branch name
         id: branch_name
         shell: bash
-        run: |
-          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            echo "BRANCH_NAME=${{ github.head_ref }}" >> $GITHUB_ENV
-          else
-            echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
-          fi
+        run: echo "BRANCH_NAME=${{ github.head_ref }}" >> $GITHUB_ENV
 
       - name: Debug branch name
         shell: bash
         run: "echo 'Branch name detected: $BRANCH_NAME'"
 
-      - name: Check if merge from develop into main
+      - name: Check if merging develop into main
+        id: skip_check
         shell: bash
         run: |
-          if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
-            LAST_COMMIT_MSG=$(git log -1 --pretty=%B)
-            if [[ "$LAST_COMMIT_MSG" == *"Merge branch 'develop'"* ]]; then
-              echo "Skipping branch name validation for develop merge into main."
-              exit 0
-            fi
+          if [[ "${{ github.base_ref }}" == "main" && "${{ github.head_ref }}" == "develop" ]]; then
+            echo "Skipping branch name validation for develop merge into main."
+            echo "SKIP=true" >> $GITHUB_ENV
           fi
 
       - name: Validate branch naming convention
+        if: env.SKIP != 'true'
         shell: bash
         run: |
           if [[ ! "$BRANCH_NAME" =~ ^(fix|feat|test)/[0-9]+/[^_]+$ ]]; then
@@ -56,5 +43,6 @@ jobs:
           fi
 
       - name: Success Message
+        if: env.SKIP != 'true'
         shell: bash
         run: echo "✅ Branch name '$BRANCH_NAME' is valid!"
