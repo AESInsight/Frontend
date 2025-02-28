@@ -1,0 +1,39 @@
+name: Deploy React App via SFTP
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Verify Bun Installation
+        run: |
+          bun -v  # This should print Bun's version
+          which bun  # Verify that Bun is available
+
+      - name: Install dependencies and build
+        run: |
+          bun install
+          bun run build
+
+      - name: Deploy via SFTP
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SFTP_HOST }}
+          username: ${{ secrets.SFTP_USERNAME }}
+          password: ${{ secrets.SFTP_PASSWORD }}
+          port: 22
+          source: "dist/*"
+          target: "/"
