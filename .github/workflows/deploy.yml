@@ -3,7 +3,7 @@ name: Deploy React App via SFTP
 on:
   push:
     branches:
-      - main # Change if using a different branch
+      - main # Adjust if using a different branch
 
 jobs:
   deploy:
@@ -17,6 +17,7 @@ jobs:
         run: |
           curl -fsSL https://bun.sh/install | bash
           echo 'export PATH="$HOME/.bun/bin:$PATH"' >> $GITHUB_ENV
+          source $GITHUB_ENV
 
       - name: Install dependencies and build
         run: |
