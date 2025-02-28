@@ -3,7 +3,7 @@ name: Deploy React App via SFTP
 on:
   push:
     branches:
-      - main # Change if using another branch
+      - main # Adjust if using a different branch
 
 jobs:
   deploy:
