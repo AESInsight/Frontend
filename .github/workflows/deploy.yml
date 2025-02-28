@@ -3,7 +3,7 @@ name: Deploy React App via SFTP
 on:
   push:
     branches:
-      - main # Adjust if using a different branch
+      - main
 
 jobs:
   deploy:
@@ -14,16 +14,17 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Verify Bun Installation
         run: |
-          curl -fsSL https://bun.sh/install | bash
-          echo 'export PATH="$HOME/.bun/bin:$PATH"' >> $GITHUB_ENV
-          source $GITHUB_ENV
-          bun -v  # Verify Bun is installed
+          bun -v  # This should print Bun's version
+          which bun  # Verify that Bun is available
 
       - name: Install dependencies and build
         run: |
-          echo "PATH: $PATH"  # Debug: Check if Bun's path is included
-          which bun  # Debug: Check if Bun is found
           bun install
           bun run build
 
