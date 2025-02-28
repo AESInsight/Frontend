@@ -36,4 +36,4 @@ jobs:
           password: ${{ secrets.SFTP_PASSWORD }}
           port: 22
           source: "dist/*"
-          target: "/public_html/"
+          target: "webroots/"
