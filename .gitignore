@@ -1,0 +1,35 @@
+### Node modules ###
+node_modules/
+
+### Dependency directories ###
+bun.lockb
+
+### Build directories ###
+dist/
+build/
+
+### Environment files ###
+.env
+.env.local
+.env.*.local
+
+### Editor files ###
+.vscode/
+.idea/
+
+### Logs ###
+bun-debug.log*
+
+### Mac system files ###
+.DS_Store
+
+### Lint and formatting ###
+.eslintcache
+.prettier*
+
+### Tailwind and PostCSS ###
+.postcssrc*
+.tailwind*
+
+### TypeScript ###
+*.tsbuildinfo
