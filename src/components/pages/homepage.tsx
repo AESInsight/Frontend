@@ -13,8 +13,8 @@ const Homepage: React.FC = () => {
 					<p>Your trusted partner in data security and insights.</p>
 				</main>
 			</div>
-			<footer className="homepage-footer p-4 bg-gray-800 text-white text-center">
-				<p>2023 AES-Insight. All rights reserved.</p>
+			<footer className="homepage-footer p-2 bg-gray-800 text-white text-center text-xs">
+				<p>2025 AES-Insight. All rights reserved.</p>
 			</footer>
 		</div>
 	);
