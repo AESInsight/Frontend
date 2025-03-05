@@ -8,7 +8,7 @@ import {
 
 const Header: React.FC = () => {
 	return (
-		<header className="bg-gradient-to-r from-sky-800 to-cyan-500 flex items-center justify-between h-16 w-auto border-b-2 border-black">
+		<header className="bg-gradient-to-r from-sky-800 to-cyan-600 flex items-center justify-between h-16 w-auto border-b-2 border-black">
 			{/* Logo */}
 			<img
 				src="../../public/aesinsight.png"
