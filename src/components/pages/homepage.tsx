@@ -4,7 +4,7 @@ import Sidebar from "../ui/sidebar";
 
 const Homepage: React.FC = () => {
 	return (
-		<div className="homepage min-h-screen flex flex-col">
+		<div className="homepage h-screen w-screen flex flex-col">
 			<Header />
 			<div className="homepage-content flex flex-1">
 				<Sidebar />
