@@ -9,7 +9,7 @@ const Sidebar: React.FC = () => {
 
 	return (
 		<div
-			className={`bg-sky-500 min-h-screen ${isCollapsed ? "w-16" : "w-64"} p-4 transition-width duration-300`}
+			className={`bg-sky-500 h-auto ${isCollapsed ? "w-16" : "w-64"} p-4 transition-width duration-300`}
 		>
 			<button onClick={toggleSidebar} className="text-white mb-4">
 				{isCollapsed ? "Expand" : "Collapse"}

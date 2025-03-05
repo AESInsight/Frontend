@@ -4,7 +4,7 @@ import Sidebar from "../ui/sidebar";
 
 const Homepage: React.FC = () => {
 	return (
-		<div className="homepage min-h-screen flex flex-col">
+		<div className="homepage h-screen w-screen flex flex-col">
 			<Header />
 			<div className="homepage-content flex flex-1">
 				<Sidebar />
@@ -13,7 +13,7 @@ const Homepage: React.FC = () => {
 					<p>Your trusted partner in data security and insights.</p>
 				</main>
 			</div>
-			<footer className="homepage-footer p-4 bg-gray-800 text-white text-center">
+			<footer className="homepage-footer p-2 bg-gray-800 text-white text-center text-xs">
 				<p>2023 AES-Insight. All rights reserved.</p>
 			</footer>
 		</div>
