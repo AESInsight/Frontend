@@ -14,7 +14,7 @@ const Homepage: React.FC = () => {
 				</main>
 			</div>
 			<footer className="homepage-footer p-2 bg-gray-800 text-white text-center text-xs">
-				<p>2023 AES-Insight. All rights reserved.</p>
+				<p>2025 AES-Insight. All rights reserved.</p>
 			</footer>
 		</div>
 	);
