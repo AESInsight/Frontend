@@ -13,9 +13,9 @@ const Sidebar: React.FC = () => {
 
 	return (
 		<div
-			className={`fixed top-16 left-0 h-[calc(100vh-4rem)] bg-white/10 backdrop-blur-lg shadow-lg ${
+			className={`fixed top-16 left-0 h-[calc(100vh-4rem)] bg-white/10 backdrop-blur-lg shadow-lg transition-all duration-200 flex flex-col p-4 items-center ${
 				isCollapsed ? "w-16" : "w-64"
-			} transition-all duration-200 flex flex-col p-4 items-center`}
+			}`}
 			onMouseEnter={() => setIsCollapsed(false)}
 			onMouseLeave={() => setIsCollapsed(true)}
 		>
@@ -24,33 +24,34 @@ const Sidebar: React.FC = () => {
 				<FontAwesomeIcon icon={faBars} />
 			</button>
 
-			{/* Navigation Items */}
-			<ul className="space-y-6 w-full">
-				<li
-					className={`text-black flex ${isCollapsed ? "justify-center" : "items-center space-x-4"} cursor-pointer hover:text-gray-500 transition-all`}
-				>
-					<FontAwesomeIcon icon={faHome} className="text-lg" />
-					{!isCollapsed && <span>Home</span>}
-				</li>
-				<li
-					className={`text-black flex ${isCollapsed ? "justify-center" : "items-center space-x-4"} cursor-pointer hover:text-gray-500 transition-all`}
-				>
-					<FontAwesomeIcon icon={faInfoCircle} className="text-lg" />
-					{!isCollapsed && <span>About</span>}
-				</li>
-				<li
-					className={`text-black flex ${isCollapsed ? "justify-center" : "items-center space-x-4"} cursor-pointer hover:text-gray-500 transition-all`}
-				>
-					<FontAwesomeIcon icon={faBriefcase} className="text-lg" />
-					{!isCollapsed && <span>Services</span>}
-				</li>
-				<li
-					className={`text-black flex ${isCollapsed ? "justify-center" : "items-center space-x-4"} cursor-pointer hover:text-gray-500 transition-all`}
-				>
-					<FontAwesomeIcon icon={faEnvelope} className="text-lg" />
-					{!isCollapsed && <span>Contact</span>}
-				</li>
-			</ul>
+			{/* Navigation Buttons */}
+			<div className="space-y-6 w-full">
+				{[
+					{ icon: faHome, label: "Home" },
+					{ icon: faInfoCircle, label: "About" },
+					{ icon: faBriefcase, label: "Services" },
+					{ icon: faEnvelope, label: "Contact" },
+				].map(({ icon, label }) => (
+					<button
+						key={label}
+						className={`text-black flex items-center w-full px-4 py-2 rounded-lg transition-all duration-200 hover:text-gray-500 hover:bg-gray-100 ${
+							isCollapsed ? "justify-center" : "justify-start space-x-4"
+						}`}
+					>
+						<FontAwesomeIcon
+							icon={icon}
+							className="text-lg transition-all duration-200"
+						/>
+						<span
+							className={`transition-all duration-200 whitespace-nowrap ${
+								isCollapsed ? "opacity-0 w-0" : "opacity-100 w-auto"
+							}`}
+						>
+							{label}
+						</span>
+					</button>
+				))}
+			</div>
 		</div>
 	);
 };
