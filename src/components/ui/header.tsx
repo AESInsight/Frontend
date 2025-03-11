@@ -8,8 +8,8 @@ const Header: React.FC = () => {
 		<header className="bg-gradient-to-r from-sky-700 to-sky-400 flex items-center justify-between h-16 w-auto border-b-2 border-black">
 			{/* Logo */}
 			<img
-				src="../../public/aesinsight.png"
-				className="h-20 w-64 object-contain ml-1"
+				src="/aesinsight.png"
+				className="h-20 w-64 object-contain ml-1 cursor-pointer"
 				onClick={() => (window.location.href = "/")}
 			/>
 
