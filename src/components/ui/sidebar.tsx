@@ -7,9 +7,30 @@ import {
 	faBriefcase,
 	faEnvelope,
 } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
+import StyledSidebarButton from "../buttons/styled_sidebar_button";
 
 const Sidebar: React.FC = () => {
 	const [isCollapsed, setIsCollapsed] = useState(true); // Start in collapsed state
+	const [selectedPage, setSelectedPage] = useState<string>("Home"); // Track selected page
+	const navigate = useNavigate();
+
+	const handleNavigation = (label: string) => {
+		setSelectedPage(label);
+		if (label === "Home") {
+			navigate("/"); // should be /
+		}
+		if (label === "About") {
+			navigate("/about");
+		}
+		if (label === "Services") {
+			navigate("/services");
+		}
+		if (label === "Contact") {
+			navigate("/contact");
+		}
+		return selectedPage;
+	};
 
 	return (
 		<div
@@ -32,24 +53,13 @@ const Sidebar: React.FC = () => {
 					{ icon: faBriefcase, label: "Services" },
 					{ icon: faEnvelope, label: "Contact" },
 				].map(({ icon, label }) => (
-					<button
+					<StyledSidebarButton
 						key={label}
-						className={`text-black flex items-center w-full px-4 py-2 rounded-lg transition-all duration-200 hover:text-gray-500 hover:bg-gray-100 ${
-							isCollapsed ? "justify-center" : "justify-start space-x-4"
-						}`}
-					>
-						<FontAwesomeIcon
-							icon={icon}
-							className="text-lg transition-all duration-200"
-						/>
-						<span
-							className={`transition-all duration-200 whitespace-nowrap ${
-								isCollapsed ? "opacity-0 w-0" : "opacity-100 w-auto"
-							}`}
-						>
-							{label}
-						</span>
-					</button>
+						icon={icon}
+						label={label}
+						isCollapsed={isCollapsed}
+						onClick={() => handleNavigation(label)}
+					/>
 				))}
 			</div>
 		</div>
