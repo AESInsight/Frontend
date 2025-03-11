@@ -1,10 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-	faSignInAlt,
-	faUserShield,
-	faEdit,
-} from "@fortawesome/free-solid-svg-icons";
+import { faUserShield, faEdit } from "@fortawesome/free-solid-svg-icons";
+import LoginButton from "../buttons/loginbutton";
 
 const Header: React.FC = () => {
 	return (
@@ -26,10 +23,7 @@ const Header: React.FC = () => {
 					<FontAwesomeIcon icon={faUserShield} className="mr-2" />
 					Admin
 				</button>
-				<button className="text-white flex items-center transition-transform duration-200 hover:scale-115">
-					<FontAwesomeIcon icon={faSignInAlt} className="mr-2" />
-					Login
-				</button>
+				<LoginButton />
 			</div>
 		</header>
 	);
