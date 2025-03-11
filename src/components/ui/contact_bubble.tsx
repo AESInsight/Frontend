@@ -25,7 +25,7 @@ const ContactBubble: React.FC<ContactBubbleProps> = ({
 			<div className="mt-2 text-center">
 				<p className="text-sm font-bold">{name}</p>
 				<p className="text-xs text-gray-600">{phoneNumber}</p>
-				<p className="text-xs text-gray-600 truncate w-36">{email}</p>
+				<p className="text-xs text-gray-600">{email}</p>
 			</div>
 		</div>
 	);
