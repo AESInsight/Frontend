@@ -14,12 +14,12 @@ const ContactBubble: React.FC<ContactBubbleProps> = ({
 	email,
 }) => {
 	return (
-		<div className="flex flex-col items-center w-40 p-2 bg-white rounded-lg shadow-md">
+		<div className="flex flex-col items-center w-50 p-2 bg-white border-1 border-black rounded-lg shadow-lg">
 			{/* Profile Picture */}
 			<img
 				src={`/profilePic/${initials}.png`}
 				alt="Profile"
-				className="w-20 h-20 rounded-full border-2 border-gray-300"
+				className="w-20 h-20 rounded-full border-2 border-sky-500"
 			/>
 			{/* Contact Info */}
 			<div className="mt-2 text-center">
