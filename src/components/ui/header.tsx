@@ -1,7 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserShield, faEdit } from "@fortawesome/free-solid-svg-icons";
-import LoginButton from "../buttons/loginbutton";
+import LoginButton from "../buttons/login_button";
 
 const Header: React.FC = () => {
 	return (
