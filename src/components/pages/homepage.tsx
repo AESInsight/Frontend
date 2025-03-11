@@ -5,12 +5,6 @@ import Sidebar from "../ui/sidebar";
 const Homepage: React.FC = () => {
 	return (
 		<div className="h-screen w-screen flex flex-col relative">
-			{/* BG image */}
-			<img
-				src="../../public/bgimage.png"
-				className="absolute inset-0 w-full h-full object-cover"
-			/>
-
 			{/* Main Content */}
 			<div className="relative z-10 flex flex-col h-full">
 				<Header />
