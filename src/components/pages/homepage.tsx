@@ -1,7 +1,6 @@
 import React from "react";
 import Header from "../ui/header";
 import Sidebar from "../ui/sidebar";
-//import BgImage from "../bg_image";
 
 const Homepage: React.FC = () => {
 	return (

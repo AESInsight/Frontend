@@ -7,7 +7,7 @@ interface BgImageProps {
 const BgImage: React.FC<BgImageProps> = ({ className }) => {
 	return (
 		<img
-			src={"../../public/bgimage.png"}
+			src={"/bgimage.png"}
 			className={`absolute inset-0 w-full h-full object-cover ${className}`}
 			alt="Background"
 		/>
