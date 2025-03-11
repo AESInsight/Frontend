@@ -13,6 +13,7 @@ const Header: React.FC = () => {
 			<img
 				src="../../public/aesinsight.png"
 				className="h-20 w-64 object-contain ml-1"
+				onClick={() => (window.location.href = "/")}
 			/>
 
 			{/* Buttons on the right */}
