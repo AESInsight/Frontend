@@ -1,22 +1,27 @@
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Sidebar from "./components/ui/sidebar";
 import "./App.css";
-import DefaultComponent from "./components/pages/fallbackpage";
 import "./index.css";
+import Homepage from "./components/pages/homepage";
+import AboutPage from "./components/pages/aboutpage";
+import ContactPage from "./components/pages/contactpage";
+import ServicePage from "./components/pages/servicepage";
+import BgImage from "./components/bg_image";
 
-function App() {
+const App: React.FC = () => {
 	return (
-		<div className="bg-sky-700 shadow-lg border text-center">
-			<span>
-				<h1 className="text-3xl text-white mb-4 font-bold">
-					Welcome to AESInsight
-				</h1>
-			</span>
-			<div className="bg-white">
-				<div>
-					<DefaultComponent />
-				</div>
-			</div>
-		</div>
+		<Router>
+			<Sidebar />
+			<BgImage />
+			<Routes>
+				<Route path="/" element={<Homepage />} />
+				<Route path="/about" element={<AboutPage />} />
+				<Route path="/services" element={<ServicePage />} />
+				<Route path="/contact" element={<ContactPage />} />
+			</Routes>
+		</Router>
 	);
-}
+};
 
 export default App;
