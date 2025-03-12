@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/AESInsight/Frontend/compare/v1.0.1...v1.1.0) (2025-03-12)
+
+
+### Features
+
+* test if minor number bumps ([e22e5e4](https://github.com/AESInsight/Frontend/commit/e22e5e4287f5dbb896f7bf176f32e84c1c5621d2))
+
 ## [1.0.1](https://github.com/AESInsight/Frontend/compare/v1.0.0...v1.0.1) (2025-03-12)
 
 
