@@ -1,56 +1,27 @@
-name: Release
+name: Semantic Release
 
 on:
-  pull_request:
-    types:
-      - closed
+  push:
     branches:
+      - develop
       - main
-
-permissions:
-  contents: write # Required for creating releases
 
 jobs:
   release:
-    if: github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'develop'
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Fetch all tags for versioning
+          fetch-depth: 0
 
-      - name: Get latest tag
-        id: get_latest_tag
-        shell: bash
-        run: |
-          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
-          echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
-          echo "Latest tag: $LATEST_TAG"
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v1
 
-      - name: Increment minor version for release
-        id: set_version
-        shell: bash
-        run: |
-          TAG_WITHOUT_V=${LATEST_TAG#v}
-          MAJOR=$(echo $TAG_WITHOUT_V | cut -d. -f1)
-          MINOR=$(echo $TAG_WITHOUT_V | cut -d. -f2)
-          NEW_MINOR=$((MINOR + 1))
-          VERSION="v$MAJOR.$NEW_MINOR.0-$(date +'%Y%m%d')"
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "New release version: $VERSION"
+      - name: Install dependencies
+        run: bun install
 
-      - name: Create official release tag
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: ${{ env.VERSION }}
-          name: "Release ${{ env.VERSION }}"
-          draft: false
-          prerelease: false
-          generate_release_notes: true
+      - name: Run semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Success Message
-        run: echo "✅ Official release ${{ env.VERSION }} created successfully!"
+        run: bunx semantic-release
