@@ -17,7 +17,7 @@ const StyledSidebarButton: React.FC<StyledSidebarButtonProps> = ({
 }) => {
 	return (
 		<button
-			className={`text-black flex items-center w-full px-4 py-2 rounded-lg transition-all duration-200 hover:text-gray-500 hover:bg-gray-100 ${
+			className={`text-black cursor-pointer flex items-center w-full px-4 py-2 rounded-lg transition-all duration-200 hover:text-gray-500 hover:bg-gray-100 ${
 				isCollapsed ? "justify-center" : "justify-start space-x-4"
 			}`}
 			onClick={onClick}
