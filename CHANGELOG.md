@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/AESInsight/Frontend/compare/v1.0.0...v1.0.1) (2025-03-12)
+
+
+### Bug Fixes
+
+* test if patch number update will trigger from this ([ed9dd8f](https://github.com/AESInsight/Frontend/commit/ed9dd8fc9507a0fc0e0b405eb79aa6134cd44886))
+
 # 1.0.0 (2025-03-12)
 
 
