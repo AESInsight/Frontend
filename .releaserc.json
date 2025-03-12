@@ -1,5 +1,4 @@
 {
-	"repositoryUrl": "https://${GH_TOKEN}@github.com/AESInsight/Frontend.git",
 	"branches": ["main", "develop"],
 	"plugins": [
 		"@semantic-release/commit-analyzer",
