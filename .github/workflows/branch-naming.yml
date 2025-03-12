@@ -34,15 +34,15 @@ jobs:
         shell: bash
         run: |
           if [[ ! "$BRANCH_NAME" =~ ^(fix|feat|test)/[0-9]+/[^_]+$ ]]; then
-            echo "❌ Invalid branch name: '$BRANCH_NAME'"
-            echo "✅ Expected format: '<scope>/<issue number>/<branch-name>'"
-            echo "🔹 Scope must be 'fix', 'feat', or 'test'"
-            echo "🔹 Issue number must be a valid number"
-            echo "🔹 Branch name must use '-' instead of '_'"
+            echo "Invalid branch name: '$BRANCH_NAME'"
+            echo "Expected format: '<scope>/<issue number>/<branch-name>'"
+            echo "Scope must be 'fix', 'feat', or 'test'"
+            echo "Issue number must be a valid number"
+            echo "Branch name must use '-' instead of '_'"
             exit 1
           fi
 
       - name: Success Message
         if: env.SKIP != 'true'
         shell: bash
-        run: echo "✅ Branch name '$BRANCH_NAME' is valid!"
+        run: echo "Branch name '$BRANCH_NAME' is valid!"
