@@ -5,7 +5,6 @@ node_modules/
 bun.lockb
 
 ### Build directories ###
-dist/
 build/
 
 ### Environment files ###
