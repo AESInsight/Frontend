@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/AESInsight/Frontend/compare/v1.1.1...v1.1.2) (2025-03-14)
+
+
+### Bug Fixes
+
+* fixes formatting errors in readme ([1974203](https://github.com/AESInsight/Frontend/commit/1974203d533213716e1194a8222c3247be425bb9))
+
 ## [1.1.1](https://github.com/AESInsight/Frontend/compare/v1.1.0...v1.1.1) (2025-03-14)
 
 
