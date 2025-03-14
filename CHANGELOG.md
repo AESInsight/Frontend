@@ -1,3 +1,10 @@
+## [1.1.3](https://github.com/AESInsight/Frontend/compare/v1.1.2...v1.1.3) (2025-03-14)
+
+
+### Bug Fixes
+
+* fix ([8c8de86](https://github.com/AESInsight/Frontend/commit/8c8de864125ef3b41fdfae4b29c233e9a5c78845))
+
 ## [1.1.2](https://github.com/AESInsight/Frontend/compare/v1.1.1...v1.1.2) (2025-03-14)
 
 
