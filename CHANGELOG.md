@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/AESInsight/Frontend/compare/v1.1.0...v1.1.1) (2025-03-14)
+
+
+### Bug Fixes
+
+* improves readme with information about naming conventions and schemantic releases ([5855baf](https://github.com/AESInsight/Frontend/commit/5855baf8f5965edb813aff97beb575b33b957f3e))
+
 # [1.1.0](https://github.com/AESInsight/Frontend/compare/v1.0.1...v1.1.0) (2025-03-12)
 
 
