@@ -9,13 +9,13 @@ To ensure consistency and enable our **GitHub Action "Branch Naming Convention"*
 
 ### Format
 
-_<type>/<issue-number>/<branch-name>_
+**<type>/<issue-number>/<branch-name>**
 
 ### Examples
 
-_fix/12/bug-fix_
-_feat/45/add-user-authentication_
-_release/78/prepare-release-v1.2.0_
+**fix/12/bug-fix**
+**feat/45/add-user-authentication**
+**release/78/prepare-release-v1.2.0**
 
 ### Type (Semantic Release Bump)
 
@@ -39,9 +39,9 @@ To ensure the **semantic release pipeline works correctly**, all commit messages
 
 ### Examples
 
-_fix: correct a typo in the login form_
-_feat: add support for dark mode_
-_release: prepare version 2.0.0_
+**fix: correct a typo in the login form**
+**feat: add support for dark mode**
+**release: prepare version 2.0.0**
 
 **Note:** If you do not follow this format, the semantic release pipeline will fail or skip version bumps.
 
