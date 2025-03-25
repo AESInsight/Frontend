@@ -1,6 +1,6 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserShield, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faUserShield } from "@fortawesome/free-solid-svg-icons";
 import LoginButton from "../buttons/login_button";
 
 const Header: React.FC = () => {
@@ -15,10 +15,6 @@ const Header: React.FC = () => {
 
 			{/* Buttons on the right */}
 			<div className="flex space-x-6 mr-6">
-				<button className="text-white flex items-center transition-transform duration-200 hover:scale-115 cursor-pointer">
-					<FontAwesomeIcon icon={faEdit} className="mr-2" />
-					Edit Data
-				</button>
 				<button className="text-white flex items-center transition-transform duration-200 hover:scale-115 cursor-pointer">
 					<FontAwesomeIcon icon={faUserShield} className="mr-2" />
 					Admin

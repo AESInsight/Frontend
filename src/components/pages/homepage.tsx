@@ -1,6 +1,7 @@
 import React from "react";
 import Header from "../ui/header";
 import Sidebar from "../ui/sidebar";
+import SearchButton from "../buttons/search_button";
 
 const Homepage: React.FC = () => {
 	return (
@@ -12,6 +13,9 @@ const Homepage: React.FC = () => {
 					<main className="flex-1 p-4 text-black">
 						<h1 className="text-3xl font-bold mb-4">Welcome to AES-Insight</h1>
 						<p>Your trusted partner in data security and insights.</p>
+						<div className="flex-1 mt-4 flex justify-center">
+						<SearchButton/>
+						</div>
 					</main>
 				</div>
 				<footer className="p-2 bg-gray-800 text-white text-center text-xs relative z-10">
