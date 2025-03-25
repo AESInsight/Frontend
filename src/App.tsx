@@ -8,6 +8,7 @@ import AboutPage from "./components/pages/aboutpage";
 import ContactPage from "./components/pages/contactpage";
 import ServicePage from "./components/pages/servicepage";
 import SearchPage from "./components/pages/searchpage";
+import AdminPage from "./components/pages/adminpage";
 import BgImage from "./components/bg_image";
 
 
@@ -22,6 +23,7 @@ const App: React.FC = () => {
 				<Route path="/services" element={<ServicePage />} />
 				<Route path="/contact" element={<ContactPage />} />
 				<Route path="/search" element={<SearchPage />} />
+				<Route path="/admin" element={<AdminPage />} />
 			</Routes>
 		</Router>
 	);

@@ -2,6 +2,7 @@ import React from "react";
 import Header from "../ui/header";
 import Sidebar from "../ui/sidebar";
 import SearchButton from "../buttons/search_button";
+import AdminButton from "../buttons/admin_button";
 
 const Homepage: React.FC = () => {
 	return (
@@ -15,6 +16,9 @@ const Homepage: React.FC = () => {
 						<p>Your trusted partner in data security and insights.</p>
 						<div className="flex-1 mt-4 flex justify-center">
 						<SearchButton/>
+						{/* AdminButton placeret her */}
+						<div className="flex-1 mt-4 flex justify-center">
+							<AdminButton />
 						</div>
 					</main>
 				</div>
