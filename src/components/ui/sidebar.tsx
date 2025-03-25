@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 	faBars,
-	faHome,
 	faInfoCircle,
 	faBriefcase,
 	faEnvelope,
@@ -19,9 +18,6 @@ const Sidebar: React.FC = () => {
 
 	const handleNavigation = (label: string) => {
 		setSelectedPage(label);
-		if (label === "Home") {
-			navigate("/"); // should be /
-		}
 		if (label === "About") {
 			navigate("/about");
 		}
@@ -69,7 +65,6 @@ const Sidebar: React.FC = () => {
 			{/* Navigation Buttons */}
 			<div className="space-y-6 w-full">
 				{[
-					{ icon: faHome, label: "Home" },
 					{ icon: faInfoCircle, label: "About" },
 					{ icon: faBriefcase, label: "Services" },
 					{ icon: faEnvelope, label: "Contact" },

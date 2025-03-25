@@ -13,7 +13,6 @@ const Header: React.FC = () => {
 				className="h-20 w-64 object-contain ml-1 cursor-pointer"
 				onClick={() => (window.location.href = "/")}
 			/>
-
 			{/* Buttons on the right */}
 			<div className="flex space-x-6 mr-6">
 				<AdminButton />
