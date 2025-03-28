@@ -1,3 +1,13 @@
+## [1.1.4](https://github.com/AESInsight/Frontend/compare/v1.1.3...v1.1.4) (2025-03-28)
+
+
+### Bug Fixes
+
+* fixes build error ([a86188b](https://github.com/AESInsight/Frontend/commit/a86188bee298c98e5a023ab56a929370538d7a04))
+* fixes cursed branch ([f3d6657](https://github.com/AESInsight/Frontend/commit/f3d6657f25240834fc989d33c14619094614ace4))
+* removes home button in sidebar, we use the logo in the top left for this ([48889ad](https://github.com/AESInsight/Frontend/commit/48889ad6f2da86da394cd4863b919e249f4bca4b))
+* removes search page - we need a search bar not a full on page ([c0142b1](https://github.com/AESInsight/Frontend/commit/c0142b1db57f051e7022f286b919d8571b6faa25))
+
 ## [1.1.3](https://github.com/AESInsight/Frontend/compare/v1.1.2...v1.1.3) (2025-03-14)
 
 
