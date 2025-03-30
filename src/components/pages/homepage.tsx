@@ -1,8 +1,8 @@
 import React from "react";
 import Header from "../ui/header";
 import Sidebar from "../ui/sidebar";
-import { TestChart } from "../charts/test-chart";
-import { TestChart2 } from "../charts/test-chart2";
+import { TestChart } from "../charts/test_chart";
+import { TestChart2 } from "../charts/test_chart2";
 import { TestChart3 } from "../charts/test_chart3";
 import { TestChart4 } from "../charts/test_chart4";
 const Homepage: React.FC = () => {
