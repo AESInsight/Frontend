@@ -29,11 +29,11 @@ const chartData = [
 const chartConfig = {
 	senior: {
 		label: "Senior Position",
-		color: "hsl(210, 64%, 56%)", // Base light blue (matches previous charts)
+		color: "hsl(210, 64%, 36%)", // Darkest base blue
 	},
 	junior: {
 		label: "Junior Position",
-		color: "hsl(210, 64%, 66%)", // Lighter accent (matches "Women" in TestChart)
+		color: "hsl(210, 64%, 48%)",
 	},
 } satisfies ChartConfig;
 
@@ -76,21 +76,21 @@ export function TestChart4() {
 						/>
 						<PolarAngleAxis
 							dataKey="skill"
-							className="text-sm" // Keeping the black text as previously updated
+							className="text-sm"
 							tickLine={false}
 						/>
 						<Radar
 							name="Senior Position"
 							dataKey="senior"
-							stroke="hsl(210, 64%, 56%)" // Base light blue
-							fill="hsl(210, 64%, 56%)"
+							stroke="hsl(210, 64%, 36%)"
+							fill="hsl(210, 64%, 36%)"
 							fillOpacity={0.3}
 						/>
 						<Radar
 							name="Junior Position"
 							dataKey="junior"
-							stroke="hsl(210, 64%, 66%)" // Lighter accent
-							fill="hsl(210, 64%, 66%)"
+							stroke="hsl(210, 64%, 48%)"
+							fill="hsl(210, 64%, 48%)"
 							fillOpacity={0.3}
 						/>
 					</RadarChart>

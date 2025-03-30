@@ -17,101 +17,99 @@ import {
 	ChartTooltip,
 } from "@/components/ui/chart";
 
-// Define chart data with a subtle color shift within blue tones
 const chartData = [
 	{
 		name: "Engineering Lead",
 		value: 145,
-		fill: "hsl(210, 64%, 56%)", // Base light blue (Engineering)
+		fill: "hsl(210, 64%, 36%)", // Darkest base blue (Engineering)
 	},
 	{
 		name: "Senior Engineer",
 		value: 125,
-		fill: "hsl(210, 64%, 56%)", // Same as Engineering Lead
+		fill: "hsl(210, 64%, 36%)", // Same as Engineering Lead
 	},
 	{
 		name: "Marketing Director",
 		value: 115,
-		fill: "hsl(210, 64%, 60%)", // Slightly lighter (Marketing)
+		fill: "hsl(210, 64%, 42%)", // First step lighter (Marketing)
 	},
 	{
 		name: "Marketing Lead",
 		value: 95,
-		fill: "hsl(210, 64%, 60%)", // Same as Marketing Director
+		fill: "hsl(210, 64%, 42%)", // Same as Marketing Director
 	},
 	{
 		name: "Sales Director",
 		value: 110,
-		fill: "hsl(210, 64%, 64%)", // Lighter (Sales)
+		fill: "hsl(210, 64%, 48%)", // Second step lighter (Sales)
 	},
 	{
 		name: "Sales Lead",
 		value: 85,
-		fill: "hsl(210, 64%, 64%)", // Same as Sales Director
+		fill: "hsl(210, 64%, 48%)", // Same as Sales Director
 	},
 	{
 		name: "Design Lead",
 		value: 92,
-		fill: "hsl(210, 64%, 68%)", // Even lighter (Design)
+		fill: "hsl(210, 64%, 54%)", // Third step lighter (Design)
 	},
 	{
 		name: "Senior Designer",
 		value: 78,
-		fill: "hsl(210, 64%, 68%)", // Same as Design Lead
+		fill: "hsl(210, 64%, 54%)", // Same as Design Lead
 	},
 	{
 		name: "Support Lead",
 		value: 75,
-		fill: "hsl(210, 64%, 72%)", // Lightest (Support)
+		fill: "hsl(210, 64%, 60%)", // Lightest (Support)
 	},
 	{
 		name: "Support Specialist",
 		value: 65,
-		fill: "hsl(210, 64%, 72%)", // Same as Support Lead
+		fill: "hsl(210, 64%, 60%)", // Same as Support Lead
 	},
 ];
 
-// Update chartConfig to reflect the new colors
 const chartConfig = {
 	"Engineering Lead": {
 		label: "Engineering Lead",
-		color: "hsl(210, 64%, 56%)",
+		color: "hsl(210, 64%, 36%)",
 	},
 	"Senior Engineer": {
 		label: "Senior Engineer",
-		color: "hsl(210, 64%, 56%)",
+		color: "hsl(210, 64%, 36%)",
 	},
 	"Marketing Director": {
 		label: "Marketing Director",
-		color: "hsl(210, 64%, 60%)",
+		color: "hsl(210, 64%, 42%)",
 	},
 	"Marketing Lead": {
 		label: "Marketing Lead",
-		color: "hsl(210, 64%, 60%)",
+		color: "hsl(210, 64%, 42%)",
 	},
 	"Sales Director": {
 		label: "Sales Director",
-		color: "hsl(210, 64%, 64%)",
+		color: "hsl(210, 64%, 48%)",
 	},
 	"Sales Lead": {
 		label: "Sales Lead",
-		color: "hsl(210, 64%, 64%)",
+		color: "hsl(210, 64%, 48%)",
 	},
 	"Design Lead": {
 		label: "Design Lead",
-		color: "hsl(210, 64%, 68%)",
+		color: "hsl(210, 64%, 54%)",
 	},
 	"Senior Designer": {
 		label: "Senior Designer",
-		color: "hsl(210, 64%, 68%)",
+		color: "hsl(210, 64%, 54%)",
 	},
 	"Support Lead": {
 		label: "Support Lead",
-		color: "hsl(210, 64%, 72%)",
+		color: "hsl(210, 64%, 60%)",
 	},
 	"Support Specialist": {
 		label: "Support Specialist",
-		color: "hsl(210, 64%, 72%)",
+		color: "hsl(210, 64%, 60%)",
 	},
 } satisfies ChartConfig;
 
@@ -155,7 +153,7 @@ export function TestChart3() {
 						/>
 						<RadialBar
 							dataKey="value"
-							background={{ fill: "hsl(210, 64%, 80%)" }} // Very light blue background
+							background={{ fill: "hsl(210, 64%, 70%)" }}
 							stackId="value"
 						>
 							<LabelList

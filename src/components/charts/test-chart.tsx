@@ -30,11 +30,11 @@ const chartData = [
 const chartConfig = {
 	Men: {
 		label: "Men",
-		color: "hsl(210, 64%, 56%)", // Base light blue (purer blue, less purple)
+		color: "hsl(210, 64%, 36%)",
 	},
 	Women: {
 		label: "Women",
-		color: "hsl(210, 64%, 66%)", // Lighter accent
+		color: "hsl(210, 64%, 48%)",
 	},
 } satisfies ChartConfig;
 
@@ -106,13 +106,13 @@ export function TestChart() {
 						/>
 						<Bar
 							dataKey="Men"
-							fill="hsl(210, 64%, 56%)" // Base light blue
+							fill="hsl(210, 64%, 36%)"
 							radius={4}
 							maxBarSize={40}
 						/>
 						<Bar
 							dataKey="Women"
-							fill="hsl(210, 64%, 66%)" // Lighter accent
+							fill="hsl(210, 64%, 48%)"
 							radius={4}
 							maxBarSize={40}
 						/>

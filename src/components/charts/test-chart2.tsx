@@ -22,50 +22,50 @@ const baseChartData = [
 	{
 		position: "Software Engineer",
 		value: 145,
-		fill: "hsl(210, 64%, 56%)", // Base light blue (same as TestChart)
+		fill: "hsl(210, 64%, 36%)",
 	},
 	{
 		position: "Product Manager",
 		value: 115,
-		fill: "hsl(210, 64%, 60%)", // Slightly lighter
+		fill: "hsl(210, 64%, 42%)",
 	},
 	{
 		position: "Data Scientist",
 		value: 110,
-		fill: "hsl(210, 64%, 64%)", // Lighter
+		fill: "hsl(210, 64%, 48%)",
 	},
 	{
 		position: "UX Designer",
 		value: 92,
-		fill: "hsl(210, 64%, 68%)", // Even lighter
+		fill: "hsl(210, 64%, 54%)",
 	},
 	{
 		position: "DevOps Engineer",
 		value: 75,
-		fill: "hsl(210, 64%, 72%)", // Lightest
+		fill: "hsl(210, 64%, 60%)",
 	},
 ] as const;
 
 const chartConfig = {
 	"Software Engineer": {
 		label: "Software Engineer",
-		color: "hsl(210, 64%, 56%)",
+		color: "hsl(210, 64%, 36%)",
 	},
 	"Product Manager": {
 		label: "Product Manager",
-		color: "hsl(210, 64%, 60%)",
+		color: "hsl(210, 64%, 42%)",
 	},
 	"Data Scientist": {
 		label: "Data Scientist",
-		color: "hsl(210, 64%, 64%)",
+		color: "hsl(210, 64%, 48%)",
 	},
 	"UX Designer": {
 		label: "UX Designer",
-		color: "hsl(210, 64%, 68%)",
+		color: "hsl(210, 64%, 54%)",
 	},
 	"DevOps Engineer": {
 		label: "DevOps Engineer",
-		color: "hsl(210, 64%, 72%)",
+		color: "hsl(210, 64%, 60%)",
 	},
 } satisfies ChartConfig;
 
