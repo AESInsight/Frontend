@@ -5,7 +5,7 @@ import InsightButton from "../buttons/Insight_button";
 
 const Header: React.FC = () => {
 	return (
-		<header className="bg-gradient-to-r from-sky-700 to-sky-400 flex items-center justify-between h-16 w-auto border-b-2 border-black">
+		<header className="bg-gradient-to-r from-sky-700 to-sky-400 flex items-center justify-between h-16 w-full border-b-2 border-black">
 			{/* Logo */}
 			<img
 				src="/aesinsight.png"
