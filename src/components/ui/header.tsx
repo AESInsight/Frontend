@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import LoginButton from "../buttons/login_button";
 import AdminButton from "../buttons/admin_button";
-import InputField from "../fields/input_field";
+import SearchBar from "./search_bar";
 
 const Header: React.FC = () => {
 	return (
@@ -16,12 +16,7 @@ const Header: React.FC = () => {
 					onClick={() => (window.location.href = "/")}
 				/>
 				{/* Search bar */}
-				<InputField
-					placeholder="Search for data..."
-					value=""
-					onChange={(e) => console.log(e.target.value)}
-					className="w-65 p-2 text-black bg-[rgba(156,206,235,0.81)] border border-sky-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 mt-4"
-				/>
+				<SearchBar />
 			</div>
 
 			{/* Buttons on the right */}
