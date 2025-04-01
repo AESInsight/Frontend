@@ -1,31 +1,30 @@
 // components/InputField.tsx
 import React from "react";
 
-interface InputFieldProps {
+interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
 	label?: string;
-	placeholder?: string;
-	value: string;
-	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-	className?: string;
+	error?: string;
 }
 
 const InputField: React.FC<InputFieldProps> = ({
 	label,
-	placeholder,
-	value,
-	onChange,
-	className = "",
+	error,
+	className = '',
+	...props
 }) => {
 	return (
-		<div className="mb-4">
+		<div className="w-full">
 			{label && (
-				<label className="block mb-1 text-sm text-gray-700">{label}</label>
+				<label className="block mb-1 text-sm font-medium text-gray-700">
+					{label}
+				</label>
 			)}
 			<input
-				placeholder={placeholder}
-				value={value}
-				onChange={onChange}
-				className={`w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-sky-500 ${className}`}
+				{...props}
+				className={`w-full px-3 py-2 border rounded-md shadow-sm 
+					focus:outline-none focus:ring-2 focus:ring-sky-500 
+					${error ? 'border-red-500' : 'border-gray-300'} 
+					${className}`}
 			/>
 		</div>
 	);

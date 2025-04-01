@@ -24,6 +24,8 @@ jobs:
           which bun  # Verify that Bun is available
 
       - name: Install dependencies and build
+        env:
+          DB_CONNECTION_STRING: ${{ secrets.DB_CONNECTION_STRING }}
         run: |
           bun install
           bun run build

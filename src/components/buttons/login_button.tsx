@@ -1,38 +1,34 @@
 import { faSignIn, faSignOut } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
+import { useAuth } from "../../context/AuthContext";
 import LoginModal from "../modals/login_modal";
 
 const LoginButton: React.FC = () => {
 	const [isOpen, setIsOpen] = useState(false);
-	const [loggedIn, setLoggedIn] = useState(false);
-	const [showLogout, setShowLogout] = useState(true);
+	const { isAuthenticated, logout, companyInfo } = useAuth();
 
 	const handleLogin = () => {
-		setLoggedIn(true);
 		setIsOpen(false);
 	};
 
 	const handleLogout = () => {
-		setShowLogout(false);
-		setTimeout(() => {
-			setLoggedIn(false);
-			setShowLogout(true);
-		}, 300);
+		logout();
 	};
 
 	return (
 		<>
-			{loggedIn ? (
-				<button
-					onClick={handleLogout}
-					className={`text-white flex items-center transition-transform duration-300 ease-in-out hover:scale-115 cursor-pointer ${
-						showLogout ? "visible" : "invisible"
-					}`}
-				>
-					<FontAwesomeIcon icon={faSignOut} className="mr-2" />
-					Logout
-				</button>
+			{isAuthenticated ? (
+				<div className="flex items-center">
+					<span className="text-white mr-4">{companyInfo?.CompanyName}</span>
+					<button
+						onClick={handleLogout}
+						className="text-white flex items-center transition-transform duration-300 ease-in-out hover:scale-115 cursor-pointer"
+					>
+						<FontAwesomeIcon icon={faSignOut} className="mr-2" />
+						Logout
+					</button>
+				</div>
 			) : (
 				<button
 					onClick={() => setIsOpen(true)}
