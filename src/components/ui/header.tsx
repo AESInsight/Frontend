@@ -1,9 +1,8 @@
 import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import LoginButton from "../buttons/login_button";
 import AdminButton from "../buttons/admin_button";
 import SearchBar from "./search_bar";
+import InsightButton from "../buttons/Insight_button";
 
 const Header: React.FC = () => {
 	return (
@@ -22,10 +21,7 @@ const Header: React.FC = () => {
 			{/* Buttons on the right */}
 			<div className="flex space-x-6 mr-6">
 				<AdminButton />
-				<button className="text-white flex items-center transition-transform duration-200 hover:scale-115 cursor-pointer">
-					<FontAwesomeIcon icon={faEdit} className="mr-2" />
-					Edit Data
-				</button>
+				<InsightButton />
 				<LoginButton />
 			</div>
 		</header>
