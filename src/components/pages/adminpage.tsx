@@ -19,6 +19,11 @@ const AdminPage: React.FC = () => {
     setTableData(newData);
   };
 
+  const handleDelete = (index: number) => {
+    const newData = tableData.filter((_, i) => i !== index);
+    setTableData(newData);
+  };
+
   return (
     <div className="h-screen w-screen flex flex-col relative">
       <div className="relative z-10 flex flex-col h-full">
@@ -56,6 +61,7 @@ const AdminPage: React.FC = () => {
                               gender={row.gender}
                               experience={row.experience}
                               onSave={(updatedData) => handleSave(index, updatedData)}
+                              onDelete={() => handleDelete(index)}
                             />
                           </td>
                         </tr>

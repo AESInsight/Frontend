@@ -5,6 +5,7 @@ interface EditModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (updatedData: { position: string; salary: string; gender: string; experience: string }) => void;
+  onDelete: () => void;
   initialData: { position: string; salary: string; gender: string; experience: string };
 }
 
@@ -12,6 +13,7 @@ const EditModal: React.FC<EditModalProps> = ({
   isOpen,
   onClose,
   onSave,
+  onDelete,
   initialData,
 }) => {
   const [fadeIn, setFadeIn] = useState(false);
@@ -101,6 +103,12 @@ const EditModal: React.FC<EditModalProps> = ({
             className="bg-sky-600 text-white px-4 py-2 rounded-lg hover:bg-sky-700 text-sm"
           >
             Save Changes
+          </button>
+          <button
+            onClick={onDelete}
+            className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 text-sm"
+          >
+            Delete
           </button>
         </div>
       </div>

@@ -9,15 +9,22 @@ interface EditButtonProps {
   gender: string;
   experience: string;
   onSave: (updatedData: { position: string; salary: string; gender: string; experience: string }) => void;
+  onDelete: () => void;
 }
 
-const EditButton: React.FC<EditButtonProps> = ({ position, salary, gender, experience, onSave }) => {
+const EditButton: React.FC<EditButtonProps> = ({ position, salary, gender, experience, onSave, onDelete }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [editedData, setEditedData] = useState({ position, salary, gender, experience });
 
   const handleSave = (updatedData: { position: string; salary: string; gender: string; experience: string }) => {
     onSave(updatedData);
     setIsOpen(false);
+  };
+
+  const handleDelete = () => {
+    if (window.confirm("Are you sure you want to delete this row?")) {
+      onDelete();
+      setIsOpen(false);
+    }
   };
 
   return (
@@ -32,11 +39,9 @@ const EditButton: React.FC<EditButtonProps> = ({ position, salary, gender, exper
       <EditModal
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
-        onSave={(updatedData) => {
-          setEditedData(updatedData);
-          handleSave(updatedData);
-        }}
-        initialData={editedData}
+        onSave={handleSave}
+        onDelete={handleDelete}
+        initialData={{ position, salary, gender, experience }}
       />
     </>
   );
