@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/AESInsight/Frontend/compare/v1.1.4...v1.2.0) (2025-04-01)
+
+
+### Features
+
+* added search bar ([ae7794a](https://github.com/AESInsight/Frontend/commit/ae7794af3eb36c129703f48464887fd665c89636))
+
 ## [1.1.4](https://github.com/AESInsight/Frontend/compare/v1.1.3...v1.1.4) (2025-03-28)
 
 
