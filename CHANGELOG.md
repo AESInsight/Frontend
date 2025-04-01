@@ -1,3 +1,15 @@
+# [1.3.0](https://github.com/AESInsight/Frontend/compare/v1.2.0...v1.3.0) (2025-04-01)
+
+
+### Bug Fixes
+
+* set in front ([1548ca1](https://github.com/AESInsight/Frontend/commit/1548ca13b74e40fb0c2e18e765c47cf0080256f9))
+
+
+### Features
+
+* add insightpage tables ([6969073](https://github.com/AESInsight/Frontend/commit/6969073a51c09e43f755a2f2df0adfae0ff29568))
+
 # [1.2.0](https://github.com/AESInsight/Frontend/compare/v1.1.4...v1.2.0) (2025-04-01)
 
 
