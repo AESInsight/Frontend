@@ -1,7 +1,7 @@
 import { faSignIn, faSignOut } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
-import LoginModal from "../modals/login_modal";
+import LoginModal from "../../modals/login_modal";
+import StyledHeaderButton from "./styled_header_button";
 
 const LoginButton: React.FC = () => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -24,23 +24,18 @@ const LoginButton: React.FC = () => {
 	return (
 		<>
 			{loggedIn ? (
-				<button
+				<StyledHeaderButton
+					icon={faSignOut}
+					text="Logout"
 					onClick={handleLogout}
-					className={`text-white flex items-center transition-transform duration-300 ease-in-out hover:scale-115 cursor-pointer ${
-						showLogout ? "visible" : "invisible"
-					}`}
-				>
-					<FontAwesomeIcon icon={faSignOut} className="mr-2" />
-					Logout
-				</button>
+					className={showLogout ? "visible" : "invisible"}
+				/>
 			) : (
-				<button
+				<StyledHeaderButton
+					icon={faSignIn}
+					text="Login"
 					onClick={() => setIsOpen(true)}
-					className="text-white flex items-center transition-transform duration-300 ease-in-out hover:scale-115 cursor-pointer"
-				>
-					<FontAwesomeIcon icon={faSignIn} className="mr-2" />
-					Login
-				</button>
+				/>
 			)}
 
 			<LoginModal
