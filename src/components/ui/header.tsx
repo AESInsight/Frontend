@@ -1,8 +1,9 @@
 import React from "react";
-import LoginButton from "../buttons/login_button";
-import AdminButton from "../buttons/admin_button";
+
+import LoginButton from "../buttons/header_buttons/login_button";
+import AdminButton from "../buttons/header_buttons/admin_button";
+import InsightButton from "../buttons/header_buttons/Insight_button";
 import SearchBar from "./search_bar";
-import InsightButton from "../buttons/Insight_button";
 
 const Header: React.FC = () => {
 	return (
