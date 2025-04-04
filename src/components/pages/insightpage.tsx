@@ -4,13 +4,23 @@ import { fetchEmployees } from "../../lib/api";
 import Header from "../ui/header";
 import Sidebar from "../ui/sidebar";
 
+// Define the Employee type
+interface Employee {
+	employeeID: number;
+	jobTitle: string;
+	salary: number;
+	experience: number;
+	gender: string;
+	companyID: number;
+}
+
 const InsightPage: React.FC = () => {
 	const {
 		data: employees,
 		isLoading,
 		isError,
 		error,
-	} = useQuery({
+	} = useQuery<Employee[]>({
 		queryKey: ["employees"],
 		queryFn: fetchEmployees,
 	});
@@ -52,28 +62,27 @@ const InsightPage: React.FC = () => {
 									</tr>
 								</thead>
 								<tbody>
-									{employees &&
-										employees
-											.sort((a: any, b: any) => a.employeeID - b.employeeID) // Sort by EmployeeID in ascending order
-											.map((employee: any, index: number) => (
-												<tr key={employee.employeeID || index}>
-													<td className="border px-4 py-2">
-														{employee.employeeID || "N/A"}
-													</td>
-													<td className="border px-4 py-2">
-														{employee.jobTitle || "N/A"}
-													</td>
-													<td className="border px-4 py-2">
-														{employee.salary || "N/A"}
-													</td>
-													<td className="border px-4 py-2">
-														{employee.experience || "N/A"}
-													</td>
-													<td className="border px-4 py-2">
-														{employee.gender || "N/A"}
-													</td>
-												</tr>
-											))}
+									{employees
+										.sort((a, b) => a.employeeID - b.employeeID) // Sort by EmployeeID in ascending order
+										.map((employee) => (
+											<tr key={employee.employeeID}>
+												<td className="border px-4 py-2">
+													{employee.employeeID || "N/A"}
+												</td>
+												<td className="border px-4 py-2">
+													{employee.jobTitle || "N/A"}
+												</td>
+												<td className="border px-4 py-2">
+													{employee.salary || "N/A"}
+												</td>
+												<td className="border px-4 py-2">
+													{employee.experience || "N/A"}
+												</td>
+												<td className="border px-4 py-2">
+													{employee.gender || "N/A"}
+												</td>
+											</tr>
+										))}
 								</tbody>
 							</table>
 						) : (
