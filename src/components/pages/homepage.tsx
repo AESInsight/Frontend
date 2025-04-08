@@ -5,7 +5,6 @@ import Sidebar from "../ui/sidebar";
 const Homepage: React.FC = () => {
 	return (
 		<div className="h-screen w-screen flex flex-col relative">
-			{/* Main Content */}
 			<div className="relative z-10 flex flex-col h-full">
 				<Header />
 				<div className="flex flex-1">

@@ -72,7 +72,6 @@ const AboutPage: React.FC = () => {
 					<Sidebar />
 
 					<div className="flex flex-1 justify-center items-center p-6">
-						{/* Grid Container */}
 						<div className="grid grid-cols-3 gap-6">
 							{contacts.map((contact, index) => (
 								<ContactBubble key={index} {...contact} />

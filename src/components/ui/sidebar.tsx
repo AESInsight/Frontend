@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 	faBars,
-	faHome,
 	faInfoCircle,
 	faBriefcase,
 	faEnvelope,
@@ -19,9 +18,6 @@ const Sidebar: React.FC = () => {
 
 	const handleNavigation = (label: string) => {
 		setSelectedPage(label);
-		if (label === "Home") {
-			navigate("/"); // should be /
-		}
 		if (label === "About") {
 			navigate("/about");
 		}
@@ -46,7 +42,7 @@ const Sidebar: React.FC = () => {
 
 	return (
 		<div
-			className={`fixed top-16 left-0 h-[calc(100vh-4rem)] bg-white/10 backdrop-blur-lg shadow-lg transition-all duration-200 flex flex-col p-4 items-center ${
+		className={`fixed top-16 left-0 h-[calc(100vh-4rem)] bg-white/10 backdrop-blur-lg shadow-lg transition-all duration-200 flex flex-col p-4 items-center z-[100] ${
 				isCollapsed ? "w-16" : "w-64"
 			}`}
 			onMouseEnter={handleMouseEnter}
@@ -69,7 +65,6 @@ const Sidebar: React.FC = () => {
 			{/* Navigation Buttons */}
 			<div className="space-y-6 w-full">
 				{[
-					{ icon: faHome, label: "Home" },
 					{ icon: faInfoCircle, label: "About" },
 					{ icon: faBriefcase, label: "Services" },
 					{ icon: faEnvelope, label: "Contact" },

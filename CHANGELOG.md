@@ -1,3 +1,82 @@
+# [1.4.0](https://github.com/AESInsight/Frontend/compare/v1.3.1...v1.4.0) (2025-04-08)
+
+
+### Features
+
+* add search bar to insight page ([1af98b9](https://github.com/AESInsight/Frontend/commit/1af98b9f976a4f87dfbf670e13923d9bd7598063))
+
+## [1.3.1](https://github.com/AESInsight/Frontend/compare/v1.3.0...v1.3.1) (2025-04-01)
+
+
+### Bug Fixes
+
+* less spacing between buttons ([60f0526](https://github.com/AESInsight/Frontend/commit/60f05261aaa65e1a2eb11df90da49a62ca3f315f))
+* Refactors header buttons for better maintainability ([ec54001](https://github.com/AESInsight/Frontend/commit/ec540019d4937ee53cff5ce0aae5516a08175935))
+
+# [1.3.0](https://github.com/AESInsight/Frontend/compare/v1.2.0...v1.3.0) (2025-04-01)
+
+
+### Bug Fixes
+
+* set in front ([1548ca1](https://github.com/AESInsight/Frontend/commit/1548ca13b74e40fb0c2e18e765c47cf0080256f9))
+
+
+### Features
+
+* add insightpage tables ([6969073](https://github.com/AESInsight/Frontend/commit/6969073a51c09e43f755a2f2df0adfae0ff29568))
+
+# [1.2.0](https://github.com/AESInsight/Frontend/compare/v1.1.4...v1.2.0) (2025-04-01)
+
+
+### Features
+
+* added search bar ([ae7794a](https://github.com/AESInsight/Frontend/commit/ae7794af3eb36c129703f48464887fd665c89636))
+
+## [1.1.4](https://github.com/AESInsight/Frontend/compare/v1.1.3...v1.1.4) (2025-03-28)
+
+
+### Bug Fixes
+
+* fixes build error ([a86188b](https://github.com/AESInsight/Frontend/commit/a86188bee298c98e5a023ab56a929370538d7a04))
+* fixes cursed branch ([f3d6657](https://github.com/AESInsight/Frontend/commit/f3d6657f25240834fc989d33c14619094614ace4))
+* removes home button in sidebar, we use the logo in the top left for this ([48889ad](https://github.com/AESInsight/Frontend/commit/48889ad6f2da86da394cd4863b919e249f4bca4b))
+* removes search page - we need a search bar not a full on page ([c0142b1](https://github.com/AESInsight/Frontend/commit/c0142b1db57f051e7022f286b919d8571b6faa25))
+
+## [1.1.3](https://github.com/AESInsight/Frontend/compare/v1.1.2...v1.1.3) (2025-03-14)
+
+
+### Bug Fixes
+
+* fix ([8c8de86](https://github.com/AESInsight/Frontend/commit/8c8de864125ef3b41fdfae4b29c233e9a5c78845))
+
+## [1.1.2](https://github.com/AESInsight/Frontend/compare/v1.1.1...v1.1.2) (2025-03-14)
+
+
+### Bug Fixes
+
+* fixes formatting errors in readme ([1974203](https://github.com/AESInsight/Frontend/commit/1974203d533213716e1194a8222c3247be425bb9))
+
+## [1.1.1](https://github.com/AESInsight/Frontend/compare/v1.1.0...v1.1.1) (2025-03-14)
+
+
+### Bug Fixes
+
+* improves readme with information about naming conventions and schemantic releases ([5855baf](https://github.com/AESInsight/Frontend/commit/5855baf8f5965edb813aff97beb575b33b957f3e))
+
+# [1.1.0](https://github.com/AESInsight/Frontend/compare/v1.0.1...v1.1.0) (2025-03-12)
+
+
+### Features
+
+* test if minor number bumps ([e22e5e4](https://github.com/AESInsight/Frontend/commit/e22e5e4287f5dbb896f7bf176f32e84c1c5621d2))
+
+## [1.0.1](https://github.com/AESInsight/Frontend/compare/v1.0.0...v1.0.1) (2025-03-12)
+
+
+### Bug Fixes
+
+* test if patch number update will trigger from this ([ed9dd8f](https://github.com/AESInsight/Frontend/commit/ed9dd8fc9507a0fc0e0b405eb79aa6134cd44886))
+
 # 1.0.0 (2025-03-12)
 
 

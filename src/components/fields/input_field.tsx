@@ -7,6 +7,7 @@ interface InputFieldProps {
 	value: string;
 	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	className?: string;
+	type?: string;
 }
 
 const InputField: React.FC<InputFieldProps> = ({
@@ -15,6 +16,7 @@ const InputField: React.FC<InputFieldProps> = ({
 	value,
 	onChange,
 	className = "",
+	type = "text",
 }) => {
 	return (
 		<div className="mb-4">
@@ -22,10 +24,11 @@ const InputField: React.FC<InputFieldProps> = ({
 				<label className="block mb-1 text-sm text-gray-700">{label}</label>
 			)}
 			<input
+				type={type}
 				placeholder={placeholder}
 				value={value}
 				onChange={onChange}
-				className={`w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-sky-500 ${className}`}
+				className={`px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-sky-500 ${className}`}
 			/>
 		</div>
 	);
