@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchEmployees } from "../../lib/api";
 import Header from "../ui/header";
 import Sidebar from "../ui/sidebar";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import InputField from "../fields/input_field";
 
 // Define the Employee type
 interface Employee {
@@ -15,6 +18,7 @@ interface Employee {
 }
 
 const InsightPage: React.FC = () => {
+	const [searchTerm, setSearchTerm] = useState("");
 	const {
 		data: employees,
 		isLoading,
@@ -30,6 +34,21 @@ const InsightPage: React.FC = () => {
 		console.log("Employees data (raw):", employees);
 	}
 
+	// Filter employees based on search term
+	const filteredEmployees = employees
+		?.filter((employee) => {
+			const search = searchTerm.toLowerCase();
+			return (
+				employee.jobTitle.toLowerCase().includes(search) ||
+				employee.gender.toLowerCase().includes(search) ||
+				String(employee.employeeID).includes(search) ||
+				String(employee.salary).includes(search) ||
+				String(employee.experience).includes(search)
+			);
+		})
+		.sort((a, b) => a.employeeID - b.employeeID); // Sort by EmployeeID in ascending order
+
+
 	return (
 		<div className="h-screen w-screen flex flex-col relative">
 			<div className="relative z-10 flex flex-col h-full">
@@ -40,8 +59,26 @@ const InsightPage: React.FC = () => {
 						<h1 className="text-3xl font-bold mb-4 text-center">
 							Employee Insights
 						</h1>
+
+						{/* Search Bar */}
+						<div className="flex justify-center mb-6">
+							<div className="relative w-120">
+								<FontAwesomeIcon
+									icon={faSearch}
+									className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+								/>
+								<InputField
+									placeholder="Search employee data..."
+									value={searchTerm}
+									onChange={(e) => setSearchTerm(e.target.value)}
+									className="w-full h-9 pl-10 p-2 text-black bg-white border border-sky-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 mt-4"
+            					/>
+							</div>
+						</div>
+
 						{/* Handle loading state */}
 						{isLoading && <p>Loading...</p>}
+
 						{/* Handle error state */}
 						{isError && (
 							<div>
@@ -49,8 +86,9 @@ const InsightPage: React.FC = () => {
 								<p className="text-red-500">{(error as Error)?.message}</p>
 							</div>
 						)}
+
 						{/* Render employees table when data is available */}
-						{employees && employees.length > 0 ? (
+						{filteredEmployees && filteredEmployees.length > 0 ? (
 							<table className="w-full border border-gray-300">
 								<thead className="bg-gray-200">
 									<tr>
@@ -62,9 +100,7 @@ const InsightPage: React.FC = () => {
 									</tr>
 								</thead>
 								<tbody>
-									{employees
-										.sort((a, b) => a.employeeID - b.employeeID) // Sort by EmployeeID in ascending order
-										.map((employee) => (
+									{filteredEmployees.map((employee) => (
 											<tr key={employee.employeeID}>
 												<td className="border px-4 py-2">
 													{employee.employeeID || "N/A"}
