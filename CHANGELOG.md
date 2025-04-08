@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/AESInsight/Frontend/compare/v1.3.1...v1.4.0) (2025-04-08)
+
+
+### Features
+
+* add search bar to insight page ([1af98b9](https://github.com/AESInsight/Frontend/commit/1af98b9f976a4f87dfbf670e13923d9bd7598063))
+
 ## [1.3.1](https://github.com/AESInsight/Frontend/compare/v1.3.0...v1.3.1) (2025-04-01)
 
 
