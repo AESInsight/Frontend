@@ -10,7 +10,7 @@ const apiClient = axios.create({
 
 export const fetchEmployees = async () => {
 	try {
-		const response = await apiClient.get("/employee/GetAllEmployees"); // Updated endpoint
+		const response = await apiClient.get("/employee/GetAllEmployees");
 		return response.data;
 	} catch (error) {
 		console.error("Error fetching employees:", error);

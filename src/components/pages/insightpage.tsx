@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { fetchEmployees } from "../../lib/api";
+import { fetchEmployees } from "../../lib/employeeAPI";
 import Header from "../ui/header";
 import Sidebar from "../ui/sidebar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
