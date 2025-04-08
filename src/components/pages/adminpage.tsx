@@ -37,24 +37,32 @@ const AdminPage: React.FC = () => {
             <div className="flex flex-col items-center gap-4">
               <div className="bg-white shadow-lg rounded-xl overflow-hidden max-w-full self-center mt-2">
                 <div className="overflow-auto max-h-96">
-                  <table className="w-full border border-gray-300">
+                  <table className="border border-gray-300 table-fixed">
                     <thead className="bg-gradient-to-r from-sky-600 to-sky-500 text-white sticky top-0 z-10">
                       <tr>
-                        <th className="px-6 py-3 font-bold text-left">Position</th>
-                        <th className="px-6 py-3 font-bold text-left">Salary</th>
-                        <th className="px-6 py-3 font-bold text-left">Gender</th>
-                        <th className="px-6 py-3 font-bold text-left">Experience</th>
-                        <th className="px-6 py-3 font-bold text-left">Edit</th>
+                        <th className="px-6 py-3 font-bold self-center w-60">Position</th>
+                        <th className="px-6 py-3 font-bold self-center w-30">Salary</th>
+                        <th className="px-6 py-3 font-bold self-center w-10">Gender</th>
+                        <th className="px-6 py-3 font-bold self-center w-50">Experience</th>
+                        <th className="px-6 py-3 font-bold self-center w-10">Edit</th>
                       </tr>
                     </thead>
                     <tbody>
                       {tableData.map((row, index) => (
                         <tr key={index} className="border-b border-gray-200 hover:bg-blue-50">
-                          <td className="px-6 py-3 text-gray-700">{row.position}</td>
-                          <td className="px-6 py-3 text-gray-700">{row.salary}</td>
-                          <td className="px-6 py-3 text-gray-700">{row.gender}</td>
-                          <td className="px-6 py-3 text-gray-700">{row.experience}</td>
-                          <td className="px-6 py-3 text-gray-700">
+                          <td className="px-6 py-3 text-gray-700 w-60 break-words">
+                            {row.position.length > 50 ? row.position.slice(0, 50) + "..." : row.position}
+                          </td>
+                          <td className="px-6 py-3 text-gray-700 w-30 break-words">
+                            {row.salary} kr.
+                          </td>
+                          <td className="px-6 py-3 text-gray-700 w-10 break-words">
+                            {row.gender.length > 50 ? row.gender.slice(0, 50) + "..." : row.gender}
+                          </td>
+                          <td className="px-6 py-3 text-gray-700 w-50 break-words">
+                            {row.experience.length > 50 ? row.experience.slice(0, 50) + "..." : row.experience}
+                          </td>
+                          <td className="px-6 py-3 text-gray-700 w-10">
                             <EditButton
                               position={row.position}
                               salary={row.salary}

@@ -44,6 +44,9 @@ const EditModal: React.FC<EditModalProps> = ({
   };
 
   const handleChange = (field: string, value: string) => {
+    if(value.length > 30) {
+      value = value.slice(0, 30);
+    }
     setEditedData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -68,13 +71,20 @@ const EditModal: React.FC<EditModalProps> = ({
           placeholder="Enter position"
           value={editedData.position}
           onChange={(e) => handleChange("position", e.target.value)}
+          maxLength={30}
         />
 
         <InputField
           label="Salary"
           placeholder="Enter salary"
           value={editedData.salary}
-          onChange={(e) => handleChange("salary", e.target.value)}
+          onChange={(e) => {
+            const numericValue = e.target.value.replace(/\D/g, ''); // Kun tal
+            handleChange("salary", numericValue);
+          }}
+          type="number"
+          suffix="kr."
+          maxLength={30}
         />
 
         <InputField
@@ -82,6 +92,7 @@ const EditModal: React.FC<EditModalProps> = ({
           placeholder="Enter gender"
           value={editedData.gender}
           onChange={(e) => handleChange("gender", e.target.value)}
+          maxLength={30}
         />
 
         <InputField
@@ -89,6 +100,7 @@ const EditModal: React.FC<EditModalProps> = ({
           placeholder="Enter experience"
           value={editedData.experience}
           onChange={(e) => handleChange("experience", e.target.value)}
+          maxLength={30}
         />
 
         <div className="flex justify-between mt-4">
