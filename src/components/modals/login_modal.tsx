@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import InputField from "../fields/input_field";
 import axios from "axios";
+import ResetPasswordModalProps from "./resetpassword_modal";
 
 interface LoginModalProps {
 	isOpen: boolean;
@@ -17,6 +18,11 @@ const LoginModal: React.FC<LoginModalProps> = ({
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
+
+	const [showResetModal, setShowResetModal] = useState(false);
+	const [resetEmail, setResetEmail] = useState("");
+	const [resetMessage, setResetMessage] = useState("");
+	const [isResetError, setIsResetError] = useState(false);
 
 	useEffect(() => {
 		if (isOpen) {
@@ -66,6 +72,26 @@ const LoginModal: React.FC<LoginModalProps> = ({
 		}
 	};
 
+	const handlePasswordReset = async () => {
+		try {
+			const response = await axios.post(
+				"http://localhost:5170/api/PasswordReset/request-reset",
+				{ email: resetEmail }
+			);
+			setResetMessage(response.data.message || "Password reset email sent.");	
+			setIsResetError(false);
+		} catch (err) {
+			if (axios.isAxiosError(err)) {
+				setResetMessage(
+					err.response?.data?.message || "Failed to send reset email."
+				);
+			} else {
+				setResetMessage("An unexpected error occurred.");
+			}
+			setIsResetError(true);
+		}
+	};
+
 	if (!isOpen) return null;
 
 	return (
@@ -111,7 +137,27 @@ const LoginModal: React.FC<LoginModalProps> = ({
 						Login
 					</button>
 				</div>
+
+				<div className="flex justify-center mt-4">
+					<button
+						onClick={() => setShowResetModal(true)}
+						className="text-xs text-sky-600 hover:underline"
+					>
+						Forgot Password?
+					</button>
+				</div>
 			</div>
+
+			{/* Reset Password Modal */}
+			<ResetPasswordModalProps
+				isOpen={showResetModal}
+				onClose={() => setShowResetModal(false)}
+				email={resetEmail}
+				onEmailChange={(e) => setResetEmail(e.target.value)}
+				onReset={handlePasswordReset}
+				message={resetMessage}
+				isError={isResetError}
+			/>
 		</div>
 	);
 };
