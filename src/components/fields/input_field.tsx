@@ -21,7 +21,6 @@ const InputField: React.FC<InputFieldProps> = ({
 	type = "text",
 	suffix,
 	maxLength,
-	
 }) => {
 	return (
 		<div className="mb-4">

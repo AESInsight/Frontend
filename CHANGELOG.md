@@ -1,3 +1,18 @@
+# [1.4.0](https://github.com/AESInsight/Frontend/compare/v1.3.1...v1.4.0) (2025-04-08)
+
+
+### Features
+
+* add search bar to insight page ([1af98b9](https://github.com/AESInsight/Frontend/commit/1af98b9f976a4f87dfbf670e13923d9bd7598063))
+
+## [1.3.1](https://github.com/AESInsight/Frontend/compare/v1.3.0...v1.3.1) (2025-04-01)
+
+
+### Bug Fixes
+
+* less spacing between buttons ([60f0526](https://github.com/AESInsight/Frontend/commit/60f05261aaa65e1a2eb11df90da49a62ca3f315f))
+* Refactors header buttons for better maintainability ([ec54001](https://github.com/AESInsight/Frontend/commit/ec540019d4937ee53cff5ce0aae5516a08175935))
+
 # [1.3.0](https://github.com/AESInsight/Frontend/compare/v1.2.0...v1.3.0) (2025-04-01)
 
 

@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from "react";
 import InputField from "../fields/input_field";
+import axios from "axios";
 
 interface LoginModalProps {
 	isOpen: boolean;
 	onClose: () => void;
-	onLogin: () => void;
+	onLoginSuccess: (token: string) => void;
 }
 
 const LoginModal: React.FC<LoginModalProps> = ({
 	isOpen,
 	onClose,
-	onLogin,
+	onLoginSuccess,
 }) => {
 	const [fadeIn, setFadeIn] = useState(false);
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
+	const [error, setError] = useState("");
 
 	useEffect(() => {
 		if (isOpen) {
@@ -40,6 +42,30 @@ const LoginModal: React.FC<LoginModalProps> = ({
 		if (e.target === e.currentTarget) onClose();
 	};
 
+	const handleLogin = async () => {
+		try {
+			const response = await axios.post(
+				"http://localhost:5170/api/auth/login",
+				{
+					username,
+					password,
+				}
+			);
+			onLoginSuccess(response.data.Token); // Pass the token to the parent component
+			onClose(); // Close the modal
+		} catch (err) {
+			if (axios.isAxiosError(err)) {
+				// Narrow the type to AxiosError
+				setError(
+					err.response?.data?.message || "Login failed. Please try again."
+				);
+			} else {
+				// Handle unexpected errors
+				setError("An unexpected error occurred.");
+			}
+		}
+	};
+
 	if (!isOpen) return null;
 
 	return (
@@ -55,7 +81,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
 				}`}
 			>
 				<h2 className="text-lg font-semibold mb-4 text-center">Login</h2>
-
+				{error && <p className="text-red-500 text-sm mb-4">{error}</p>}
 				<InputField
 					label="Username"
 					placeholder="Enter your username"
@@ -68,6 +94,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
 					placeholder="Enter your password"
 					value={password}
 					onChange={(e) => setPassword(e.target.value)}
+					type="password"
 				/>
 
 				<div className="flex justify-between mt-4">
@@ -78,7 +105,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
 						Cancel
 					</button>
 					<button
-						onClick={onLogin}
+						onClick={handleLogin}
 						className="bg-sky-600 text-white px-4 py-2 rounded-lg hover:bg-sky-700 text-sm"
 					>
 						Login
