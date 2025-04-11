@@ -33,7 +33,7 @@ const EditButton: React.FC<EditButtonProps> = ({ position, salary, gender, exper
         onClick={() => setIsOpen(true)}
         className="text-gray-700 flex items-center transition-transform duration-300 ease-in-out hover:scale-115 cursor-pointer"
       >
-        <FontAwesomeIcon icon={faEdit} className="mr-2" />
+        <FontAwesomeIcon icon={faEdit} className="p-1" />
       </button>
 
       <EditModal
