@@ -42,10 +42,10 @@ const PersonalInformationButton: React.FC<{
 		// Validate sex
 		const validSex = sex.toLowerCase();
 		if (!validSex) {
-			errors.sex = "Gender is required";
+			errors.sex = "Sex is required";
 			isValid = false;
 		} else if (validSex !== "male" && validSex !== "female") {
-			errors.sex = "Gender must be either 'male' or 'female'";
+			errors.sex = "Sex must be 'male' or 'female'";
 			isValid = false;
 		}
 
@@ -120,7 +120,7 @@ const PersonalInformationButton: React.FC<{
 					</div>
 					<div className="mb-2">
 						<InputField
-							label="Gender"
+							label="Sex"
 							value={sex}
 							onChange={(e) => setSex(e.target.value)}
 							error={validationErrors.sex}
