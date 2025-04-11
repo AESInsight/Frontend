@@ -44,10 +44,12 @@ const EditModal: React.FC<EditModalProps> = ({
   };
 
   const handleChange = (field: string, value: string) => {
-    if(value.length > 30) {
-      value = value.slice(0, 30);
-    }
     setEditedData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const formatSalary = (value: string) => {
+    if (!value) return "";
+    return parseInt(value, 10).toLocaleString("da-DK");
   };
 
   if (!isOpen) return null;
@@ -70,37 +72,58 @@ const EditModal: React.FC<EditModalProps> = ({
           label="Position"
           placeholder="Enter position"
           value={editedData.position}
-          onChange={(e) => handleChange("position", e.target.value)}
+          onChange={(e) => {
+            let value = e.target.value;
+            if (value.length > 30) {
+              value = value.slice(0, 30);
+            }
+            handleChange("position", value);
+          }}
           maxLength={30}
         />
 
         <InputField
           label="Salary"
           placeholder="Enter salary"
-          value={editedData.salary}
+          value={formatSalary(editedData.salary)}
           onChange={(e) => {
-            const numericValue = e.target.value.replace(/\D/g, ''); // Kun tal
+            let numericValue = e.target.value.replace(/\D/g, '');
+            if (numericValue.length > 7) {
+              numericValue = numericValue.slice(0, 7);
+            }
             handleChange("salary", numericValue);
           }}
-          type="number"
+          type="text"
           suffix="kr."
-          maxLength={30}
         />
 
         <InputField
           label="Gender"
           placeholder="Enter gender"
           value={editedData.gender}
-          onChange={(e) => handleChange("gender", e.target.value)}
-          maxLength={30}
+          onChange={(e) => {
+            let value = e.target.value;
+            if (value.length > 6) {
+              value = value.slice(0, 6);
+            }
+            handleChange("gender", value);
+          }}
+          maxLength={6}
         />
 
         <InputField
           label="Experience"
           placeholder="Enter experience"
           value={editedData.experience}
-          onChange={(e) => handleChange("experience", e.target.value)}
-          maxLength={30}
+          onChange={(e) => {
+            let numericValue = e.target.value.replace(/\D/g, '');
+            if (numericValue.length > 2) {
+              numericValue = numericValue.slice(0, 2);
+            }
+            handleChange("experience", numericValue);
+          }}
+          type="text"
+          suffix={editedData.experience === "1" ? "yr." : "yrs."}
         />
 
         <div className="flex justify-between mt-4">
