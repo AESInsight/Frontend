@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/AESInsight/Frontend/compare/v1.4.0...v1.4.1) (2025-04-11)
+
+
+### Bug Fixes
+
+* lint formatting ([91d6cd0](https://github.com/AESInsight/Frontend/commit/91d6cd01e69bfee415cb29217fb961eddf857075))
+
 # [1.4.0](https://github.com/AESInsight/Frontend/compare/v1.3.1...v1.4.0) (2025-04-08)
 
 
