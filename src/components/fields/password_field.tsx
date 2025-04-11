@@ -26,7 +26,7 @@ const PasswordField: React.FC<PasswordFieldProps> = ({
         { text: "Minimum 8 characters long", regex: /.{8,}/ },
         { text: "At least one uppercase letter", regex: /[A-Z]/ },
         { text: "At least one number", regex: /\d/ },
-        { text: "At least one special character", regex: /[~`!@#$%^&*()\-_=+\[\]{}|;:'",<.>/?]/ }
+        { text: "At least one special character (~`!@#$%^&*()-_=+[]{}|;:'\",<.>/?", regex: /[~`!@#$%^&*()\-_=+[\]{}|;:'",<.>/?]/ }
     ];
 
     const getValidationStatus = () => {

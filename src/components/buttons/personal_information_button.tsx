@@ -34,8 +34,8 @@ const PersonalInformationButton: React.FC<{
 		if (!jobTitle.trim()) {
 			errors.jobTitle = "Job title is required";
 			isValid = false;
-		} else if (!/^[a-zA-Z\s]+$/.test(jobTitle)) {
-			errors.jobTitle = "Job title can only contain letters and spaces";
+		} else if (!/^[a-zA-Z\s\-'.,]+$/.test(jobTitle)) {
+			errors.jobTitle = "Job title can only contain letters, spaces, hyphens, apostrophes, and periods";
 			isValid = false;
 		}
 
