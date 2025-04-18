@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/AESInsight/Frontend/compare/v1.5.0...v1.5.1) (2025-04-18)
+
+
+### Bug Fixes
+
+* table component ([35d0493](https://github.com/AESInsight/Frontend/commit/35d04936efd0cbc2a03127f8ebb44d0fc8a40c67))
+
 # [1.5.0](https://github.com/AESInsight/Frontend/compare/v1.4.1...v1.5.0) (2025-04-18)
 
 
