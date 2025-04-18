@@ -6,7 +6,7 @@ const ServicePage = () => {
 		<div className="h-screen w-screen flex flex-col relative justify-center items-center">
 			<div className="relative z-10 flex flex-col h-full w-full">
 				<Header />
-				<div className="flex flex-1 w-full">
+				<div className="flex flex-1 w-full overflow-y-auto">
 					<Sidebar />
 					{/* Centering Content */}
 					<div className="flex flex-1 justify-center items-center">
