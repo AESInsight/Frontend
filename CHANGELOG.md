@@ -1,3 +1,10 @@
+## [1.5.2](https://github.com/AESInsight/Frontend/compare/v1.5.1...v1.5.2) (2025-04-18)
+
+
+### Bug Fixes
+
+* fixes tables to be same size in admin and insightpage. Also removes overflow/scroll from header in tables ([d643fdd](https://github.com/AESInsight/Frontend/commit/d643fdd0c5042e7cfd5d699c18923ccbbd627b0b))
+
 ## [1.5.1](https://github.com/AESInsight/Frontend/compare/v1.5.0...v1.5.1) (2025-04-18)
 
 
