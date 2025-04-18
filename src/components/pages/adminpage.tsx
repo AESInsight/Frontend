@@ -1,20 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { fetchEmployees } from "../../lib/employeeAPI";
 import Header from "../ui/header";
 import Sidebar from "../ui/sidebar";
 import EmployeeTable, { TableRow } from "../tables/EmployeeTable";
 
+// Backend type
+interface Employee {
+  employeeID: number;
+  jobTitle: string;
+  salary: number;
+  experience: number;
+  gender: string;
+  companyID: number;
+}
+
 const AdminPage: React.FC = () => {
-  const [tableData, setTableData] = useState<TableRow[]>(
-    Array(20)
-      .fill(null)
-      .map((_, i) => ({
-        id: i + 1,
-        jobTitle: "Position",
-        salary: "Salary",
-        gender: "Gender",
-        experience: "Experience",
-      }))
-  );
+  const {
+    data: employees,
+    isLoading,
+    isError,
+    error,
+  } = useQuery<Employee[]>({
+    queryKey: ["employees"],
+    queryFn: fetchEmployees,
+  });
+
+  const [tableData, setTableData] = useState<TableRow[]>([]);
+
+  // Sync tableData when data loads
+  useEffect(() => {
+    if (employees) {
+      const mapped = employees.map((e) => ({
+        id: e.employeeID,
+        jobTitle: e.jobTitle,
+        salary: e.salary,
+        gender: e.gender,
+        experience: e.experience,
+      }));
+      setTableData(mapped);
+    }
+  }, [employees]);
 
   const handleSave = (index: number, updatedData: TableRow) => {
     const newData = [...tableData];
@@ -38,14 +64,26 @@ const AdminPage: React.FC = () => {
               Welcome to the Admin Page
             </h1>
 
-            <div className="max-w-6xl mx-auto w-full px-4">
-              <EmployeeTable
-                editable={true}
-                data={tableData}
-                onSave={handleSave}
-                onDelete={handleDelete}
-              />
-            </div>
+            {/* Loading / Error states */}
+            {isLoading && <p className="text-center">Loading...</p>}
+            {isError && (
+              <div className="text-center text-red-500">
+                <p>Error fetching employees.</p>
+                <p>{(error as Error)?.message}</p>
+              </div>
+            )}
+
+            {/* Table */}
+            {!isLoading && tableData.length > 0 && (
+              <div className="max-w-6xl mx-auto w-full px-4">
+                <EmployeeTable
+                  editable={true}
+                  data={tableData}
+                  onSave={handleSave}
+                  onDelete={handleDelete}
+                />
+              </div>
+            )}
           </main>
         </div>
 
