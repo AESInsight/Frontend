@@ -7,7 +7,7 @@ import SearchBar from "./search_bar";
 
 const Header: React.FC = () => {
 	return (
-		<header className="bg-gradient-to-r from-sky-700 to-sky-400 flex items-center justify-between h-16 w-auto border-b-2 border-black">
+		<header className="fixed overflow-hidden z-20 bg-gradient-to-r from-sky-700 to-sky-400 flex items-center justify-between h-16 w-full border-b-2 border-black">
 			<div className="flex items-center space-x-4 flex-grow">
 				{/* Logo */}
 				<img
