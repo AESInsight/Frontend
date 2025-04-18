@@ -48,7 +48,7 @@ const InsightPage: React.FC = () => {
 		<div className="h-screen w-screen flex flex-col relative">
 			<div className="relative z-10 flex flex-col h-full">
 				<Header />
-				<div className="flex flex-1">
+				<div className="flex flex-1 overflow-y-auto pt-14">
 					<Sidebar />
 					<main className="flex-1 p-4 text-black">
 						<h1 className="text-3xl font-bold mb-4 text-center">
