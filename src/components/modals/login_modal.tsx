@@ -151,7 +151,12 @@ const LoginModal: React.FC<LoginModalProps> = ({
 			{/* Reset Password Modal */}
 			<ResetPasswordModalProps
 				isOpen={showResetModal}
-				onClose={() => setShowResetModal(false)}
+				onClose={() => {
+					setShowResetModal(false);
+					setResetEmail("");
+					setResetMessage("");
+					setIsResetError(false);
+				}}
 				email={resetEmail}
 				onEmailChange={(e) => setResetEmail(e.target.value)}
 				onReset={handlePasswordReset}
