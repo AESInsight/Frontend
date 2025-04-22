@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import InputField from "../fields/input_field";
 import axios from "axios";
-import ResetPasswordModalProps from "./resetpassword_modal";
+import ResetPasswordModal from "./resetpassword_modal";
 
 interface LoginModalProps {
 	isOpen: boolean;
@@ -133,6 +133,26 @@ const LoginModal: React.FC<LoginModalProps> = ({
 					fadeIn ? "opacity-100 scale-100" : "opacity-0 scale-95"
 				}`}
 			>
+				<button
+					onClick={() => {
+						resetLoginState(); // Reset state when modal closes
+						onClose(); // Close the modal
+					}}
+					className="absolute top-3 left-3 text-gray-400 hover:text-black text-xl font-bold focus:outline-none hover:cursor-pointer"
+					aria-label="Close modal"
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						fill="none"
+						viewBox="0 0 24 24"
+						strokeWidth={2}
+						stroke="currentColor"
+						className="w-5 h-5"
+					>
+						<path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+					</svg>
+				</button>
+
 				<h2 className="text-lg font-semibold mb-4 text-center">Login</h2>
 				{error && <p className="text-red-500 text-sm mb-4">{error}</p>}
 				<InputField
@@ -150,39 +170,40 @@ const LoginModal: React.FC<LoginModalProps> = ({
 					type="password"
 				/>
 
-				<div className="flex justify-between mt-4">
+				<button
+					onClick={handleLogin}
+					disabled={isLoggingIn}
+					className={`w-full mt-2 bg-sky-600 text-white px-4 py-2 rounded-lg text-sm ${
+						isLoggingIn ? "opacity-50 cursor-not-allowed" : "hover:bg-sky-700 hover:underline hover:cursor-pointer"
+					}`}
+				>
+					{isLoggingIn ? "Logging in..." : "Login"}
+				</button>
+
+				<div className="flex justify-center mt-4">
+					<button
+						onClick={() => setShowResetModal(true)}
+						className="text-xs text-sky-600 hover:underline hover:cursor-pointer"
+					>
+						Forgot Password?
+					</button>
+				</div>
+
+				{/*<div className="flex justify-center mt-2">
 					<button
 						onClick={() => {
 							resetLoginState(); // Reset state when modal closes
 							onClose(); // Close the modal
 						}}
-						className="text-sm text-gray-600 hover:underline"
+						className="text-xs text-gray-600 hover:underline hover:cursor-pointer"
 					>
 						Cancel
 					</button>
-					<button
-						onClick={handleLogin}
-						disabled={isLoggingIn}
-						className={`bg-sky-600 text-white px-4 py-2 rounded-lg text-sm ${
-							isLoggingIn ? "opacity-50 cursor-not-allowed" : "hover:bg-sky-700"
-						}`}
-					>
-						{isLoggingIn ? "Logging in..." : "Login"}
-					</button>
-				</div>
-
-				<div className="flex justify-center mt-4">
-					<button
-						onClick={() => setShowResetModal(true)}
-						className="text-xs text-sky-600 hover:underline"
-					>
-						Forgot Password?
-					</button>
-				</div>
+				</div>*/}
 			</div>
 
 			{/* Reset Password Modal */}
-			<ResetPasswordModalProps
+			<ResetPasswordModal
 				isOpen={showResetModal}
 				onClose={() => {
 					setShowResetModal(false);

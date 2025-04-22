@@ -28,7 +28,7 @@ const InputField: React.FC<InputFieldProps> = ({
 				placeholder={placeholder}
 				value={value}
 				onChange={onChange}
-				className={`px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-sky-500 ${className}`}
+				className={`w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-sky-500 ${className}`}
 			/>
 		</div>
 	);

@@ -1,3 +1,3 @@
-const API_BASE_URL = "http://localhost:5170/api"; // Ensure this matches the backend's host and port
+const API_BASE_URL = "https://aes-backend-geaefagrhudkesg9.northeurope-01.azurewebsites.net/api"; // Ensure this matches the backend's host and port
 
 export default API_BASE_URL;
