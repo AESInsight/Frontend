@@ -2,6 +2,8 @@ import React from "react";
 import Header from "../ui/header";
 import Sidebar from "../ui/sidebar";
 
+// Define the Employee type
+
 const AboutPage: React.FC = () => {
 	return (
 		<div className="h-screen w-screen flex flex-col relative justify-center items-center">
