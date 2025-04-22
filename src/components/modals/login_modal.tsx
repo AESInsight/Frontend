@@ -18,23 +18,36 @@ const LoginModal: React.FC<LoginModalProps> = ({
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
+	const [isLoggingIn, setIsLoggingIn] = useState(false);
 
 	const [showResetModal, setShowResetModal] = useState(false);
 	const [resetEmail, setResetEmail] = useState("");
 	const [resetMessage, setResetMessage] = useState("");
 	const [isResetError, setIsResetError] = useState(false);
+	const [isSending, setIsSending] = useState(false);
+
+	const resetLoginState = () => {
+		setUsername("");
+		setPassword("");
+		setError("");
+		setIsLoggingIn(false);
+	};
 
 	useEffect(() => {
 		if (isOpen) {
 			setTimeout(() => setFadeIn(true), 10);
 		} else {
 			setFadeIn(false);
+			resetLoginState(); // Reset state when modal closes
 		}
 	}, [isOpen]);
 
 	useEffect(() => {
 		const handleKeyDown = (e: KeyboardEvent) => {
-			if (e.key === "Escape") onClose();
+			if (e.key === "Escape") {
+				resetLoginState(); // Reset state when modal closes
+				onClose(); // Close the modal
+			}
 		};
 		if (isOpen) {
 			window.addEventListener("keydown", handleKeyDown);
@@ -45,13 +58,19 @@ const LoginModal: React.FC<LoginModalProps> = ({
 	}, [isOpen, onClose]);
 
 	const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
-		if (e.target === e.currentTarget) onClose();
+		if (e.target === e.currentTarget) {
+			resetLoginState(); // Reset state when modal closes
+			onClose(); // Close the modal
+		}
 	};
 
 	const handleLogin = async () => {
+		setIsLoggingIn(true);
+		setError(""); // Clear previous error message
+
 		try {
 			const response = await axios.post(
-				"http://localhost:5170/api/auth/login",
+				"http://localhost:5170/api/Auth/login",
 				{
 					username,
 					password,
@@ -62,17 +81,24 @@ const LoginModal: React.FC<LoginModalProps> = ({
 		} catch (err) {
 			if (axios.isAxiosError(err)) {
 				// Narrow the type to AxiosError
-				setError(
-					err.response?.data?.message || "Login failed. Please try again."
-				);
+				setError(err.response?.data?.message || "Login failed. Please try again.");
 			} else {
 				// Handle unexpected errors
 				setError("An unexpected error occurred.");
 			}
+		} finally {
+			setIsLoggingIn(false);
 		}
 	};
 
 	const handlePasswordReset = async () => {
+		if(!resetEmail) {
+			setResetMessage("Please enter your email address.");
+			setIsResetError(true);
+			return;
+		}
+
+		setIsSending(true);
 		try {
 			const response = await axios.post(
 				"http://localhost:5170/api/PasswordReset/request-reset",
@@ -82,13 +108,14 @@ const LoginModal: React.FC<LoginModalProps> = ({
 			setIsResetError(false);
 		} catch (err) {
 			if (axios.isAxiosError(err)) {
-				setResetMessage(
-					err.response?.data?.message || "Failed to send reset email."
-				);
+				setResetMessage(err.response?.data?.message || "Failed to send reset email.");
 			} else {
 				setResetMessage("An unexpected error occurred.");
 			}
 			setIsResetError(true);
+
+		} finally {
+			setIsSending(false);
 		}
 	};
 
@@ -125,16 +152,22 @@ const LoginModal: React.FC<LoginModalProps> = ({
 
 				<div className="flex justify-between mt-4">
 					<button
-						onClick={onClose}
+						onClick={() => {
+							resetLoginState(); // Reset state when modal closes
+							onClose(); // Close the modal
+						}}
 						className="text-sm text-gray-600 hover:underline"
 					>
 						Cancel
 					</button>
 					<button
 						onClick={handleLogin}
-						className="bg-sky-600 text-white px-4 py-2 rounded-lg hover:bg-sky-700 text-sm"
+						disabled={isLoggingIn}
+						className={`bg-sky-600 text-white px-4 py-2 rounded-lg text-sm ${
+							isLoggingIn ? "opacity-50 cursor-not-allowed" : "hover:bg-sky-700"
+						}`}
 					>
-						Login
+						{isLoggingIn ? "Logging in..." : "Login"}
 					</button>
 				</div>
 
@@ -156,12 +189,14 @@ const LoginModal: React.FC<LoginModalProps> = ({
 					setResetEmail("");
 					setResetMessage("");
 					setIsResetError(false);
+					setIsSending(false);
 				}}
 				email={resetEmail}
 				onEmailChange={(e) => setResetEmail(e.target.value)}
 				onReset={handlePasswordReset}
 				message={resetMessage}
 				isError={isResetError}
+				isSending={isSending}
 			/>
 		</div>
 	);

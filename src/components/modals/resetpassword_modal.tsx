@@ -9,6 +9,7 @@ interface ResetPasswordModalProps {
     onReset: () => void;
     message: string;
     isError: boolean;
+    isSending: boolean;
 }
 
 const ResetPasswordModalProps: React.FC<ResetPasswordModalProps> = ({
@@ -19,6 +20,7 @@ const ResetPasswordModalProps: React.FC<ResetPasswordModalProps> = ({
     onReset,
     message,
     isError,
+    isSending,
 }) => {
     if (!isOpen) return null;
 
@@ -57,9 +59,12 @@ const ResetPasswordModalProps: React.FC<ResetPasswordModalProps> = ({
                     </button>
                     <button
                         onClick={onReset}
-                        className="bg-sky-600 text-white px-4 py-2 rounded-lg hover:bg-sky-700 text-sm"
+                        disabled={isSending}
+                        className={`bg-sky-600 text-white px-4 py-2 rounded-lg text-sm ${
+                            isSending ? "opacity-50 cursor-not-allowed" : "hover:bg-sky-700"
+                        }`}
                     >
-                        Send Email
+                        {isSending ? "Sending..." : "Send Email"}
                     </button>
                 </div>
             </div>
