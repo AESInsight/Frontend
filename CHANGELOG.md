@@ -1,3 +1,10 @@
+## [1.5.4](https://github.com/AESInsight/Frontend/compare/v1.5.3...v1.5.4) (2025-04-22)
+
+
+### Bug Fixes
+
+* fix table for frontend ([c6b9869](https://github.com/AESInsight/Frontend/commit/c6b9869472d0f3ee6973f50e33c4d3451dcb175b))
+
 ## [1.5.3](https://github.com/AESInsight/Frontend/compare/v1.5.2...v1.5.3) (2025-04-18)
 
 
