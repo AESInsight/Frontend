@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import EditButton from "../buttons/edit_button";
+import { fetchAllSalaries, fetchEmployees } from "../../lib/employeeAPI";
 
 export interface TableRow {
 	id?: number | string;
@@ -9,19 +10,69 @@ export interface TableRow {
 	experience: number | string;
 }
 
+interface Employee {
+	employeeID: number;
+	jobTitle: string;
+	experience: number;
+	gender: string;
+	companyID: number;
+}
+
+interface Salary {
+	salaryID: number;
+	employeeID: number;
+	salary: number;
+	timestamp: string;
+}
+
 interface EmployeeTableProps {
-	data: TableRow[];
+	data: TableRow[]; // Add this line to define the data prop
 	editable?: boolean;
 	onSave?: (index: number, updatedData: TableRow) => void;
 	onDelete?: (index: number) => void;
 }
 
 const EmployeeTable: React.FC<EmployeeTableProps> = ({
-	data,
 	editable = true,
 	onSave,
 	onDelete,
 }) => {
+	const [data, setData] = useState<TableRow[]>([]);
+
+	useEffect(() => {
+		const loadData = async () => {
+			try {
+				const employees: Employee[] = await fetchEmployees();
+				const salaries: Salary[] = await fetchAllSalaries();
+
+				// Merge salaries into employees
+				const mergedData = employees.map((employee) => {
+					const latestSalary = salaries
+						.filter((salary) => salary.employeeID === employee.employeeID)
+						.sort(
+							(a, b) =>
+								new Date(b.timestamp).getTime() -
+								new Date(a.timestamp).getTime()
+						)[0];
+
+					return {
+						id: employee.employeeID,
+						jobTitle: employee.jobTitle,
+						salary: latestSalary ? latestSalary.salary : "N/A",
+						gender: employee.gender,
+						experience: employee.experience,
+					};
+				});
+
+				setData(mergedData);
+			} catch (error) {
+				console.error("Failed to load data:", error);
+			}
+		};
+
+		loadData();
+	}, []);
+
 	return (
 		<div className="bg-white shadow-lg rounded-xl overflow-hidden w-full">
 			<div
@@ -51,7 +102,7 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
 					>
 						<div className="p-4 text-gray-700">{row.id ?? "N/A"}</div>
 						<div className="p-4 text-gray-700">{row.jobTitle || "N/A"}</div>
-						<div className="p-4 text-gray-700">{row.salary} kr.</div>
+						<div className="p-4 text-gray-700">{row.salary || "N/A"} kr.</div>
 						<div className="p-4 text-gray-700">
 							{row.experience
 								? `${row.experience} ${
