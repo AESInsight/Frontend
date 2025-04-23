@@ -18,6 +18,14 @@ export const fetchEmployees = async () => {
 	}
 };
 
+export interface SalaryEntry {
+	id: number;
+	amount: number;
+	gender: "Men" | "Women";
+	date: string;
+	employeeId?: number;
+}
+
 export const fetchAllSalaries = async () => {
 	try {
 		const response = await apiClient.get("/salary/all");

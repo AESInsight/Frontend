@@ -24,10 +24,10 @@ const Homepage: React.FC = () => {
 							<div className="bg-transparent backdrop-blur-sm border-2 border-black rounded-lg">
 								<TestChart2 />
 							</div>
-							<div className="bg-transparent backdrop-blur-sm border-2 border-black rounded-lg">
+							<div className="bg-transparent backdrop-blur-sm border-2 border-black rounded-lg mb-4">
 								<TestChart3 />
 							</div>
-							<div className="bg-transparent backdrop-blur-sm border-2 border-black rounded-lg">
+							<div className="bg-transparent backdrop-blur-sm border-2 border-black rounded-lg mb-4">
 								<TestChart4 />
 							</div>
 						</div>
