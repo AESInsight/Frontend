@@ -1,19 +1,17 @@
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import StyledHeaderButton from "./styled_header_button";
 
 const InsightButton: React.FC = () => {
 	const navigate = useNavigate();
 
 	return (
-		<button
+		<StyledHeaderButton
+			icon={faEdit}
+			text="Insight"
 			onClick={() => navigate("/insight")}
-			className="text-white flex items-center transition-transform duration-200 hover:scale-115 cursor-pointer"
-		>
-			<FontAwesomeIcon icon={faEdit} className="mr-2" />
-			<span>Insight</span>
-		</button>
+		/>
 	);
 };
 

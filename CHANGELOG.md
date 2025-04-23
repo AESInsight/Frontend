@@ -1,3 +1,88 @@
+## [1.5.4](https://github.com/AESInsight/Frontend/compare/v1.5.3...v1.5.4) (2025-04-22)
+
+
+### Bug Fixes
+
+* fix table for frontend ([c6b9869](https://github.com/AESInsight/Frontend/commit/c6b9869472d0f3ee6973f50e33c4d3451dcb175b))
+
+## [1.5.3](https://github.com/AESInsight/Frontend/compare/v1.5.2...v1.5.3) (2025-04-18)
+
+
+### Bug Fixes
+
+* fixes header scroll overflow and makes header fixed in place ([f9cc14f](https://github.com/AESInsight/Frontend/commit/f9cc14f91fefcd4a8e85be65bf5761a84215bf54))
+
+## [1.5.2](https://github.com/AESInsight/Frontend/compare/v1.5.1...v1.5.2) (2025-04-18)
+
+
+### Bug Fixes
+
+* fixes tables to be same size in admin and insightpage. Also removes overflow/scroll from header in tables ([d643fdd](https://github.com/AESInsight/Frontend/commit/d643fdd0c5042e7cfd5d699c18923ccbbd627b0b))
+
+## [1.5.1](https://github.com/AESInsight/Frontend/compare/v1.5.0...v1.5.1) (2025-04-18)
+
+
+### Bug Fixes
+
+* table component ([35d0493](https://github.com/AESInsight/Frontend/commit/35d04936efd0cbc2a03127f8ebb44d0fc8a40c67))
+
+# [1.5.0](https://github.com/AESInsight/Frontend/compare/v1.4.1...v1.5.0) (2025-04-18)
+
+
+### Bug Fixes
+
+* add grod-col ([b3c68c4](https://github.com/AESInsight/Frontend/commit/b3c68c4655cb5c33a695af7a1e9166870843e1a0))
+* add new features ([bff44cd](https://github.com/AESInsight/Frontend/commit/bff44cd2eb03010108c2d127fb5ac8a813d33822))
+* Tables size ([5edfc36](https://github.com/AESInsight/Frontend/commit/5edfc36d4279ea4a43fd8be40673047512fc870b))
+
+
+### Features
+
+* add delete button to edit modal ([97b59e1](https://github.com/AESInsight/Frontend/commit/97b59e13beb8a790866f57e3f9ac603b405a5abe))
+* add edit button and logic ([516bc8d](https://github.com/AESInsight/Frontend/commit/516bc8dacf3b812550c2b8607f2f026381399a88))
+* add tables ([84a2a87](https://github.com/AESInsight/Frontend/commit/84a2a877e04ae2da793c92f752d8d0fd6dde8e84))
+
+## [1.4.1](https://github.com/AESInsight/Frontend/compare/v1.4.0...v1.4.1) (2025-04-11)
+
+
+### Bug Fixes
+
+* lint formatting ([91d6cd0](https://github.com/AESInsight/Frontend/commit/91d6cd01e69bfee415cb29217fb961eddf857075))
+
+# [1.4.0](https://github.com/AESInsight/Frontend/compare/v1.3.1...v1.4.0) (2025-04-08)
+
+
+### Features
+
+* add search bar to insight page ([1af98b9](https://github.com/AESInsight/Frontend/commit/1af98b9f976a4f87dfbf670e13923d9bd7598063))
+
+## [1.3.1](https://github.com/AESInsight/Frontend/compare/v1.3.0...v1.3.1) (2025-04-01)
+
+
+### Bug Fixes
+
+* less spacing between buttons ([60f0526](https://github.com/AESInsight/Frontend/commit/60f05261aaa65e1a2eb11df90da49a62ca3f315f))
+* Refactors header buttons for better maintainability ([ec54001](https://github.com/AESInsight/Frontend/commit/ec540019d4937ee53cff5ce0aae5516a08175935))
+
+# [1.3.0](https://github.com/AESInsight/Frontend/compare/v1.2.0...v1.3.0) (2025-04-01)
+
+
+### Bug Fixes
+
+* set in front ([1548ca1](https://github.com/AESInsight/Frontend/commit/1548ca13b74e40fb0c2e18e765c47cf0080256f9))
+
+
+### Features
+
+* add insightpage tables ([6969073](https://github.com/AESInsight/Frontend/commit/6969073a51c09e43f755a2f2df0adfae0ff29568))
+
+# [1.2.0](https://github.com/AESInsight/Frontend/compare/v1.1.4...v1.2.0) (2025-04-01)
+
+
+### Features
+
+* added search bar ([ae7794a](https://github.com/AESInsight/Frontend/commit/ae7794af3eb36c129703f48464887fd665c89636))
+
 ## [1.1.4](https://github.com/AESInsight/Frontend/compare/v1.1.3...v1.1.4) (2025-03-28)
 
 

@@ -1,19 +1,17 @@
 import { faUserShield } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import StyledHeaderButton from "./styled_header_button";
 
 const AdminButton: React.FC = () => {
 	const navigate = useNavigate();
 
 	return (
-		<button
+		<StyledHeaderButton
+			icon={faUserShield}
+			text="Admin"
 			onClick={() => navigate("/admin")}
-			className="text-white flex items-center transition-transform duration-200 hover:scale-115 cursor-pointer"
-		>
-			<FontAwesomeIcon icon={faUserShield} className="mr-2" />
-			<span>Admin</span>
-		</button>
+		/>
 	);
 };
 
