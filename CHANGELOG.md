@@ -1,3 +1,54 @@
+## [1.5.4](https://github.com/AESInsight/Frontend/compare/v1.5.3...v1.5.4) (2025-04-22)
+
+
+### Bug Fixes
+
+* fix table for frontend ([c6b9869](https://github.com/AESInsight/Frontend/commit/c6b9869472d0f3ee6973f50e33c4d3451dcb175b))
+
+## [1.5.3](https://github.com/AESInsight/Frontend/compare/v1.5.2...v1.5.3) (2025-04-18)
+
+
+### Bug Fixes
+
+* fixes header scroll overflow and makes header fixed in place ([f9cc14f](https://github.com/AESInsight/Frontend/commit/f9cc14f91fefcd4a8e85be65bf5761a84215bf54))
+
+## [1.5.2](https://github.com/AESInsight/Frontend/compare/v1.5.1...v1.5.2) (2025-04-18)
+
+
+### Bug Fixes
+
+* fixes tables to be same size in admin and insightpage. Also removes overflow/scroll from header in tables ([d643fdd](https://github.com/AESInsight/Frontend/commit/d643fdd0c5042e7cfd5d699c18923ccbbd627b0b))
+
+## [1.5.1](https://github.com/AESInsight/Frontend/compare/v1.5.0...v1.5.1) (2025-04-18)
+
+
+### Bug Fixes
+
+* table component ([35d0493](https://github.com/AESInsight/Frontend/commit/35d04936efd0cbc2a03127f8ebb44d0fc8a40c67))
+
+# [1.5.0](https://github.com/AESInsight/Frontend/compare/v1.4.1...v1.5.0) (2025-04-18)
+
+
+### Bug Fixes
+
+* add grod-col ([b3c68c4](https://github.com/AESInsight/Frontend/commit/b3c68c4655cb5c33a695af7a1e9166870843e1a0))
+* add new features ([bff44cd](https://github.com/AESInsight/Frontend/commit/bff44cd2eb03010108c2d127fb5ac8a813d33822))
+* Tables size ([5edfc36](https://github.com/AESInsight/Frontend/commit/5edfc36d4279ea4a43fd8be40673047512fc870b))
+
+
+### Features
+
+* add delete button to edit modal ([97b59e1](https://github.com/AESInsight/Frontend/commit/97b59e13beb8a790866f57e3f9ac603b405a5abe))
+* add edit button and logic ([516bc8d](https://github.com/AESInsight/Frontend/commit/516bc8dacf3b812550c2b8607f2f026381399a88))
+* add tables ([84a2a87](https://github.com/AESInsight/Frontend/commit/84a2a877e04ae2da793c92f752d8d0fd6dde8e84))
+
+## [1.4.1](https://github.com/AESInsight/Frontend/compare/v1.4.0...v1.4.1) (2025-04-11)
+
+
+### Bug Fixes
+
+* lint formatting ([91d6cd0](https://github.com/AESInsight/Frontend/commit/91d6cd01e69bfee415cb29217fb961eddf857075))
+
 # [1.4.0](https://github.com/AESInsight/Frontend/compare/v1.3.1...v1.4.0) (2025-04-08)
 
 

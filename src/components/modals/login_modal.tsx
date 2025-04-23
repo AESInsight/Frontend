@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import InputField from "../fields/input_field";
 import axios from "axios";
 import ResetPasswordModal from "./resetpassword_modal";
+import { validateEmail, validatePassword } from "@/lib/regexValidationLogin";
+import PasswordField from "../fields/password_field";
 
 interface LoginModalProps {
 	isOpen: boolean;
@@ -18,6 +20,11 @@ const LoginModal: React.FC<LoginModalProps> = ({
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
+	const [validationErrors, setValidationErrors] = useState<{
+		email?: string;
+		password?: string;
+	}>({});
+	const [isSubmitted, setIsSubmitted] = useState(false);
 	const [isLoggingIn, setIsLoggingIn] = useState(false);
 
 	const [showResetModal, setShowResetModal] = useState(false);
@@ -31,6 +38,8 @@ const LoginModal: React.FC<LoginModalProps> = ({
 		setPassword("");
 		setError("");
 		setIsLoggingIn(false);
+		setValidationErrors({});
+		setIsSubmitted(false);
 	};
 
 	useEffect(() => {
@@ -38,15 +47,15 @@ const LoginModal: React.FC<LoginModalProps> = ({
 			setTimeout(() => setFadeIn(true), 10);
 		} else {
 			setFadeIn(false);
-			resetLoginState(); // Reset state when modal closes
+			resetLoginState();
 		}
 	}, [isOpen]);
 
 	useEffect(() => {
 		const handleKeyDown = (e: KeyboardEvent) => {
 			if (e.key === "Escape") {
-				resetLoginState(); // Reset state when modal closes
-				onClose(); // Close the modal
+				resetLoginState();
+				onClose();
 			}
 		};
 		if (isOpen) {
@@ -59,31 +68,80 @@ const LoginModal: React.FC<LoginModalProps> = ({
 
 	const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
 		if (e.target === e.currentTarget) {
-			resetLoginState(); // Reset state when modal closes
-			onClose(); // Close the modal
+			resetLoginState();
+			onClose();
+		}
+	};
+
+	const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const value = e.target.value;
+		setUsername(value);
+		if (isSubmitted) {
+			if (value && !validateEmail(value)) {
+				setValidationErrors((prev) => ({
+					...prev,
+					email: "Please enter a valid email address",
+				}));
+			} else {
+				setValidationErrors((prev) => ({
+					...prev,
+					email: undefined,
+				}));
+			}
+		}
+	};
+
+	const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const value = e.target.value;
+		setPassword(value);
+		if (isSubmitted) {
+			const { errors } = validatePassword(value);
+			setValidationErrors((prev) => ({
+				...prev,
+				password: errors.length > 0 ? errors[0] : undefined,
+			}));
 		}
 	};
 
 	const handleLogin = async () => {
+		setIsSubmitted(true);
+		setError("");
 		setIsLoggingIn(true);
-		setError(""); // Clear previous error message
+
+		// Validate email
+		if (!validateEmail(username)) {
+			setValidationErrors((prev) => ({
+				...prev,
+				email: "Please enter a valid email address",
+			}));
+			setIsLoggingIn(false);
+			return;
+		}
+
+		// Validate password
+		const passwordValidation = validatePassword(password);
+		if (!passwordValidation.isValid) {
+			setValidationErrors((prev) => ({
+				...prev,
+				password: passwordValidation.errors[0],
+			}));
+			setIsLoggingIn(false);
+			return;
+		}
 
 		try {
 			const response = await axios.post(
 				"http://localhost:5170/api/Auth/login",
-				{
-					username,
-					password,
-				}
+				{ username, password }
 			);
-			onLoginSuccess(response.data.Token); // Pass the token to the parent component
-			onClose(); // Close the modal
+			onLoginSuccess(response.data.Token);
+			onClose();
 		} catch (err) {
 			if (axios.isAxiosError(err)) {
-				// Narrow the type to AxiosError
-				setError(err.response?.data?.message || "Login failed. Please try again.");
+				setError(
+					err.response?.data?.message || "Login failed. Please try again."
+				);
 			} else {
-				// Handle unexpected errors
 				setError("An unexpected error occurred.");
 			}
 		} finally {
@@ -92,7 +150,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
 	};
 
 	const handlePasswordReset = async () => {
-		if(!resetEmail) {
+		if (!resetEmail) {
 			setResetMessage("Please enter your email address.");
 			setIsResetError(true);
 			return;
@@ -104,16 +162,17 @@ const LoginModal: React.FC<LoginModalProps> = ({
 				"http://localhost:5170/api/PasswordReset/request-reset",
 				{ email: resetEmail }
 			);
-			setResetMessage(response.data.message || "Password reset email sent.");	
+			setResetMessage(response.data.message || "Password reset email sent.");
 			setIsResetError(false);
 		} catch (err) {
 			if (axios.isAxiosError(err)) {
-				setResetMessage(err.response?.data?.message || "Failed to send reset email.");
+				setResetMessage(
+					err.response?.data?.message || "Failed to send reset email."
+				);
 			} else {
 				setResetMessage("An unexpected error occurred.");
 			}
 			setIsResetError(true);
-
 		} finally {
 			setIsSending(false);
 		}
@@ -135,8 +194,8 @@ const LoginModal: React.FC<LoginModalProps> = ({
 			>
 				<button
 					onClick={() => {
-						resetLoginState(); // Reset state when modal closes
-						onClose(); // Close the modal
+						resetLoginState();
+						onClose();
 					}}
 					className="absolute top-3 left-3 text-gray-400 hover:text-black text-xl font-bold focus:outline-none hover:cursor-pointer"
 					aria-label="Close modal"
@@ -149,32 +208,39 @@ const LoginModal: React.FC<LoginModalProps> = ({
 						stroke="currentColor"
 						className="w-5 h-5"
 					>
-						<path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+						<path
+							strokeLinecap="round"
+							strokeLinejoin="round"
+							d="M6 18L18 6M6 6l12 12"
+						/>
 					</svg>
 				</button>
 
 				<h2 className="text-lg font-semibold mb-4 text-center">Login</h2>
 				{error && <p className="text-red-500 text-sm mb-4">{error}</p>}
-				<InputField
-					label="Username"
-					placeholder="Enter your username"
-					value={username}
-					onChange={(e) => setUsername(e.target.value)}
-				/>
 
 				<InputField
-					label="Password"
-					placeholder="Enter your password"
+					label="Email"
+					placeholder="Enter your email"
+					value={username}
+					onChange={handleUsernameChange}
+					error={isSubmitted ? validationErrors.email : undefined}
+				/>
+
+				<PasswordField
 					value={password}
-					onChange={(e) => setPassword(e.target.value)}
-					type="password"
+					onChange={handlePasswordChange}
+					error={validationErrors.password}
+					showValidation={isSubmitted}
 				/>
 
 				<button
 					onClick={handleLogin}
 					disabled={isLoggingIn}
 					className={`w-full mt-2 bg-sky-600 text-white px-4 py-2 rounded-lg text-sm ${
-						isLoggingIn ? "opacity-50 cursor-not-allowed" : "hover:bg-sky-700 hover:underline hover:cursor-pointer"
+						isLoggingIn
+							? "opacity-50 cursor-not-allowed"
+							: "hover:bg-sky-700 hover:underline hover:cursor-pointer"
 					}`}
 				>
 					{isLoggingIn ? "Logging in..." : "Login"}
@@ -188,21 +254,8 @@ const LoginModal: React.FC<LoginModalProps> = ({
 						Forgot Password?
 					</button>
 				</div>
-
-				{/*<div className="flex justify-center mt-2">
-					<button
-						onClick={() => {
-							resetLoginState(); // Reset state when modal closes
-							onClose(); // Close the modal
-						}}
-						className="text-xs text-gray-600 hover:underline hover:cursor-pointer"
-					>
-						Cancel
-					</button>
-				</div>*/}
 			</div>
 
-			{/* Reset Password Modal */}
 			<ResetPasswordModal
 				isOpen={showResetModal}
 				onClose={() => {

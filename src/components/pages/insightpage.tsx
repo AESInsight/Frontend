@@ -6,6 +6,7 @@ import Sidebar from "../ui/sidebar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import InputField from "../fields/input_field";
+import EmployeeTable from "../tables/EmployeeTable";
 
 // Define the Employee type
 interface Employee {
@@ -19,6 +20,7 @@ interface Employee {
 
 const InsightPage: React.FC = () => {
 	const [searchTerm, setSearchTerm] = useState("");
+
 	const {
 		data: employees,
 		isLoading,
@@ -29,12 +31,6 @@ const InsightPage: React.FC = () => {
 		queryFn: fetchEmployees,
 	});
 
-	// Log only when data is available or during debugging
-	if (!isLoading && employees) {
-		console.log("Employees data (raw):", employees);
-	}
-
-	// Filter employees based on search term
 	const filteredEmployees = employees
 		?.filter((employee) => {
 			const search = searchTerm.toLowerCase();
@@ -46,14 +42,13 @@ const InsightPage: React.FC = () => {
 				String(employee.experience).includes(search)
 			);
 		})
-		.sort((a, b) => a.employeeID - b.employeeID); // Sort by EmployeeID in ascending order
-
+		.sort((a, b) => a.employeeID - b.employeeID); // Sort by EmployeeID
 
 	return (
 		<div className="h-screen w-screen flex flex-col relative">
 			<div className="relative z-10 flex flex-col h-full">
 				<Header />
-				<div className="flex flex-1">
+				<div className="flex flex-1 overflow-y-auto pt-14">
 					<Sidebar />
 					<main className="flex-1 p-4 text-black">
 						<h1 className="text-3xl font-bold mb-4 text-center">
@@ -72,57 +67,37 @@ const InsightPage: React.FC = () => {
 									value={searchTerm}
 									onChange={(e) => setSearchTerm(e.target.value)}
 									className="w-full h-9 pl-10 p-2 text-black bg-white border border-sky-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 mt-4"
-            					/>
+								/>
 							</div>
 						</div>
 
-						{/* Handle loading state */}
-						{isLoading && <p>Loading...</p>}
+						{/* Loading */}
+						{isLoading && <p className="text-center">Loading...</p>}
 
-						{/* Handle error state */}
+						{/* Error */}
 						{isError && (
-							<div>
+							<div className="text-center text-red-500">
 								<p>Error fetching employees.</p>
-								<p className="text-red-500">{(error as Error)?.message}</p>
+								<p>{(error as Error)?.message}</p>
 							</div>
 						)}
 
-						{/* Render employees table when data is available */}
+						{/* Employee Table */}
 						{filteredEmployees && filteredEmployees.length > 0 ? (
-							<table className="w-full border border-gray-300">
-								<thead className="bg-gray-200">
-									<tr>
-										<th className="px-4 py-2">ID</th>
-										<th className="px-4 py-2">Job Title</th>
-										<th className="px-4 py-2">Salary</th>
-										<th className="px-4 py-2">Experience</th>
-										<th className="px-4 py-2">Gender</th>
-									</tr>
-								</thead>
-								<tbody>
-									{filteredEmployees.map((employee) => (
-											<tr key={employee.employeeID}>
-												<td className="border px-4 py-2">
-													{employee.employeeID || "N/A"}
-												</td>
-												<td className="border px-4 py-2">
-													{employee.jobTitle || "N/A"}
-												</td>
-												<td className="border px-4 py-2">
-													{employee.salary || "N/A"}
-												</td>
-												<td className="border px-4 py-2">
-													{employee.experience || "N/A"}
-												</td>
-												<td className="border px-4 py-2">
-													{employee.gender || "N/A"}
-												</td>
-											</tr>
-										))}
-								</tbody>
-							</table>
+							<div className="max-w-6xl mx-auto w-full px-4">
+								<EmployeeTable
+									editable={false}
+									data={filteredEmployees.map((e) => ({
+										id: e.employeeID,
+										jobTitle: e.jobTitle,
+										salary: e.salary,
+										gender: e.gender,
+										experience: e.experience,
+									}))}
+								/>
+							</div>
 						) : (
-							!isLoading && <p>No employees found.</p>
+							!isLoading && <p className="text-center">No employees found.</p>
 						)}
 					</main>
 				</div>

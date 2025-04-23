@@ -7,7 +7,7 @@ const AboutPage: React.FC = () => {
 		<div className="h-screen w-screen flex flex-col relative justify-center items-center">
 			<div className="relative z-10 flex flex-col h-full w-full">
 				<Header />
-				<div className="flex flex-1 w-full">
+				<div className="flex flex-1 w-full overflow-y-auto pt-14">
 					<Sidebar />
 					<div className="flex flex-1 justify-center items-center">
 						<div className="bg-white p-8 rounded-lg shadow-lg max-w-2xl">
