@@ -18,13 +18,12 @@ export const fetchEmployees = async () => {
 	}
 };
 
-export interface SalaryEntry {
-	id: number;
-	amount: number;
-	gender: "Men" | "Women";
-	date: string;
-	employeeId?: number;
-}
+export type SalaryEntry = {
+	salaryID: number;
+	employeeID: number;
+	salary: number;
+	timestamp: string;
+};
 
 export const fetchAllSalaries = async () => {
 	try {

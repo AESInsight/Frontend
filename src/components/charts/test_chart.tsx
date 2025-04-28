@@ -13,7 +13,7 @@ import {
 	ChartContainer,
 	ChartTooltip,
 } from "@/components/ui/chart";
-import { fetchAllSalaries } from "@/lib/employeeAPI";
+import { fetchAllSalaries, SalaryEntry } from "@/lib/employeeAPI";
 import { fetchEmployees } from "@/lib/employeeAPI";
 
 const chartConfig = {
@@ -57,7 +57,7 @@ export function TestChart() {
 
 				const monthlySums: Record<string, MonthlyEntry> = {};
 
-				salaries.forEach((item: any) => {
+				salaries.forEach((item: SalaryEntry) => {
 					const date = new Date(item.timestamp);
 					const month = date.toLocaleDateString("da-DK", {
 						month: "long",
