@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { TrendingUp } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
@@ -16,30 +17,114 @@ import {
 	ChartContainer,
 	ChartTooltip,
 } from "@/components/ui/chart";
+import { fetchAllSalaries, fetchEmployees } from "@/lib/employeeAPI";
+import { SalaryEntry } from "@/lib/types/salary";
 
-// Updated data to show average salary raise percentages for men and women per year
-const chartData = [
-	{ year: "2019", Men: 3.5, Women: 3.0 },
-	{ year: "2020", Men: 4.0, Women: 3.8 },
-	{ year: "2021", Men: 4.5, Women: 4.2 },
-	{ year: "2022", Men: 5.0, Women: 4.8 },
-	{ year: "2023", Men: 5.5, Women: 5.2 },
-	{ year: "2024", Men: 6.0, Women: 5.8 },
-];
-
-// Updated chartConfig to reflect Men and Women with the consistent color scheme
 const chartConfig = {
 	Men: {
 		label: "Men",
-		color: "hsl(210, 64%, 36%)", // Darkest base blue (matches other charts)
+		color: "hsl(210, 64%, 36%)",
 	},
 	Women: {
 		label: "Women",
-		color: "hsl(210, 64%, 48%)", // Two steps lighter for contrast
+		color: "hsl(210, 64%, 48%)",
 	},
 } satisfies ChartConfig;
 
 export function TestChart3() {
+	const [chartData, setChartData] = useState<
+		{ year: string; Men: number; Women: number }[]
+	>([]);
+
+	useEffect(() => {
+		const loadSalaries = async () => {
+			try {
+				const [salaries, employees] = await Promise.all([
+					fetchAllSalaries(),
+					fetchEmployees(),
+				]);
+
+				// Map employeeID -> gender
+				const employeeGenderMap: Record<number, "Men" | "Women"> = {};
+				employees.forEach((emp: { employeeID: number; gender: string }) => {
+					employeeGenderMap[emp.employeeID] =
+						emp.gender === "Female" ? "Women" : "Men";
+				});
+
+				// Group salaries by year and gender
+				const yearlySalaries: Record<
+					string,
+					{ Men: number[]; Women: number[] }
+				> = {};
+
+				salaries.forEach((item: SalaryEntry) => {
+					const year = new Date(item.timestamp).getFullYear().toString();
+					const gender = employeeGenderMap[item.employeeID] ?? "Men";
+
+					if (!yearlySalaries[year]) {
+						yearlySalaries[year] = { Men: [], Women: [] };
+					}
+
+					yearlySalaries[year][gender].push(item.salary);
+				});
+
+				// Calculate average salary per year per gender
+				const yearlyAverages: Record<string, { Men: number; Women: number }> =
+					{};
+
+				Object.entries(yearlySalaries).forEach(([year, genders]) => {
+					yearlyAverages[year] = {
+						Men:
+							genders.Men.reduce((sum, salary) => sum + salary, 0) /
+							(genders.Men.length || 1),
+						Women:
+							genders.Women.reduce((sum, salary) => sum + salary, 0) /
+							(genders.Women.length || 1),
+					};
+				});
+
+				// Now calculate raise % year over year
+				const sortedYears = Object.keys(yearlyAverages)
+					.map(Number)
+					.sort((a, b) => a - b)
+					.map(String);
+
+				const raiseData = sortedYears.map((year, index) => {
+					if (index === 0) {
+						// First year, no previous year to compare
+						return {
+							year,
+							Men: 0,
+							Women: 0,
+						};
+					}
+
+					const prevYear = sortedYears[index - 1];
+					const menRaise =
+						((yearlyAverages[year].Men - yearlyAverages[prevYear].Men) /
+							(yearlyAverages[prevYear].Men || 1)) *
+						100;
+					const womenRaise =
+						((yearlyAverages[year].Women - yearlyAverages[prevYear].Women) /
+							(yearlyAverages[prevYear].Women || 1)) *
+						100;
+
+					return {
+						year,
+						Men: parseFloat(menRaise.toFixed(1)),
+						Women: parseFloat(womenRaise.toFixed(1)),
+					};
+				});
+
+				setChartData(raiseData);
+			} catch (err) {
+				console.error("Could not load raise chart data", err);
+			}
+		};
+
+		loadSalaries();
+	}, []);
+
 	return (
 		<Card className="bg-transparent border-none shadow-none">
 			<CardHeader className="pb-1 pt-2 px-2">
@@ -47,7 +132,7 @@ export function TestChart3() {
 					Average Salary Raise by Gender
 				</CardTitle>
 				<CardDescription className="text-sm">
-					Showing average salary raise percentages (2019 - 2024)
+					Showing average salary raise percentages
 				</CardDescription>
 			</CardHeader>
 			<CardContent className="p-2 flex-1">
@@ -56,14 +141,8 @@ export function TestChart3() {
 					className="mx-auto aspect-square max-h-[220px] w-full"
 				>
 					<AreaChart
-						accessibilityLayer
 						data={chartData}
-						margin={{
-							left: 12,
-							right: 12,
-							top: 5,
-							bottom: 5,
-						}}
+						margin={{ left: 12, right: 12, top: 5, bottom: 5 }}
 					>
 						<CartesianGrid
 							vertical={false}
@@ -81,8 +160,8 @@ export function TestChart3() {
 							tickLine={false}
 							axisLine={false}
 							tickFormatter={(value) => `${value}%`}
-							domain={[0, 8]} // Adjust domain based on data range
-							ticks={[0, 2, 4, 6, 8]}
+							domain={[-10, 20]}
+							ticks={[-10, 0, 10, 20]}
 							fontSize={12}
 							width={40}
 						/>
@@ -91,21 +170,21 @@ export function TestChart3() {
 							content={({ payload, label }) => {
 								if (!payload?.length) return null;
 								return (
-									<div className="rounded-lg border bg-white p-2 shadow-sm">
-										<div className="mb-1 font-medium">{label}</div>
+									<div className="rounded-md border bg-white px-3 py-2 shadow-md text-sm">
+										<div className="mb-1 font-semibold text-black">{label}</div>
 										{payload.map((item) => (
 											<div
 												key={item.name}
-												className="flex items-center gap-1.5"
+												className="flex items-center justify-between gap-2"
 											>
-												<div
-													className="h-2.5 w-2.5 rounded-sm"
-													style={{ backgroundColor: item.color }}
-												/>
-												<span className="font-medium">{item.name}</span>
-												<span className="ml-auto font-medium">
-													{item.value}%
-												</span>
+												<div className="flex items-center gap-2">
+													<div
+														className="h-2 w-2 rounded-full"
+														style={{ backgroundColor: item.color }}
+													/>
+													<span>{item.name}</span>
+												</div>
+												<span className="font-medium">{item.value}%</span>
 											</div>
 										))}
 									</div>
@@ -115,17 +194,17 @@ export function TestChart3() {
 						<Area
 							dataKey="Women"
 							type="natural"
-							fill="hsl(210, 64%, 48%)" // Two steps lighter
+							fill={chartConfig.Women.color}
 							fillOpacity={0.4}
-							stroke="hsl(210, 64%, 48%)"
+							stroke={chartConfig.Women.color}
 							stackId="a"
 						/>
 						<Area
 							dataKey="Men"
 							type="natural"
-							fill="hsl(210, 64%, 36%)" // Darkest base blue
+							fill={chartConfig.Men.color}
 							fillOpacity={0.4}
-							stroke="hsl(210, 64%, 36%)"
+							stroke={chartConfig.Men.color}
 							stackId="a"
 						/>
 					</AreaChart>
@@ -133,8 +212,7 @@ export function TestChart3() {
 			</CardContent>
 			<CardFooter className="pt-1 pb-2 px-2 flex-col items-start gap-2 text-sm">
 				<div className="flex gap-2 font-medium leading-none">
-					Salary raises trending up by 8.5% this year{" "}
-					<TrendingUp className="h-4 w-4" />
+					Salary raises trending up <TrendingUp className="h-4 w-4" />
 				</div>
 				<div className="leading-none text-muted-foreground">
 					Based on annual salary adjustments

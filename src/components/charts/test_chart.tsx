@@ -13,8 +13,9 @@ import {
 	ChartContainer,
 	ChartTooltip,
 } from "@/components/ui/chart";
-import { fetchAllSalaries, SalaryEntry } from "@/lib/employeeAPI";
+import { fetchAllSalaries } from "@/lib/employeeAPI";
 import { fetchEmployees } from "@/lib/employeeAPI";
+import { MonthlyEntry, SalaryEntry } from "@/lib/types/salary";
 
 const chartConfig = {
 	Men: {
@@ -46,14 +47,6 @@ export function TestChart() {
 					employeeGenderMap[emp.employeeID] =
 						emp.gender === "Female" ? "Women" : "Men";
 				});
-
-				type MonthlyEntry = {
-					month: string;
-					Men: number;
-					Women: number;
-					MenCount: number;
-					WomenCount: number;
-				};
 
 				const monthlySums: Record<string, MonthlyEntry> = {};
 
