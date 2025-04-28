@@ -18,13 +18,6 @@ export const fetchEmployees = async () => {
 	}
 };
 
-export type SalaryEntry = {
-	salaryID: number;
-	employeeID: number;
-	salary: number;
-	timestamp: string;
-};
-
 export const fetchAllSalaries = async () => {
 	try {
 		const response = await apiClient.get("/salary/all");
