@@ -17,4 +17,16 @@ export type ChartDataEntry = {
 	position: string;
 	people: number;
 	fill: string;
+	value?: number;
+	percentage?: string;
+};
+
+export type JobSalaryData = {
+	jobTitle: string;
+	genderData: {
+		[gender: string]: {
+			averageSalary: number;
+			employeeCount: number;
+		};
+	};
 };
