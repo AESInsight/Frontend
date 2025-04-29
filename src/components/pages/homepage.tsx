@@ -13,7 +13,7 @@ const Homepage: React.FC = () => {
 				<div className="flex flex-1 overflow-y-auto pt-14">
 					<Sidebar />
 					<div className="flex-1 p-4 text-black ml-20 mr-2">
-						<h1 className="text-3xl font-bold mb-4">Welcome to AES-Insight</h1>
+						<h1 className="text-3xl font-bold mb-1">Welcome to AES-Insight</h1>
 						<p className="mb-6">
 							Your trusted partner in data security and insights.
 						</p>
