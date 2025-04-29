@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { TrendingUp } from "lucide-react";
 import { Bar, BarChart, XAxis, YAxis } from "recharts";
 
@@ -16,44 +17,55 @@ import {
 	ChartContainer,
 	ChartTooltip,
 } from "@/components/ui/chart";
+import { fetchEmployees } from "@/lib/employeeAPI";
+import { ChartDataEntry } from "@/lib/types/salary";
 
-// Data remains the same
-const chartData = [
-	{ position: "softwareEngineer", people: 145, fill: "hsl(210, 64%, 36%)" },
-	{ position: "productManager", people: 115, fill: "hsl(210, 64%, 42%)" },
-	{ position: "dataScientist", people: 110, fill: "hsl(210, 64%, 48%)" },
-	{ position: "uxDesigner", people: 92, fill: "hsl(210, 64%, 54%)" },
-	{ position: "devOpsEngineer", people: 75, fill: "hsl(210, 64%, 60%)" },
-];
-
-// ChartConfig remains the same
 const chartConfig = {
 	people: {
 		label: "People",
 	},
-	softwareEngineer: {
-		label: "Software Engineer",
-		color: "hsl(210, 64%, 36%)",
-	},
-	productManager: {
-		label: "Product Manager",
-		color: "hsl(210, 64%, 42%)",
-	},
-	dataScientist: {
-		label: "Data Scientist",
-		color: "hsl(210, 64%, 48%)",
-	},
-	uxDesigner: {
-		label: "UX Designer",
-		color: "hsl(210, 64%, 54%)",
-	},
-	devOpsEngineer: {
-		label: "DevOps Engineer",
-		color: "hsl(210, 64%, 60%)",
-	},
 } satisfies ChartConfig;
 
 export function TestChart4() {
+	const [chartData, setChartData] = useState<ChartDataEntry[]>([]);
+
+	useEffect(() => {
+		const loadEmployees = async () => {
+			try {
+				const employees = await fetchEmployees();
+
+				const jobTitleCounts: Record<string, number> = {};
+
+				employees.forEach((emp: { jobTitle: string }) => {
+					const title = emp.jobTitle || "Unknown";
+					jobTitleCounts[title] = (jobTitleCounts[title] || 0) + 1;
+				});
+
+				const colors = [
+					"hsl(210, 64%, 36%)",
+					"hsl(210, 64%, 42%)",
+					"hsl(210, 64%, 48%)",
+					"hsl(210, 64%, 54%)",
+					"hsl(210, 64%, 60%)",
+				];
+
+				const entries = Object.entries(jobTitleCounts)
+					.map(([position, people], index) => ({
+						position,
+						people,
+						fill: colors[index % colors.length], // Rotate colors
+					}))
+					.sort((a, b) => b.people - a.people); // Highest first
+
+				setChartData(entries);
+			} catch (err) {
+				console.error("Could not load employees for chart", err);
+			}
+		};
+
+		loadEmployees();
+	}, []);
+
 	return (
 		<Card className="bg-transparent border-none shadow-none">
 			<CardHeader className="pb-1 pt-2 px-2">
@@ -67,18 +79,12 @@ export function TestChart4() {
 			<CardContent className="p-2 flex-1">
 				<ChartContainer
 					config={chartConfig}
-					className="mx-auto aspect-square max-h-[220px] w-full"
+					className="mx-auto aspect-square max-h-[300px] w-full"
 				>
 					<BarChart
-						accessibilityLayer
 						data={chartData}
 						layout="vertical"
-						margin={{
-							left: 10,
-							right: 20,
-							top: 5,
-							bottom: 5,
-						}}
+						margin={{ left: 10, right: 20, top: 5, bottom: 5 }}
 					>
 						<YAxis
 							dataKey="position"
@@ -87,10 +93,7 @@ export function TestChart4() {
 							tickMargin={10}
 							axisLine={false}
 							fontSize={12}
-							tickFormatter={(value) =>
-								chartConfig[value as keyof typeof chartConfig]?.label || value
-							}
-							width={120}
+							width={150}
 						/>
 						<XAxis
 							dataKey="people"
@@ -99,8 +102,8 @@ export function TestChart4() {
 							axisLine={false}
 							tickMargin={8}
 							fontSize={12}
-							domain={[0, 150]}
-							ticks={[0, 50, 100, 150]}
+							domain={[0, Math.max(...chartData.map((d) => d.people), 10) + 10]}
+							ticks={[0, 5, 10, 15, 20]}
 						/>
 						<ChartTooltip
 							cursor={false}
@@ -109,18 +112,19 @@ export function TestChart4() {
 								const data = payload[0].payload;
 								return (
 									<div className="rounded-lg border bg-white p-2 shadow-sm">
-										<div className="font-medium">
-											{
-												chartConfig[data.position as keyof typeof chartConfig]
-													?.label
-											}
-										</div>
+										<div className="font-medium">{data.position}</div>
 										<div className="mt-1 font-medium">{data.people} people</div>
 									</div>
 								);
 							}}
 						/>
-						<Bar dataKey="people" layout="vertical" radius={5} />
+						<Bar
+							dataKey="people"
+							layout="vertical"
+							radius={5}
+							fill="fill"
+							isAnimationActive={true}
+						/>
 					</BarChart>
 				</ChartContainer>
 			</CardContent>

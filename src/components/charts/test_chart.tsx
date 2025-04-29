@@ -152,8 +152,8 @@ export function TestChart() {
 							tickLine={false}
 							axisLine={false}
 							tickFormatter={(value) => `DKK ${value / 1000}k`}
-							domain={[0, 150000]}
-							ticks={[0, 50000, 100000, 150000]}
+							domain={[0, 100000]}
+							ticks={[0, 25000, 50000, 75000, 100000]}
 							fontSize={12}
 							width={40}
 						/>

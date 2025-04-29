@@ -12,3 +12,9 @@ export type SalaryEntry = {
 	salary: number;
 	timestamp: string;
 };
+
+export type ChartDataEntry = {
+	position: string;
+	people: number;
+	fill: string;
+};
