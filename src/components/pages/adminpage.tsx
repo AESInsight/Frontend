@@ -8,7 +8,6 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import InputField from "../fields/input_field";
 import EmployeeTable from "../tables/EmployeeTable";
 
-// Define the Employee type
 interface Employee {
 	employeeID: number;
 	jobTitle: string;
@@ -42,7 +41,7 @@ const InsightPage: React.FC = () => {
 				String(employee.experience).includes(search)
 			);
 		})
-		.sort((a, b) => a.employeeID - b.employeeID); // Sort by EmployeeID
+		.sort((a, b) => a.employeeID - b.employeeID);
 
 	return (
 		<div className="h-screen w-screen flex flex-col relative">
@@ -69,10 +68,8 @@ const InsightPage: React.FC = () => {
 							</div>
 						</div>
 
-						{/* Loading */}
 						{isLoading && <p className="text-center">Loading...</p>}
 
-						{/* Error */}
 						{isError && (
 							<div className="text-center text-red-500">
 								<p>Error fetching employees.</p>
@@ -80,7 +77,6 @@ const InsightPage: React.FC = () => {
 							</div>
 						)}
 
-						{/* Employee Table */}
 						{filteredEmployees && filteredEmployees.length > 0 ? (
 							<div className="max-w-6xl mx-auto w-full px-4">
 								<EmployeeTable
