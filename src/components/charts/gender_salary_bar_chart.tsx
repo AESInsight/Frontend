@@ -13,9 +13,13 @@ import {
 	ChartContainer,
 	ChartTooltip,
 } from "@/components/ui/chart";
-import { fetchAllSalaries } from "@/lib/employeeAPI";
-import { fetchEmployees } from "@/lib/employeeAPI";
+import {
+	fetchAllSalaries,
+	fetchEmployees,
+	fetchJobTitles,
+} from "@/lib/employeeAPI";
 import { MonthlyEntry, SalaryEntry } from "@/lib/types/salary";
+import { Select } from "@/components/ui/select";
 
 const chartConfig = {
 	Men: {
@@ -28,10 +32,29 @@ const chartConfig = {
 	},
 } satisfies ChartConfig;
 
-export function TestChart() {
+export function GenderSalaryBarChart() {
 	const [chartData, setChartData] = useState<
 		{ month: string; Men: number; Women: number }[]
 	>([]);
+	const [jobTitles, setJobTitles] = useState<string[]>([]);
+	const [selectedJobTitle, setSelectedJobTitle] = useState<string>("");
+
+	useEffect(() => {
+		const loadJobTitles = async () => {
+			try {
+				const response = await fetchJobTitles();
+				const titles = response.jobTitles;
+				setJobTitles(Array.isArray(titles) ? titles : []);
+				if (!selectedJobTitle && titles.length > 0) {
+					setSelectedJobTitle("");
+				}
+			} catch (err) {
+				console.error("Failed to fetch job titles", err);
+			}
+		};
+
+		loadJobTitles();
+	}, [selectedJobTitle]);
 
 	useEffect(() => {
 		const loadSalaries = async () => {
@@ -41,23 +64,32 @@ export function TestChart() {
 					fetchEmployees(),
 				]);
 
-				// Map employeeID -> gender
-				const employeeGenderMap: Record<number, "Men" | "Women"> = {};
-				employees.forEach((emp: { employeeID: number; gender: string }) => {
-					employeeGenderMap[emp.employeeID] =
-						emp.gender === "Female" ? "Women" : "Men";
-				});
+				const employeeGenderMap: Record<
+					number,
+					{ gender: "Men" | "Women"; jobTitle: string }
+				> = {};
+				employees.forEach(
+					(emp: { employeeID: number; gender: string; jobTitle: string }) => {
+						employeeGenderMap[emp.employeeID] = {
+							gender: emp.gender === "Female" ? "Women" : "Men",
+							jobTitle: emp.jobTitle,
+						};
+					}
+				);
 
 				const monthlySums: Record<string, MonthlyEntry> = {};
 
 				salaries.forEach((item: SalaryEntry) => {
+					const emp = employeeGenderMap[item.employeeID];
+					if (!emp || emp.jobTitle !== selectedJobTitle) return;
+
 					const date = new Date(item.timestamp);
 					const month = date.toLocaleDateString("da-DK", {
 						month: "long",
 						year: "numeric",
 					});
 
-					const gender = employeeGenderMap[item.employeeID] ?? "Men"; // fallback
+					const gender = emp.gender;
 
 					if (!monthlySums[month]) {
 						monthlySums[month] = {
@@ -69,13 +101,8 @@ export function TestChart() {
 						};
 					}
 
-					if (gender === "Men") {
-						monthlySums[month].Men += item.salary;
-						monthlySums[month].MenCount++;
-					} else {
-						monthlySums[month].Women += item.salary;
-						monthlySums[month].WomenCount++;
-					}
+					monthlySums[month][gender] += item.salary;
+					monthlySums[month][`${gender}Count`]++;
 				});
 
 				const finalData = Object.values(monthlySums).map((entry) => ({
@@ -84,7 +111,6 @@ export function TestChart() {
 					Women: Math.round(entry.Women / (entry.WomenCount || 1)),
 				}));
 
-				// Sort by chronological month+year
 				finalData.sort((a, b) => {
 					const getIndex = (label: string) => {
 						const [monthName, year] = label.split(" ");
@@ -115,18 +141,26 @@ export function TestChart() {
 			}
 		};
 
-		loadSalaries();
-	}, []);
+		if (selectedJobTitle) loadSalaries();
+	}, [selectedJobTitle]);
 
 	return (
 		<Card className="bg-transparent border-none shadow-none">
-			<CardHeader className="pb-1 pt-2 px-2">
-				<CardTitle className="text-lg">
-					Bar Chart - Gender Based Salary
-				</CardTitle>
-				<CardDescription className="text-sm">
-					January - December 2024
-				</CardDescription>
+			<CardHeader className="px-4 flex items-center justify-between">
+				<div>
+					<CardTitle className="text-lg">
+						Gender-Based Salary Over Time
+					</CardTitle>
+					<CardDescription className="text-sm">
+						Filtered by Job Title
+					</CardDescription>
+				</div>
+				<Select
+					options={jobTitles}
+					selected={selectedJobTitle}
+					onChange={setSelectedJobTitle}
+					placeholder="Select a Job Title"
+				/>
 			</CardHeader>
 			<CardContent className="p-2 flex-1">
 				<ChartContainer config={chartConfig} className="h-[220px] w-full">

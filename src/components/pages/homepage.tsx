@@ -1,10 +1,10 @@
 import React from "react";
 import Header from "../ui/header";
 import Sidebar from "../ui/sidebar";
-import { TestChart } from "../charts/test_chart";
-import { TestChart2 } from "../charts/test_chart2";
-import { TestChart3 } from "../charts/test_chart3";
-import { TestChart4 } from "../charts/test_chart4";
+import { GenderSalaryBarChart } from "../charts/gender_salary_bar_chart";
+import { SalaryPieChart } from "../charts/salary_pie_chart";
+import { SalaryRaiseFlowChart } from "../charts/salary_raise_flow_chart";
+import { PositionBarChart } from "../charts/position_bar_chart";
 const Homepage: React.FC = () => {
 	return (
 		<div className="h-screen w-screen flex flex-col relative">
@@ -19,16 +19,16 @@ const Homepage: React.FC = () => {
 						</p>
 						<div className="grid grid-cols-2 gap-12">
 							<div className="bg-transparent backdrop-blur-sm border-black border-2 rounded-lg">
-								<TestChart />
+								<GenderSalaryBarChart />
 							</div>
 							<div className="bg-transparent backdrop-blur-sm border-2 border-black rounded-lg">
-								<TestChart2 />
+								<SalaryPieChart />
 							</div>
 							<div className="bg-transparent backdrop-blur-sm border-2 border-black rounded-lg mb-4">
-								<TestChart3 />
+								<SalaryRaiseFlowChart />
 							</div>
 							<div className="bg-transparent backdrop-blur-sm border-2 border-black rounded-lg mb-4">
-								<TestChart4 />
+								<PositionBarChart />
 							</div>
 						</div>
 					</div>

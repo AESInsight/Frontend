@@ -3,26 +3,33 @@
 import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 
-type IndustrySelectProps = {
+type SelectProps = {
 	options: string[];
 	selected: string;
 	onChange: (value: string) => void;
+	label?: string;
+	className?: string;
+	placeholder?: string;
 };
 
-export function IndustrySelect({
+export function Select({
 	options,
 	selected,
 	onChange,
-}: IndustrySelectProps) {
+	label,
+	className = "",
+	placeholder = "Select...",
+}: SelectProps) {
 	const [isOpen, setIsOpen] = useState(false);
 
 	return (
-		<div className="relative w-44 text-sm">
+		<div className={`relative w-44 text-sm ${className}`}>
+			{label && <span className="block mb-1">{label}</span>}
 			<button
 				onClick={() => setIsOpen((prev) => !prev)}
 				className="w-full flex items-center justify-between rounded-md border px-3 py-2 bg-white shadow-sm hover:border-muted-foreground focus:outline-none"
 			>
-				<span>{selected || "Select industry"}</span>
+				<span>{selected || placeholder}</span>
 				{isOpen ? (
 					<ChevronUp className="h-4 w-4" />
 				) : (

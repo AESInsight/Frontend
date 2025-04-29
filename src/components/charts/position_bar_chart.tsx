@@ -1,9 +1,6 @@
-"use client";
-
 import { useEffect, useState } from "react";
-import { TrendingUp, ChevronDown, ChevronUp } from "lucide-react";
+import { TrendingUp } from "lucide-react";
 import { Bar, BarChart, XAxis, YAxis } from "recharts";
-
 import {
 	Card,
 	CardContent,
@@ -22,6 +19,7 @@ import {
 	fetchIndustries,
 } from "@/lib/companyAPI";
 import { JobSalaryData } from "@/lib/types/salary";
+import { Select } from "@/components/ui/select";
 
 const chartConfig = {
 	people: {
@@ -29,56 +27,9 @@ const chartConfig = {
 	},
 } satisfies ChartConfig;
 
-function IndustrySelect({
-	options,
-	selected,
-	onChange,
-}: {
-	options: string[];
-	selected: string;
-	onChange: (value: string) => void;
-}) {
-	const [isOpen, setIsOpen] = useState(false);
-
-	return (
-		<div className="relative w-44 text-sm">
-			<button
-				onClick={() => setIsOpen((prev) => !prev)}
-				className="w-full flex items-center justify-between rounded-md border px-3 py-2 bg-white shadow-sm hover:border-muted-foreground focus:outline-none"
-			>
-				<span>{selected || "Select industry"}</span>
-				{isOpen ? (
-					<ChevronUp className="h-4 w-4" />
-				) : (
-					<ChevronDown className="h-4 w-4" />
-				)}
-			</button>
-
-			{isOpen && (
-				<div className="absolute z-10 mt-1 w-full rounded-md border bg-white shadow-md">
-					<ul className="max-h-48 overflow-y-auto py-1">
-						{options.map((option) => (
-							<li
-								key={option}
-								onClick={() => {
-									onChange(option);
-									setIsOpen(false);
-								}}
-								className="px-3 py-2 hover:bg-muted-foreground/10 cursor-pointer"
-							>
-								{option}
-							</li>
-						))}
-					</ul>
-				</div>
-			)}
-		</div>
-	);
-}
-
-export function TestChart4() {
+export function PositionBarChart() {
 	const [industries, setIndustries] = useState<string[]>([]);
-	const [selectedIndustry, setSelectedIndustry] = useState<string>("IT");
+	const [selectedIndustry, setSelectedIndustry] = useState<string>("");
 	const [chartData, setChartData] = useState<
 		{
 			position: string;
@@ -93,8 +44,8 @@ export function TestChart4() {
 				const data = await fetchIndustries();
 				const cleaned = data.filter((i) => i.trim() !== "");
 				setIndustries(cleaned);
-				if (!cleaned.includes(selectedIndustry)) {
-					setSelectedIndustry(cleaned[0]);
+				if (selectedIndustry === "" && cleaned.length > 0) {
+					setSelectedIndustry("");
 				}
 			} catch (err) {
 				console.error("Failed to fetch industries", err);
@@ -148,7 +99,7 @@ export function TestChart4() {
 
 	return (
 		<Card className="bg-transparent border-none shadow-none">
-			<CardHeader className="pb-1 pt-2 px-2 flex items-center justify-between">
+			<CardHeader className="px-4 flex items-center justify-between">
 				<div>
 					<CardTitle className="text-lg">
 						Number of People by Job Position
@@ -157,19 +108,18 @@ export function TestChart4() {
 						Employee distribution as of April 2025
 					</CardDescription>
 				</div>
-				<div className="flex items-center gap-2">
-					<span>Select industry</span>
-					<IndustrySelect
-						options={industries}
-						selected={selectedIndustry}
-						onChange={setSelectedIndustry}
-					/>
-				</div>
+				<Select
+					options={industries}
+					selected={selectedIndustry}
+					onChange={setSelectedIndustry}
+					placeholder="Select an Industry"
+				/>
 			</CardHeader>
+
 			<CardContent className="p-2 flex-1">
 				<ChartContainer
 					config={chartConfig}
-					className="mx-auto aspect-square max-h-[300px] w-full"
+					className="mx-auto aspect-square max-h-[250px] w-full"
 				>
 					<BarChart
 						data={chartData}
@@ -213,11 +163,12 @@ export function TestChart4() {
 							layout="vertical"
 							radius={5}
 							fill="fill"
-							isAnimationActive={true}
+							isAnimationActive
 						/>
 					</BarChart>
 				</ChartContainer>
 			</CardContent>
+
 			<CardFooter className="pt-1 pb-2 px-2 flex-col items-start gap-2 text-sm">
 				<div className="flex gap-2 font-medium leading-none">
 					Software Engineers increased by 12% this year

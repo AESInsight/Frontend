@@ -1,12 +1,10 @@
-"use client";
-
-import * as React from "react";
-import { TrendingUp, ChevronDown, ChevronUp } from "lucide-react";
+import { useEffect, useState } from "react";
+import { TrendingUp } from "lucide-react";
 import { Pie, PieChart, Label } from "recharts";
-
 import {
 	Card,
 	CardContent,
+	CardDescription,
 	CardFooter,
 	CardHeader,
 	CardTitle,
@@ -16,74 +14,27 @@ import {
 	ChartContainer,
 	ChartTooltip,
 } from "@/components/ui/chart";
-
 import { ChartDataEntry, JobSalaryData } from "@/lib/types/salary";
 import {
 	fetchAverageSalariesForIndustry,
 	fetchIndustries,
 } from "@/lib/companyAPI";
+import { Select } from "@/components/ui/select";
 
-function IndustrySelect({
-	options,
-	selected,
-	onChange,
-}: {
-	options: string[];
-	selected: string;
-	onChange: (value: string) => void;
-}) {
-	const [isOpen, setIsOpen] = React.useState(false);
+export function SalaryPieChart() {
+	const [industries, setIndustries] = useState<string[]>([]);
+	const [selectedIndustry, setSelectedIndustry] = useState<string>("");
+	const [chartData, setChartData] = useState<ChartDataEntry[]>([]);
+	const [totalSalary, setTotalSalary] = useState(0);
 
-	return (
-		<div className="relative w-44 text-sm">
-			<button
-				onClick={() => setIsOpen((prev) => !prev)}
-				className="w-full flex items-center justify-between rounded-md border px-3 py-2 bg-white shadow-sm hover:border-muted-foreground focus:outline-none"
-			>
-				<span>{selected || "Select industry"}</span>
-				{isOpen ? (
-					<ChevronUp className="h-4 w-4" />
-				) : (
-					<ChevronDown className="h-4 w-4" />
-				)}
-			</button>
-
-			{isOpen && (
-				<div className="absolute z-10 mt-1 w-full rounded-md border bg-white shadow-md">
-					<ul className="max-h-48 overflow-y-auto py-1">
-						{options.map((option) => (
-							<li
-								key={option}
-								onClick={() => {
-									onChange(option);
-									setIsOpen(false);
-								}}
-								className="px-3 py-2 hover:bg-muted-foreground/10 cursor-pointer"
-							>
-								{option}
-							</li>
-						))}
-					</ul>
-				</div>
-			)}
-		</div>
-	);
-}
-
-export function TestChart2() {
-	const [industries, setIndustries] = React.useState<string[]>([]);
-	const [selectedIndustry, setSelectedIndustry] = React.useState<string>("IT");
-	const [chartData, setChartData] = React.useState<ChartDataEntry[]>([]);
-	const [totalSalary, setTotalSalary] = React.useState(0);
-
-	React.useEffect(() => {
+	useEffect(() => {
 		const loadIndustries = async () => {
 			try {
 				const data = await fetchIndustries();
 				const cleaned = data.filter((i) => i.trim() !== "");
 				setIndustries(cleaned);
-				if (!cleaned.includes(selectedIndustry)) {
-					setSelectedIndustry(cleaned[0]);
+				if (selectedIndustry === "" && cleaned.length > 0) {
+					setSelectedIndustry("");
 				}
 			} catch (err) {
 				console.error("Failed to fetch industries", err);
@@ -93,7 +44,7 @@ export function TestChart2() {
 		loadIndustries();
 	}, [selectedIndustry]);
 
-	React.useEffect(() => {
+	useEffect(() => {
 		if (!selectedIndustry) return;
 
 		const loadSalaryData = async () => {
@@ -158,26 +109,27 @@ export function TestChart2() {
 
 	return (
 		<Card className="bg-transparent border-none shadow-none">
-			<CardHeader className="p-2">
-				<div className="flex items-center justify-between gap-4">
-					<CardTitle className="text-lg whitespace-nowrap">
+			<CardHeader className="px-4 flex items-center justify-between">
+				<div>
+					<CardTitle className="text-lg">
 						Salary Distribution by Position
 					</CardTitle>
-					<div className="flex items-center gap-2">
-						<span>Select industry</span>
-						<IndustrySelect
-							options={industries}
-							selected={selectedIndustry}
-							onChange={setSelectedIndustry}
-						/>
-					</div>
+					<CardDescription className="text-sm">
+						Sorted by Industry
+					</CardDescription>
 				</div>
+				<Select
+					options={industries}
+					selected={selectedIndustry}
+					onChange={setSelectedIndustry}
+					placeholder="Select an Industry"
+				/>
 			</CardHeader>
 
-			<CardContent className="p-2">
+			<CardContent className="p-2 flex-1">
 				<ChartContainer
 					config={chartConfig}
-					className="mx-auto aspect-square max-h-[320px] w-full"
+					className="mx-auto aspect-square max-h-[250px] w-full"
 				>
 					<PieChart margin={{ top: 5, right: 5, bottom: 5, left: 5 }}>
 						<ChartTooltip
@@ -208,7 +160,7 @@ export function TestChart2() {
 							data={chartData}
 							dataKey="value"
 							nameKey="position"
-							innerRadius={65}
+							innerRadius={75}
 							outerRadius="85%"
 							strokeWidth={3}
 						>

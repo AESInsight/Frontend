@@ -30,3 +30,9 @@ export type JobSalaryData = {
 		};
 	};
 };
+
+export type SalaryRaiseData = {
+	employeeID: number;
+	gender: string;
+	jobTitle: string;
+};

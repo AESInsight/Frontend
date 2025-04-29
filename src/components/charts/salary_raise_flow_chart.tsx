@@ -17,8 +17,13 @@ import {
 	ChartContainer,
 	ChartTooltip,
 } from "@/components/ui/chart";
-import { fetchAllSalaries, fetchEmployees } from "@/lib/employeeAPI";
-import { SalaryEntry } from "@/lib/types/salary";
+import {
+	fetchAllSalaries,
+	fetchEmployees,
+	fetchJobTitles,
+} from "@/lib/employeeAPI";
+import { SalaryEntry, SalaryRaiseData } from "@/lib/types/salary";
+import { Select } from "@/components/ui/select";
 
 const chartConfig = {
 	Men: {
@@ -31,10 +36,29 @@ const chartConfig = {
 	},
 } satisfies ChartConfig;
 
-export function TestChart3() {
+export function SalaryRaiseFlowChart() {
 	const [chartData, setChartData] = useState<
 		{ year: string; Men: number; Women: number }[]
 	>([]);
+	const [jobTitles, setJobTitles] = useState<string[]>([]);
+	const [selectedJobTitle, setSelectedJobTitle] = useState<string>("");
+
+	useEffect(() => {
+		const loadJobTitles = async () => {
+			try {
+				const res = await fetchJobTitles();
+				const titles = res.jobTitles;
+				setJobTitles(Array.isArray(titles) ? titles : []);
+				if (!selectedJobTitle && titles.length > 0) {
+					setSelectedJobTitle("");
+				}
+			} catch (err) {
+				console.error("Failed to fetch job titles", err);
+			}
+		};
+
+		loadJobTitles();
+	}, [selectedJobTitle]);
 
 	useEffect(() => {
 		const loadSalaries = async () => {
@@ -44,22 +68,28 @@ export function TestChart3() {
 					fetchEmployees(),
 				]);
 
-				// Map employeeID -> gender
-				const employeeGenderMap: Record<number, "Men" | "Women"> = {};
-				employees.forEach((emp: { employeeID: number; gender: string }) => {
-					employeeGenderMap[emp.employeeID] =
-						emp.gender === "Female" ? "Women" : "Men";
+				const employeeMap: Record<
+					number,
+					{ gender: "Men" | "Women"; jobTitle: string }
+				> = {};
+				employees.forEach((emp: SalaryRaiseData) => {
+					employeeMap[emp.employeeID] = {
+						gender: emp.gender === "Female" ? "Women" : "Men",
+						jobTitle: emp.jobTitle,
+					};
 				});
 
-				// Group salaries by year and gender
 				const yearlySalaries: Record<
 					string,
 					{ Men: number[]; Women: number[] }
 				> = {};
 
 				salaries.forEach((item: SalaryEntry) => {
+					const emp = employeeMap[item.employeeID];
+					if (!emp || emp.jobTitle !== selectedJobTitle) return;
+
 					const year = new Date(item.timestamp).getFullYear().toString();
-					const gender = employeeGenderMap[item.employeeID] ?? "Men";
+					const gender = emp.gender;
 
 					if (!yearlySalaries[year]) {
 						yearlySalaries[year] = { Men: [], Women: [] };
@@ -68,45 +98,36 @@ export function TestChart3() {
 					yearlySalaries[year][gender].push(item.salary);
 				});
 
-				// Calculate average salary per year per gender
 				const yearlyAverages: Record<string, { Men: number; Women: number }> =
 					{};
 
 				Object.entries(yearlySalaries).forEach(([year, genders]) => {
 					yearlyAverages[year] = {
 						Men:
-							genders.Men.reduce((sum, salary) => sum + salary, 0) /
+							genders.Men.reduce((sum, s) => sum + s, 0) /
 							(genders.Men.length || 1),
 						Women:
-							genders.Women.reduce((sum, salary) => sum + salary, 0) /
+							genders.Women.reduce((sum, s) => sum + s, 0) /
 							(genders.Women.length || 1),
 					};
 				});
 
-				// Now calculate raise % year over year
 				const sortedYears = Object.keys(yearlyAverages)
 					.map(Number)
 					.sort((a, b) => a - b)
 					.map(String);
 
 				const raiseData = sortedYears.map((year, index) => {
-					if (index === 0) {
-						// First year, no previous year to compare
-						return {
-							year,
-							Men: 0,
-							Women: 0,
-						};
-					}
+					if (index === 0) return { year, Men: 0, Women: 0 };
 
-					const prevYear = sortedYears[index - 1];
+					const prev = sortedYears[index - 1];
 					const menRaise =
-						((yearlyAverages[year].Men - yearlyAverages[prevYear].Men) /
-							(yearlyAverages[prevYear].Men || 1)) *
+						((yearlyAverages[year].Men - yearlyAverages[prev].Men) /
+							(yearlyAverages[prev].Men || 1)) *
 						100;
 					const womenRaise =
-						((yearlyAverages[year].Women - yearlyAverages[prevYear].Women) /
-							(yearlyAverages[prevYear].Women || 1)) *
+						((yearlyAverages[year].Women - yearlyAverages[prev].Women) /
+							(yearlyAverages[prev].Women || 1)) *
 						100;
 
 					return {
@@ -122,24 +143,29 @@ export function TestChart3() {
 			}
 		};
 
-		loadSalaries();
-	}, []);
+		if (selectedJobTitle) loadSalaries();
+	}, [selectedJobTitle]);
 
 	return (
 		<Card className="bg-transparent border-none shadow-none">
-			<CardHeader className="pb-1 pt-2 px-2">
-				<CardTitle className="text-lg">
-					Average Salary Raise by Gender
-				</CardTitle>
-				<CardDescription className="text-sm">
-					Showing average salary raise percentages
-				</CardDescription>
+			<CardHeader className="px-4 flex items-center justify-between">
+				<div>
+					<CardTitle className="text-lg">
+						Average Salary Raise by Gender
+					</CardTitle>
+					<CardDescription className="text-sm">
+						Filtered by Job Title
+					</CardDescription>
+				</div>
+				<Select
+					options={jobTitles}
+					selected={selectedJobTitle}
+					onChange={setSelectedJobTitle}
+					placeholder="Select a Job Title"
+				/>
 			</CardHeader>
 			<CardContent className="p-2 flex-1">
-				<ChartContainer
-					config={chartConfig}
-					className="mx-auto aspect-square max-h-[220px] w-full"
-				>
+				<ChartContainer config={chartConfig} className="h-[220px] w-full">
 					<AreaChart
 						data={chartData}
 						margin={{ left: 12, right: 12, top: 5, bottom: 5 }}
