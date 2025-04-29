@@ -6,6 +6,7 @@ import { validateEmail, validatePassword } from "@/lib/regexValidationLogin";
 import PasswordField from "../fields/password_field";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { postLogin, postReset } from "@/lib/loginAPI";
 
 interface LoginModalProps {
 	isOpen: boolean;
@@ -132,11 +133,8 @@ const LoginModal: React.FC<LoginModalProps> = ({
 		}
 
 		try {
-			const response = await axios.post(
-				"http://localhost:5170/api/Auth/login",
-				{ username, password }
-			);
-			onLoginSuccess(response.data.Token);
+			const response = await postLogin(username, password);
+			onLoginSuccess(response.Token);
 			onClose();
 		} catch (err) {
 			if (axios.isAxiosError(err)) {
@@ -160,11 +158,8 @@ const LoginModal: React.FC<LoginModalProps> = ({
 
 		setIsSending(true);
 		try {
-			const response = await axios.post(
-				"http://localhost:5170/api/PasswordReset/request-reset",
-				{ email: resetEmail }
-			);
-			setResetMessage(response.data.message || "Password reset email sent.");
+			const response = await postReset(resetEmail);
+			setResetMessage(response.message || "Password reset email sent.");
 			setIsResetError(false);
 		} catch (err) {
 			if (axios.isAxiosError(err)) {
@@ -202,13 +197,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
 					className="absolute top-3 left-3 text-gray-400 hover:text-black text-xl font-bold focus:outline-none hover:cursor-pointer"
 					aria-label="Close modal"
 				>
-					<button
-						onClick={onClose}
-						className="absolute left-1 text-gray-400 hover:text-black text-xl font-bold focus:outline-none hover:cursor-pointer"
-						aria-label="Close modal"
-					>
-						<FontAwesomeIcon icon={faTimes} size="sm" />
-					</button>
+					<FontAwesomeIcon icon={faTimes} size="sm" />
 				</button>
 
 				<h2 className="text-lg font-semibold mb-4 text-center">Login</h2>
