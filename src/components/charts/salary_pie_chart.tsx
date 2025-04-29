@@ -131,7 +131,7 @@ export function SalaryPieChart() {
 					config={chartConfig}
 					className="mx-auto aspect-square max-h-[250px] w-full"
 				>
-					<PieChart margin={{ top: 5, right: 5, bottom: 5, left: 5 }}>
+					<PieChart margin={{ left: 12, right: 12, top: 5, bottom: 5 }}>
 						<ChartTooltip
 							cursor={false}
 							content={({ payload }) => {

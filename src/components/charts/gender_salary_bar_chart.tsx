@@ -166,7 +166,7 @@ export function GenderSalaryBarChart() {
 				<ChartContainer config={chartConfig} className="h-[250px] w-full">
 					<BarChart
 						data={chartData}
-						margin={{ top: 5, right: 25, bottom: 5, left: 45 }}
+						margin={{ left: 12, right: 12, top: 5, bottom: 5 }}
 						barGap={4}
 					>
 						<CartesianGrid

@@ -124,7 +124,7 @@ export function PositionBarChart() {
 					<BarChart
 						data={chartData}
 						layout="vertical"
-						margin={{ left: 10, right: 20, top: 5, bottom: 5 }}
+						margin={{ left: 12, right: 12, top: 5, bottom: 5 }}
 					>
 						<YAxis
 							dataKey="position"
