@@ -9,6 +9,7 @@ import ContactPage from "./components/pages/contactpage";
 import ServicePage from "./components/pages/servicepage";
 import InsightPage from "./components/pages/insightpage";
 import AdminPage from "./components/pages/adminpage";
+import ResetPasswordPage from "./components/pages/resetpasswordpage";
 import BgImage from "./components/bg_image";
 
 const App: React.FC = () => {
@@ -23,6 +24,7 @@ const App: React.FC = () => {
 				<Route path="/contact" element={<ContactPage />} />
 				<Route path="/admin" element={<AdminPage />} />
 				<Route path="/insight" element={<InsightPage />} />
+				<Route path="/reset-password" element={<ResetPasswordPage />} />
 			</Routes>
 		</Router>
 	);
