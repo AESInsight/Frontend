@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { TrendingUp } from "lucide-react";
+import { TrendingUp, ChevronDown, ChevronUp } from "lucide-react";
 import { Bar, BarChart, XAxis, YAxis } from "recharts";
 
 import {
@@ -17,8 +17,11 @@ import {
 	ChartContainer,
 	ChartTooltip,
 } from "@/components/ui/chart";
-import { fetchEmployees } from "@/lib/employeeAPI";
-import { ChartDataEntry } from "@/lib/types/salary";
+import {
+	fetchAverageSalariesForIndustry,
+	fetchIndustries,
+} from "@/lib/companyAPI";
+import { JobSalaryData } from "@/lib/types/salary";
 
 const chartConfig = {
 	people: {
@@ -26,20 +29,87 @@ const chartConfig = {
 	},
 } satisfies ChartConfig;
 
+function IndustrySelect({
+	options,
+	selected,
+	onChange,
+}: {
+	options: string[];
+	selected: string;
+	onChange: (value: string) => void;
+}) {
+	const [isOpen, setIsOpen] = useState(false);
+
+	return (
+		<div className="relative w-44 text-sm">
+			<button
+				onClick={() => setIsOpen((prev) => !prev)}
+				className="w-full flex items-center justify-between rounded-md border px-3 py-2 bg-white shadow-sm hover:border-muted-foreground focus:outline-none"
+			>
+				<span>{selected || "Select industry"}</span>
+				{isOpen ? (
+					<ChevronUp className="h-4 w-4" />
+				) : (
+					<ChevronDown className="h-4 w-4" />
+				)}
+			</button>
+
+			{isOpen && (
+				<div className="absolute z-10 mt-1 w-full rounded-md border bg-white shadow-md">
+					<ul className="max-h-48 overflow-y-auto py-1">
+						{options.map((option) => (
+							<li
+								key={option}
+								onClick={() => {
+									onChange(option);
+									setIsOpen(false);
+								}}
+								className="px-3 py-2 hover:bg-muted-foreground/10 cursor-pointer"
+							>
+								{option}
+							</li>
+						))}
+					</ul>
+				</div>
+			)}
+		</div>
+	);
+}
+
 export function TestChart4() {
-	const [chartData, setChartData] = useState<ChartDataEntry[]>([]);
+	const [industries, setIndustries] = useState<string[]>([]);
+	const [selectedIndustry, setSelectedIndustry] = useState<string>("IT");
+	const [chartData, setChartData] = useState<
+		{
+			position: string;
+			people: number;
+			fill: string;
+		}[]
+	>([]);
 
 	useEffect(() => {
-		const loadEmployees = async () => {
+		const loadIndustries = async () => {
 			try {
-				const employees = await fetchEmployees();
+				const data = await fetchIndustries();
+				const cleaned = data.filter((i) => i.trim() !== "");
+				setIndustries(cleaned);
+				if (!cleaned.includes(selectedIndustry)) {
+					setSelectedIndustry(cleaned[0]);
+				}
+			} catch (err) {
+				console.error("Failed to fetch industries", err);
+			}
+		};
 
-				const jobTitleCounts: Record<string, number> = {};
+		loadIndustries();
+	}, [selectedIndustry]);
 
-				employees.forEach((emp: { jobTitle: string }) => {
-					const title = emp.jobTitle || "Unknown";
-					jobTitleCounts[title] = (jobTitleCounts[title] || 0) + 1;
-				});
+	useEffect(() => {
+		if (!selectedIndustry) return;
+
+		const loadData = async () => {
+			try {
+				const rawData = await fetchAverageSalariesForIndustry(selectedIndustry);
 
 				const colors = [
 					"hsl(210, 64%, 36%)",
@@ -49,32 +119,52 @@ export function TestChart4() {
 					"hsl(210, 64%, 60%)",
 				];
 
-				const entries = Object.entries(jobTitleCounts)
-					.map(([position, people], index) => ({
-						position,
-						people,
-						fill: colors[index % colors.length], // Rotate colors
-					}))
-					.sort((a, b) => b.people - a.people); // Highest first
+				const grouped = rawData
+					.map((entry: JobSalaryData, index: number) => {
+						let total = 0;
+						for (const gender in entry.genderData) {
+							total += entry.genderData[gender].employeeCount;
+						}
+						return {
+							position: entry.jobTitle,
+							people: total,
+							fill: colors[index % colors.length],
+						};
+					})
+					.filter((d: { people: number }) => d.people > 0)
+					.sort(
+						(a: { people: number }, b: { people: number }) =>
+							b.people - a.people
+					);
 
-				setChartData(entries);
+				setChartData(grouped);
 			} catch (err) {
-				console.error("Could not load employees for chart", err);
+				console.error("Failed to fetch job data", err);
 			}
 		};
 
-		loadEmployees();
-	}, []);
+		loadData();
+	}, [selectedIndustry]);
 
 	return (
 		<Card className="bg-transparent border-none shadow-none">
-			<CardHeader className="pb-1 pt-2 px-2">
-				<CardTitle className="text-lg">
-					Number of People by Job Position
-				</CardTitle>
-				<CardDescription className="text-sm">
-					Employee distribution as of April 2025
-				</CardDescription>
+			<CardHeader className="pb-1 pt-2 px-2 flex items-center justify-between">
+				<div>
+					<CardTitle className="text-lg">
+						Number of People by Job Position
+					</CardTitle>
+					<CardDescription className="text-sm">
+						Employee distribution as of April 2025
+					</CardDescription>
+				</div>
+				<div className="flex items-center gap-2">
+					<span>Select industry</span>
+					<IndustrySelect
+						options={industries}
+						selected={selectedIndustry}
+						onChange={setSelectedIndustry}
+					/>
+				</div>
 			</CardHeader>
 			<CardContent className="p-2 flex-1">
 				<ChartContainer
@@ -102,7 +192,7 @@ export function TestChart4() {
 							axisLine={false}
 							tickMargin={8}
 							fontSize={12}
-							domain={[0, Math.max(...chartData.map((d) => d.people), 10) + 10]}
+							domain={[0, Math.max(...chartData.map((d) => d.people), 10) + 5]}
 							ticks={[0, 5, 10, 15, 20]}
 						/>
 						<ChartTooltip
@@ -130,7 +220,7 @@ export function TestChart4() {
 			</CardContent>
 			<CardFooter className="pt-1 pb-2 px-2 flex-col items-start gap-2 text-sm">
 				<div className="flex gap-2 font-medium leading-none">
-					Software Engineers increased by 12% this year{" "}
+					Software Engineers increased by 12% this year
 					<TrendingUp className="h-4 w-4" />
 				</div>
 				<div className="leading-none text-muted-foreground">
