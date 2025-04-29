@@ -4,6 +4,8 @@ import axios from "axios";
 import ResetPasswordModal from "./resetpassword_modal";
 import { validateEmail, validatePassword } from "@/lib/regexValidationLogin";
 import PasswordField from "../fields/password_field";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 interface LoginModalProps {
 	isOpen: boolean;
@@ -200,20 +202,13 @@ const LoginModal: React.FC<LoginModalProps> = ({
 					className="absolute top-3 left-3 text-gray-400 hover:text-black text-xl font-bold focus:outline-none hover:cursor-pointer"
 					aria-label="Close modal"
 				>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						fill="none"
-						viewBox="0 0 24 24"
-						strokeWidth={2}
-						stroke="currentColor"
-						className="w-5 h-5"
+					<button
+						onClick={onClose}
+						className="absolute left-1 text-gray-400 hover:text-black text-xl font-bold focus:outline-none hover:cursor-pointer"
+						aria-label="Close modal"
 					>
-						<path
-							strokeLinecap="round"
-							strokeLinejoin="round"
-							d="M6 18L18 6M6 6l12 12"
-						/>
-					</svg>
+						<FontAwesomeIcon icon={faTimes} size="sm" />
+					</button>
 				</button>
 
 				<h2 className="text-lg font-semibold mb-4 text-center">Login</h2>

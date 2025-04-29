@@ -1,5 +1,7 @@
 import React from "react";
 import InputField from "../fields/input_field";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 interface ResetPasswordModal {
     isOpen: boolean;
@@ -38,18 +40,14 @@ const ResetPasswordModal: React.FC<ResetPasswordModal> = ({
 					className="absolute top-3 left-3 text-gray-400 hover:text-black text-xl font-bold focus:outline-none hover:cursor-pointer"
 					aria-label="Close reset modal"
 				>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						fill="none"
-						viewBox="0 0 24 24"
-						strokeWidth={2}
-						stroke="currentColor"
-						className="w-5 h-5"
-					>
-						<path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-					</svg>
+					<button
+                        onClick={onClose}
+                        className="absolute left-1 text-gray-400 hover:text-black text-xl font-bold focus:outline-none hover:cursor-pointer"
+                        aria-label="Close modal"
+                    >
+                        <FontAwesomeIcon icon={faTimes} size="sm" />
+                    </button>
 				</button>
-            {/*</div><div className="bg-white p-6 rounded-2xl shadow-xl w-80 border-2 border-black">*/}
                 <h2 className="text-lg font-semibold mb-4 text-center">
                     Reset Password
                 </h2>
