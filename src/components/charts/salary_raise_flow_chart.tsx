@@ -165,7 +165,7 @@ export function SalaryRaiseFlowChart() {
 				/>
 			</CardHeader>
 			<CardContent className="p-2 flex-1">
-				<ChartContainer config={chartConfig} className="h-[220px] w-full">
+				<ChartContainer config={chartConfig} className="h-[250px] w-full">
 					<AreaChart
 						data={chartData}
 						margin={{ left: 12, right: 12, top: 5, bottom: 5 }}
