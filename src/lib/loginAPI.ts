@@ -1,4 +1,4 @@
-import API_BASE_URL from "@/config";
+import API_BASE_URL from "../config";
 import axios from "axios";
 
 const axiosInstance = axios.create({
@@ -12,5 +12,22 @@ axiosInstance.interceptors.request.use((config) => {
 	}
 	return config;
 });
+
+const apiClient = axios.create({
+	baseURL: API_BASE_URL,
+	headers: {
+		"Content-Type": "application/json",
+	},
+});
+
+export const postLogin = async (email: string, password: string) => {
+	const response = await apiClient.post("/Auth/login", {email, password});
+	return response.data;
+};
+
+export const postReset = async (email: string) => {
+	const response = await apiClient.post("/PasswordReset/request-reset", {email});
+	return response.data;
+};
 
 export default axiosInstance;

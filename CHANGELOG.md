@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/AESInsight/Frontend/compare/v1.5.4...v1.6.0) (2025-04-29)
+
+
+### Features
+
+* reset password button added ([6781292](https://github.com/AESInsight/Frontend/commit/67812929854189a1515143226507c45d3f652e26))
+
 ## [1.5.4](https://github.com/AESInsight/Frontend/compare/v1.5.3...v1.5.4) (2025-04-22)
 
 
