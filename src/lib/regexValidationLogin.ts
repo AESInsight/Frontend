@@ -1,6 +1,6 @@
 // Regular expressions for validation
 const EMAIL_REGEX = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-const PASSWORD_REQUIREMENTS = {
+export const PASSWORD_REQUIREMENTS = {
     minLength: 8,
     hasUpperCase: /[A-Z]/,
     hasNumber: /\d/,

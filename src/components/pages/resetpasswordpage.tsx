@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
+import { validatePassword, PASSWORD_REQUIREMENTS } from "@/lib/regexValidationLogin";
 import Header from "../ui/header";
 
 const ResetPasswordPage: React.FC = () => {
@@ -12,25 +13,35 @@ const ResetPasswordPage: React.FC = () => {
 	const [message, setMessage] = useState("");
 	const [isError, setIsError] = useState(false);
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [validationErrors, setValidationErrors] = useState<string[]>([]);
 	const [showNewPassword, setShowNewPassword] = useState(false);
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
 	const navigate = useNavigate();
 
-	const getPasswordStrength = (password: string) => {
-		let strength = 0;
-		if (password.length >= 8) strength++;
-		if (/[A-Z]/.test(password)) strength++;
-		if (/[0-9]/.test(password)) strength++;
-		if (/[^A-Za-z0-9]/.test(password)) strength++;
-		return strength;
-	};
+    const passwordRequirementsList = [
+        `Password must be at least ${PASSWORD_REQUIREMENTS.minLength} characters long`,
+		"Password must contain at least one uppercase letter",
+		"Password must contain at least one number",
+		"Password must contain at least one special character",
+	];
 
 	const handleResetPassword = async () => {
 		if (!newPassword || !confirmPassword) {
 			setMessage("Please fill in all fields.");
 			setIsError(true);
 			return;
+		}
+
+		const { isValid, errors } = validatePassword(newPassword);
+
+		if (!isValid) {
+			setValidationErrors(errors);
+			setMessage("Please fix the password requirements.");
+			setIsError(true);
+			return;
+		} else {
+			setValidationErrors([]);
 		}
 
 		if (newPassword !== confirmPassword) {
@@ -57,30 +68,14 @@ const ResetPasswordPage: React.FC = () => {
 			setIsError(false);
 			setTimeout(() => navigate("/admin"), 1500);
 		} catch (err: unknown) {
-            if (err instanceof Error) {
-                setMessage(err.message || "An error occurred.");
-            } else {
-                setMessage("An unknown error occurred.");
-            }
-            setIsError(true);
+			if (err instanceof Error) {
+				setMessage(err.message || "An error occurred.");
+			} else {
+				setMessage("An unknown error occurred.");
+			}
+			setIsError(true);
 		} finally {
 			setIsSubmitting(false);
-		}
-	};
-
-	const strength = getPasswordStrength(newPassword);
-	const getStrengthText = (level: number) => {
-		switch (level) {
-			case 0:
-			case 1:
-				return { text: "Weak", color: "text-red-500" };
-			case 2:
-			case 3:
-				return { text: "Medium", color: "text-yellow-500" };
-			case 4:
-				return { text: "Strong", color: "text-green-500" };
-			default:
-				return { text: "", color: "" };
 		}
 	};
 
@@ -89,7 +84,6 @@ const ResetPasswordPage: React.FC = () => {
 			<div className="relative z-10 flex flex-col h-full">
 				<Header />
 				<div className="flex flex-1 overflow-y-auto pt-14">
-					{/* Sidebar er i App.tsx */}
 					<main className="flex-1 p-4 text-black">
 						<h1 className="text-3xl font-bold mb-6 text-center">Reset Your Password</h1>
 
@@ -115,12 +109,28 @@ const ResetPasswordPage: React.FC = () => {
 								>
 									{showNewPassword ? <Eye size={20} /> : <EyeOff size={20} />}
 								</button>
-							</div>
+                                <div className="absolute left-full top-1/2 transform -translate-y-1/2 ml-2 group">
+                                    <div className="w-5 h-5 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs cursor-pointer">
+                                    i
+                                    </div>
+                                    <div className="hidden group-hover:block absolute left-full top-1/2 transform -translate-y-1/2 ml-2 w-48 bg-gray-800 text-white text-xs rounded-lg p-2 shadow-lg">
+                                        Password must:
+                                        <ul className="list-disc list-inside mt-1">
+                                            {passwordRequirementsList.map((req, idx) => (
+                                                <li key={idx}>{req}</li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
 
-							{newPassword && (
-								<p className={`text-xs mb-4 ${getStrengthText(strength).color}`}>
-									Password Strength: {getStrengthText(strength).text}
-								</p>
+							{/* Password validation errors */}
+							{validationErrors.length > 0 && (
+								<ul className="text-red-500 text-xs mb-4 list-disc ml-5">
+									{validationErrors.map((error, index) => (
+										<li key={index}>{error}</li>
+									))}
+								</ul>
 							)}
 
 							<div className="relative mb-4">

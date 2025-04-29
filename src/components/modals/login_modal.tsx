@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import InputField from "../fields/input_field";
 import axios from "axios";
 import ResetPasswordModal from "./resetpassword_modal";
-import { validateEmail, validatePassword } from "@/lib/regexValidationLogin";
-import PasswordField from "../fields/password_field";
+import { validateEmail } from "@/lib/regexValidationLogin";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { postLogin, postReset } from "@/lib/loginAPI";
+import { Eye, EyeOff } from "lucide-react";
 
 interface LoginModalProps {
 	isOpen: boolean;
@@ -24,11 +24,10 @@ const LoginModal: React.FC<LoginModalProps> = ({
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
 	const [validationErrors, setValidationErrors] = useState<{
-		email?: string;
-		password?: string;
-	}>({});
+		email?: string; }>({});
 	const [isSubmitted, setIsSubmitted] = useState(false);
 	const [isLoggingIn, setIsLoggingIn] = useState(false);
+	const [showPassword, setShowPassword] = useState(false);
 
 	const [showResetModal, setShowResetModal] = useState(false);
 	const [resetEmail, setResetEmail] = useState("");
@@ -97,13 +96,6 @@ const LoginModal: React.FC<LoginModalProps> = ({
 	const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const value = e.target.value;
 		setPassword(value);
-		if (isSubmitted) {
-			const { errors } = validatePassword(value);
-			setValidationErrors((prev) => ({
-				...prev,
-				password: errors.length > 0 ? errors[0] : undefined,
-			}));
-		}
 	};
 
 	const handleLogin = async () => {
@@ -116,17 +108,6 @@ const LoginModal: React.FC<LoginModalProps> = ({
 			setValidationErrors((prev) => ({
 				...prev,
 				email: "Please enter a valid email address",
-			}));
-			setIsLoggingIn(false);
-			return;
-		}
-
-		// Validate password
-		const passwordValidation = validatePassword(password);
-		if (!passwordValidation.isValid) {
-			setValidationErrors((prev) => ({
-				...prev,
-				password: passwordValidation.errors[0],
 			}));
 			setIsLoggingIn(false);
 			return;
@@ -211,12 +192,22 @@ const LoginModal: React.FC<LoginModalProps> = ({
 					error={isSubmitted ? validationErrors.email : undefined}
 				/>
 
-				<PasswordField
-					value={password}
-					onChange={handlePasswordChange}
-					error={validationErrors.password}
-					showValidation={isSubmitted}
-				/>
+				<div className="relative mb-4">
+					<input
+						type={showPassword ? "text" : "password"}
+						placeholder="Enter your password"
+						value={password}
+						onChange={handlePasswordChange}
+						className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-sky-500"
+					/>
+					<button
+						type="button"
+						onClick={() => setShowPassword(!showPassword)}
+						className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-black"
+					>
+						{showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
+					</button>
+				</div>
 
 				<button
 					onClick={handleLogin}
