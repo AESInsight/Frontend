@@ -109,7 +109,7 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
 							<div className="p-4 flex justify-center">
 								<EditButton
 									position={row.jobTitle}
-									salary={row.salary.toString()}
+									salary={row.salary ? row.salary.toString() : ""}
 									gender={row.gender}
 									experience={row.experience.toString()}
 									onSave={(updatedData) => onSave && onSave(index, { ...row, ...updatedData })}
