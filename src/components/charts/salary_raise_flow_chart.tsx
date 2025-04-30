@@ -1,7 +1,4 @@
-"use client";
-
 import { useEffect, useState } from "react";
-import { TrendingUp } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import {
@@ -245,9 +242,6 @@ export function SalaryRaiseFlowChart() {
 			</CardContent>
 			<CardFooter className="pt-1 pb-2 px-2 flex-col items-start gap-2 text-sm">
 				<div className="flex gap-2 font-medium leading-none">
-					Salary raises trending up <TrendingUp className="h-4 w-4" />
-				</div>
-				<div className="leading-none text-muted-foreground">
 					Based on annual salary adjustments
 				</div>
 			</CardFooter>

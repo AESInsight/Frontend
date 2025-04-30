@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { TrendingUp } from "lucide-react";
 import { Pie, PieChart, Label } from "recharts";
 import {
 	Card,
@@ -31,26 +30,19 @@ export function SalaryPieChart() {
 		const loadIndustries = async () => {
 			try {
 				const data = await fetchIndustries();
-				const cleaned = data.filter((i) => i.trim() !== "");
+				const cleaned = ["All", ...data.filter((i) => i.trim() !== "")];
 				setIndustries(cleaned);
-				if (selectedIndustry === "" && cleaned.length > 0) {
-					setSelectedIndustry("");
-				}
 			} catch (err) {
 				console.error("Failed to fetch industries", err);
 			}
 		};
 
 		loadIndustries();
-	}, [selectedIndustry]);
+	}, []);
 
 	useEffect(() => {
-		if (!selectedIndustry) return;
-
 		const loadSalaryData = async () => {
 			try {
-				const rawData = await fetchAverageSalariesForIndustry(selectedIndustry);
-
 				const colors = [
 					"hsl(210, 64%, 36%)",
 					"hsl(210, 64%, 42%)",
@@ -58,6 +50,22 @@ export function SalaryPieChart() {
 					"hsl(210, 64%, 54%)",
 					"hsl(210, 64%, 60%)",
 				];
+
+				let rawData: JobSalaryData[] = [];
+
+				if (!selectedIndustry || selectedIndustry === "All") {
+					// fetch all
+					const validIndustries = industries.filter((i) => i !== "All");
+					const allData: JobSalaryData[] = [];
+					for (const industry of validIndustries) {
+						const industryData =
+							await fetchAverageSalariesForIndustry(industry);
+						allData.push(...industryData);
+					}
+					rawData = allData;
+				} else {
+					rawData = await fetchAverageSalariesForIndustry(selectedIndustry);
+				}
 
 				const transformed: ChartDataEntry[] = rawData
 					.map((entry: JobSalaryData, index: number) => {
@@ -73,17 +81,17 @@ export function SalaryPieChart() {
 							position: entry.jobTitle,
 							value: avg,
 							fill: colors[index % colors.length],
+							people: count,
 						};
 					})
-					.filter((d: { value: number }) => d.value > 0)
-					.sort(
-						(a: { value: number }, b: { value: number }) => b.value - a.value
-					);
+					.filter((d) => d.value > 0)
+					.sort((a, b) => b.value - a.value);
 
 				const totalValue = transformed.reduce(
 					(sum, d) => sum + (d.value ?? 0),
 					0
 				);
+
 				const withPercent = transformed.map((d) => ({
 					...d,
 					percentage: (((d.value ?? 0) / totalValue) * 100).toFixed(1),
@@ -97,7 +105,7 @@ export function SalaryPieChart() {
 		};
 
 		loadSalaryData();
-	}, [selectedIndustry]);
+	}, [selectedIndustry, industries]);
 
 	const chartConfig: ChartConfig = chartData.reduce((acc, d) => {
 		acc[d.position] = { label: d.position, color: d.fill };
@@ -201,10 +209,6 @@ export function SalaryPieChart() {
 
 			<CardFooter className="p-2 flex-col items-start gap-2 text-sm">
 				<div className="flex gap-2 font-medium leading-none">
-					Average salary trending up by 8.5% this year{" "}
-					<TrendingUp className="h-4 w-4" />
-				</div>
-				<div className="leading-none text-muted-foreground">
 					Based on current market rates
 				</div>
 			</CardFooter>

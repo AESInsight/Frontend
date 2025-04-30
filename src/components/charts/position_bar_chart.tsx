@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { TrendingUp } from "lucide-react";
 import { Bar, BarChart, XAxis, YAxis } from "recharts";
 import {
 	Card,
@@ -42,26 +41,19 @@ export function PositionBarChart() {
 		const loadIndustries = async () => {
 			try {
 				const data = await fetchIndustries();
-				const cleaned = data.filter((i) => i.trim() !== "");
+				const cleaned = ["All", ...data.filter((i) => i.trim() !== "")];
 				setIndustries(cleaned);
-				if (selectedIndustry === "" && cleaned.length > 0) {
-					setSelectedIndustry("");
-				}
 			} catch (err) {
 				console.error("Failed to fetch industries", err);
 			}
 		};
 
 		loadIndustries();
-	}, [selectedIndustry]);
+	}, []);
 
 	useEffect(() => {
-		if (!selectedIndustry) return;
-
 		const loadData = async () => {
 			try {
-				const rawData = await fetchAverageSalariesForIndustry(selectedIndustry);
-
 				const colors = [
 					"hsl(210, 64%, 36%)",
 					"hsl(210, 64%, 42%)",
@@ -69,6 +61,21 @@ export function PositionBarChart() {
 					"hsl(210, 64%, 54%)",
 					"hsl(210, 64%, 60%)",
 				];
+
+				let rawData: JobSalaryData[] = [];
+
+				if (!selectedIndustry || selectedIndustry === "All") {
+					const validIndustries = industries.filter((i) => i !== "All");
+					const allData: JobSalaryData[] = [];
+					for (const industry of validIndustries) {
+						const industryData =
+							await fetchAverageSalariesForIndustry(industry);
+						allData.push(...industryData);
+					}
+					rawData = allData;
+				} else {
+					rawData = await fetchAverageSalariesForIndustry(selectedIndustry);
+				}
 
 				const grouped = rawData
 					.map((entry: JobSalaryData, index: number) => {
@@ -82,11 +89,8 @@ export function PositionBarChart() {
 							fill: colors[index % colors.length],
 						};
 					})
-					.filter((d: { people: number }) => d.people > 0)
-					.sort(
-						(a: { people: number }, b: { people: number }) =>
-							b.people - a.people
-					);
+					.filter((d) => d.people > 0)
+					.sort((a, b) => b.people - a.people);
 
 				setChartData(grouped);
 			} catch (err) {
@@ -95,7 +99,7 @@ export function PositionBarChart() {
 		};
 
 		loadData();
-	}, [selectedIndustry]);
+	}, [selectedIndustry, industries]);
 
 	return (
 		<Card className="bg-transparent border-none shadow-none">
@@ -105,7 +109,7 @@ export function PositionBarChart() {
 						Number of People by Job Position
 					</CardTitle>
 					<CardDescription className="text-sm">
-						Employee distribution as of April 2025
+						Filtered by Industry
 					</CardDescription>
 				</div>
 				<Select
@@ -171,10 +175,6 @@ export function PositionBarChart() {
 
 			<CardFooter className="pt-1 pb-2 px-2 flex-col items-start gap-2 text-sm">
 				<div className="flex gap-2 font-medium leading-none">
-					Software Engineers increased by 12% this year
-					<TrendingUp className="h-4 w-4" />
-				</div>
-				<div className="leading-none text-muted-foreground">
 					Based on current hiring trends
 				</div>
 			</CardFooter>

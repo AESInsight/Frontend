@@ -236,8 +236,8 @@ export function GenderSalaryBarChart() {
 					</BarChart>
 				</ChartContainer>
 			</CardContent>
-			<CardFooter className="pt-1 pb-2 px-2 flex-col items-start gap-2 text-sm">
-				<div className="leading-none text-muted-foreground">
+			<CardFooter className="p-2 flex-col items-start gap-2 text-sm">
+				<div className="flex gap-2 font-medium leading-none">
 					Average salary in thousands (DKK)
 				</div>
 			</CardFooter>

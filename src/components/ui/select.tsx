@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
 type SelectProps = {
 	options: string[];
@@ -30,11 +30,13 @@ export function Select({
 				className="w-full flex items-center justify-between rounded-md border px-3 py-2 bg-white shadow-sm hover:border-muted-foreground focus:outline-none"
 			>
 				<span>{selected || placeholder}</span>
-				{isOpen ? (
-					<ChevronUp className="h-4 w-4" />
-				) : (
+				<div
+					className={`transition-transform duration-300 ${
+						isOpen ? "rotate-180" : "rotate-0"
+					}`}
+				>
 					<ChevronDown className="h-4 w-4" />
-				)}
+				</div>
 			</button>
 
 			{isOpen && (
