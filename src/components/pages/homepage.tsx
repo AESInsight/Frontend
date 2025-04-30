@@ -1,10 +1,8 @@
 import React from "react";
 import Header from "../ui/header";
 import Sidebar from "../ui/sidebar";
-import { GenderSalaryBarChart } from "../charts/gender_salary_bar_chart";
-import { SalaryPieChart } from "../charts/salary_pie_chart";
-import { SalaryRaiseFlowChart } from "../charts/salary_raise_flow_chart";
-import { PositionBarChart } from "../charts/position_bar_chart";
+import { ChartProvider } from "../charts/context/chart_context";
+import { GroupedCharts } from "../charts/grouped_charts";
 const Homepage: React.FC = () => {
 	return (
 		<div className="h-screen w-screen flex flex-col relative">
@@ -17,20 +15,9 @@ const Homepage: React.FC = () => {
 						<p className="mb-6">
 							Your trusted partner in data security and insights.
 						</p>
-						<div className="grid grid-cols-2 gap-12">
-							<div className="bg-transparent backdrop-blur-sm border-black border-2 rounded-lg">
-								<GenderSalaryBarChart />
-							</div>
-							<div className="bg-transparent backdrop-blur-sm border-2 border-black rounded-lg">
-								<SalaryPieChart />
-							</div>
-							<div className="bg-transparent backdrop-blur-sm border-2 border-black rounded-lg mb-4">
-								<SalaryRaiseFlowChart />
-							</div>
-							<div className="bg-transparent backdrop-blur-sm border-2 border-black rounded-lg mb-4">
-								<PositionBarChart />
-							</div>
-						</div>
+						<ChartProvider>
+							<GroupedCharts />
+						</ChartProvider>
 					</div>
 				</div>
 				<footer className="p-2 bg-gray-800 text-white text-center text-xs relative z-10">

@@ -19,12 +19,28 @@ import {
 	fetchIndustries,
 } from "@/lib/companyAPI";
 import { Select } from "@/components/ui/select";
+import { SharedIndustryToggle } from "./toggles/sync_industry_toggle";
 
-export function SalaryPieChart() {
+interface SalaryPieChartProps {
+	sharedIndustry: string;
+	setSharedIndustry: (industry: string) => void;
+	enabled: boolean;
+	onToggle: (checked: boolean) => void;
+}
+
+export function SalaryPieChart({
+	sharedIndustry,
+	setSharedIndustry,
+	enabled,
+	onToggle,
+}: SalaryPieChartProps) {
 	const [industries, setIndustries] = useState<string[]>([]);
-	const [selectedIndustry, setSelectedIndustry] = useState<string>("");
+	const [localIndustry, setLocalIndustry] = useState<string>("");
 	const [chartData, setChartData] = useState<ChartDataEntry[]>([]);
 	const [totalSalary, setTotalSalary] = useState(0);
+
+	const selectedIndustry = enabled ? sharedIndustry : localIndustry;
+	const setSelectedIndustry = enabled ? setSharedIndustry : setLocalIndustry;
 
 	useEffect(() => {
 		const loadIndustries = async () => {
@@ -54,7 +70,6 @@ export function SalaryPieChart() {
 				let rawData: JobSalaryData[] = [];
 
 				if (!selectedIndustry || selectedIndustry === "All") {
-					// fetch all
 					const validIndustries = industries.filter((i) => i !== "All");
 					const allData: JobSalaryData[] = [];
 					for (const industry of validIndustries) {
@@ -117,7 +132,7 @@ export function SalaryPieChart() {
 
 	return (
 		<Card className="bg-transparent border-none shadow-none">
-			<CardHeader className="px-4 flex items-center justify-between">
+			<CardHeader className="px-4 flex items-start justify-between">
 				<div>
 					<CardTitle className="text-lg">
 						Salary Distribution by Position
@@ -126,14 +141,16 @@ export function SalaryPieChart() {
 						Sorted by Industry
 					</CardDescription>
 				</div>
-				<Select
-					options={industries}
-					selected={selectedIndustry}
-					onChange={setSelectedIndustry}
-					placeholder="Select an Industry"
-				/>
+				<div className="flex flex-col items-end gap-1">
+					<Select
+						options={industries}
+						selected={selectedIndustry}
+						onChange={setSelectedIndustry}
+						placeholder="Select an Industry"
+					/>
+					<SharedIndustryToggle enabled={enabled} onToggle={onToggle} />
+				</div>
 			</CardHeader>
-
 			<CardContent className="p-2 flex-1">
 				<ChartContainer
 					config={chartConfig}
@@ -206,7 +223,6 @@ export function SalaryPieChart() {
 					</PieChart>
 				</ChartContainer>
 			</CardContent>
-
 			<CardFooter className="p-2 flex-col items-start gap-2 text-sm">
 				<div className="flex gap-2 font-medium leading-none">
 					Based on current market rates

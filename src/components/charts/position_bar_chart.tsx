@@ -26,9 +26,19 @@ const chartConfig = {
 	},
 } satisfies ChartConfig;
 
-export function PositionBarChart() {
+interface PositionBarChartProps {
+	sharedIndustry: string;
+	setSharedIndustry: (industry: string) => void;
+	industrySyncEnabled: boolean;
+}
+
+export function PositionBarChart({
+	sharedIndustry,
+	setSharedIndustry,
+	industrySyncEnabled,
+}: PositionBarChartProps) {
 	const [industries, setIndustries] = useState<string[]>([]);
-	const [selectedIndustry, setSelectedIndustry] = useState<string>("");
+	const [localIndustry, setLocalIndustry] = useState<string>("");
 	const [chartData, setChartData] = useState<
 		{
 			position: string;
@@ -36,6 +46,11 @@ export function PositionBarChart() {
 			fill: string;
 		}[]
 	>([]);
+
+	const selectedIndustry = industrySyncEnabled ? sharedIndustry : localIndustry;
+	const setSelectedIndustry = industrySyncEnabled
+		? setSharedIndustry
+		: setLocalIndustry;
 
 	useEffect(() => {
 		const loadIndustries = async () => {

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
-
 import {
 	Card,
 	CardContent,
@@ -33,12 +32,27 @@ const chartConfig = {
 	},
 } satisfies ChartConfig;
 
-export function SalaryRaiseFlowChart() {
+interface SalaryRaiseFlowChartProps {
+	sharedJobTitle: string;
+	setSharedJobTitle: (jobTitle: string) => void;
+	jobTitleSyncEnabled: boolean;
+}
+
+export function SalaryRaiseFlowChart({
+	sharedJobTitle,
+	setSharedJobTitle,
+	jobTitleSyncEnabled,
+}: SalaryRaiseFlowChartProps) {
 	const [chartData, setChartData] = useState<
 		{ year: string; Men: number; Women: number }[]
 	>([]);
 	const [jobTitles, setJobTitles] = useState<string[]>([]);
-	const [selectedJobTitle, setSelectedJobTitle] = useState<string>("");
+	const [localJobTitle, setLocalJobTitle] = useState<string>("");
+
+	const selectedJobTitle = jobTitleSyncEnabled ? sharedJobTitle : localJobTitle;
+	const setSelectedJobTitle = jobTitleSyncEnabled
+		? setSharedJobTitle
+		: setLocalJobTitle;
 
 	useEffect(() => {
 		const loadJobTitles = async () => {

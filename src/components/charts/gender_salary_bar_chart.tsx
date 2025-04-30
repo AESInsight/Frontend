@@ -20,6 +20,7 @@ import {
 } from "@/lib/employeeAPI";
 import { EmployeeData, MonthlyEntry, SalaryEntry } from "@/lib/types/salary";
 import { Select } from "@/components/ui/select";
+import { SharedJobTitleToggle } from "./toggles/sync_jobtitle_toggle";
 
 const chartConfig = {
 	Men: {
@@ -32,12 +33,27 @@ const chartConfig = {
 	},
 } satisfies ChartConfig;
 
-export function GenderSalaryBarChart() {
+interface GenderSalaryBarChartProps {
+	sharedJobTitle: string;
+	setSharedJobTitle: (jobTitle: string) => void;
+	enabled: boolean;
+	onToggle: (checked: boolean) => void;
+}
+
+export function GenderSalaryBarChart({
+	sharedJobTitle,
+	setSharedJobTitle,
+	enabled,
+	onToggle,
+}: GenderSalaryBarChartProps) {
 	const [chartData, setChartData] = useState<
 		{ month: string; Men: number; Women: number }[]
 	>([]);
 	const [jobTitles, setJobTitles] = useState<string[]>([]);
-	const [selectedJobTitle, setSelectedJobTitle] = useState<string>("");
+	const [localJobTitle, setLocalJobTitle] = useState<string>("");
+
+	const selectedJobTitle = enabled ? sharedJobTitle : localJobTitle;
+	const setSelectedJobTitle = enabled ? setSharedJobTitle : setLocalJobTitle;
 
 	useEffect(() => {
 		const loadJobTitles = async () => {
@@ -64,12 +80,12 @@ export function GenderSalaryBarChart() {
 					fetchEmployees(),
 				]);
 
-				const employeeGenderMap: Record<
+				const employeeMap: Record<
 					number,
 					{ gender: "Men" | "Women"; jobTitle: string }
 				> = {};
 				employees.forEach((emp: EmployeeData) => {
-					employeeGenderMap[emp.employeeID] = {
+					employeeMap[emp.employeeID] = {
 						gender: emp.gender === "Female" ? "Women" : "Men",
 						jobTitle: emp.jobTitle,
 					};
@@ -78,7 +94,7 @@ export function GenderSalaryBarChart() {
 				const monthlySums: Record<string, MonthlyEntry> = {};
 
 				salaries.forEach((item: SalaryEntry) => {
-					const emp = employeeGenderMap[item.employeeID];
+					const emp = employeeMap[item.employeeID];
 					if (!emp) return;
 					if (
 						selectedJobTitle &&
@@ -150,7 +166,7 @@ export function GenderSalaryBarChart() {
 
 	return (
 		<Card className="bg-transparent border-none shadow-none">
-			<CardHeader className="px-4 flex items-center justify-between">
+			<CardHeader className="px-4 flex items-start justify-between">
 				<div>
 					<CardTitle className="text-lg">
 						Gender-Based Salary Over Time
@@ -159,12 +175,15 @@ export function GenderSalaryBarChart() {
 						Filtered by Job Title
 					</CardDescription>
 				</div>
-				<Select
-					options={jobTitles}
-					selected={selectedJobTitle}
-					onChange={setSelectedJobTitle}
-					placeholder="Select a Job Title"
-				/>
+				<div className="flex flex-col items-end gap-1">
+					<Select
+						options={jobTitles}
+						selected={selectedJobTitle}
+						onChange={setSelectedJobTitle}
+						placeholder="Select a Job Title"
+					/>
+					<SharedJobTitleToggle enabled={enabled} onToggle={onToggle} />
+				</div>
 			</CardHeader>
 			<CardContent className="p-2 flex-1">
 				<ChartContainer config={chartConfig} className="h-[250px] w-full">
