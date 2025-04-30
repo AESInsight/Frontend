@@ -48,17 +48,18 @@ export function SalaryRaiseFlowChart() {
 			try {
 				const res = await fetchJobTitles();
 				const titles = res.jobTitles;
-				setJobTitles(Array.isArray(titles) ? titles : []);
-				if (!selectedJobTitle && titles.length > 0) {
-					setSelectedJobTitle("");
-				}
+				const allTitles = [
+					"All",
+					...titles.filter((t: string) => t.trim() !== ""),
+				];
+				setJobTitles(allTitles);
 			} catch (err) {
 				console.error("Failed to fetch job titles", err);
 			}
 		};
 
 		loadJobTitles();
-	}, [selectedJobTitle]);
+	}, []);
 
 	useEffect(() => {
 		const loadSalaries = async () => {
@@ -86,7 +87,13 @@ export function SalaryRaiseFlowChart() {
 
 				salaries.forEach((item: SalaryEntry) => {
 					const emp = employeeMap[item.employeeID];
-					if (!emp || emp.jobTitle !== selectedJobTitle) return;
+					if (!emp) return;
+					if (
+						selectedJobTitle &&
+						selectedJobTitle !== "All" &&
+						emp.jobTitle !== selectedJobTitle
+					)
+						return;
 
 					const year = new Date(item.timestamp).getFullYear().toString();
 					const gender = emp.gender;
@@ -143,7 +150,7 @@ export function SalaryRaiseFlowChart() {
 			}
 		};
 
-		if (selectedJobTitle) loadSalaries();
+		loadSalaries();
 	}, [selectedJobTitle]);
 
 	return (

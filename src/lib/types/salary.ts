@@ -36,3 +36,9 @@ export type SalaryRaiseData = {
 	gender: string;
 	jobTitle: string;
 };
+
+export type EmployeeData = {
+	employeeID: number;
+	gender: string;
+	jobTitle: string;
+};

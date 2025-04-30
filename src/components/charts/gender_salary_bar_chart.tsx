@@ -18,7 +18,7 @@ import {
 	fetchEmployees,
 	fetchJobTitles,
 } from "@/lib/employeeAPI";
-import { MonthlyEntry, SalaryEntry } from "@/lib/types/salary";
+import { EmployeeData, MonthlyEntry, SalaryEntry } from "@/lib/types/salary";
 import { Select } from "@/components/ui/select";
 
 const chartConfig = {
@@ -44,17 +44,17 @@ export function GenderSalaryBarChart() {
 			try {
 				const response = await fetchJobTitles();
 				const titles = response.jobTitles;
-				setJobTitles(Array.isArray(titles) ? titles : []);
-				if (!selectedJobTitle && titles.length > 0) {
-					setSelectedJobTitle("");
-				}
+				const allTitles = [
+					"All",
+					...titles.filter((t: string) => t.trim() !== ""),
+				];
+				setJobTitles(allTitles);
 			} catch (err) {
 				console.error("Failed to fetch job titles", err);
 			}
 		};
-
 		loadJobTitles();
-	}, [selectedJobTitle]);
+	}, []);
 
 	useEffect(() => {
 		const loadSalaries = async () => {
@@ -68,20 +68,24 @@ export function GenderSalaryBarChart() {
 					number,
 					{ gender: "Men" | "Women"; jobTitle: string }
 				> = {};
-				employees.forEach(
-					(emp: { employeeID: number; gender: string; jobTitle: string }) => {
-						employeeGenderMap[emp.employeeID] = {
-							gender: emp.gender === "Female" ? "Women" : "Men",
-							jobTitle: emp.jobTitle,
-						};
-					}
-				);
+				employees.forEach((emp: EmployeeData) => {
+					employeeGenderMap[emp.employeeID] = {
+						gender: emp.gender === "Female" ? "Women" : "Men",
+						jobTitle: emp.jobTitle,
+					};
+				});
 
 				const monthlySums: Record<string, MonthlyEntry> = {};
 
 				salaries.forEach((item: SalaryEntry) => {
 					const emp = employeeGenderMap[item.employeeID];
-					if (!emp || emp.jobTitle !== selectedJobTitle) return;
+					if (!emp) return;
+					if (
+						selectedJobTitle &&
+						selectedJobTitle !== "All" &&
+						emp.jobTitle !== selectedJobTitle
+					)
+						return;
 
 					const date = new Date(item.timestamp);
 					const month = date.toLocaleDateString("da-DK", {
@@ -141,7 +145,7 @@ export function GenderSalaryBarChart() {
 			}
 		};
 
-		if (selectedJobTitle) loadSalaries();
+		loadSalaries();
 	}, [selectedJobTitle]);
 
 	return (
