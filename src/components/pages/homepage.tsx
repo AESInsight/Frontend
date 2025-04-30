@@ -3,6 +3,7 @@ import Header from "../ui/header";
 import Sidebar from "../ui/sidebar";
 import { ChartProvider } from "../charts/context/chart_context";
 import { GroupedCharts } from "../charts/grouped_charts";
+
 const Homepage: React.FC = () => {
 	return (
 		<div className="h-screen w-screen flex flex-col relative">
