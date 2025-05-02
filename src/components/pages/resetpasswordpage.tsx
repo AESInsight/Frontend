@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Eye, EyeOff } from "lucide-react";
-import { validatePassword, PASSWORD_REQUIREMENTS } from "@/lib/regexValidationLogin";
+import { validatePassword } from "@/lib/regexValidationLogin";
 import Header from "../ui/header";
+import PasswordField from "../fields/password_field";
 
 const ResetPasswordPage: React.FC = () => {
 	const [searchParams] = useSearchParams();
@@ -13,18 +13,8 @@ const ResetPasswordPage: React.FC = () => {
 	const [message, setMessage] = useState("");
 	const [isError, setIsError] = useState(false);
 	const [isSubmitting, setIsSubmitting] = useState(false);
-	const [validationErrors, setValidationErrors] = useState<string[]>([]);
-	const [showNewPassword, setShowNewPassword] = useState(false);
-	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
 	const navigate = useNavigate();
-
-    const passwordRequirementsList = [
-        `Password must be at least ${PASSWORD_REQUIREMENTS.minLength} characters long`,
-		"Password must contain at least one uppercase letter",
-		"Password must contain at least one number",
-		"Password must contain at least one special character",
-	];
 
 	const handleResetPassword = async () => {
 		if (!newPassword || !confirmPassword) {
@@ -36,12 +26,9 @@ const ResetPasswordPage: React.FC = () => {
 		const { isValid, errors } = validatePassword(newPassword);
 
 		if (!isValid) {
-			setValidationErrors(errors);
-			setMessage("Please fix the password requirements.");
+			setMessage(errors[0]);
 			setIsError(true);
 			return;
-		} else {
-			setValidationErrors([]);
 		}
 
 		if (newPassword !== confirmPassword) {
@@ -66,7 +53,7 @@ const ResetPasswordPage: React.FC = () => {
 
 			setMessage(data.message || "Password reset successful!");
 			setIsError(false);
-			setTimeout(() => navigate("/admin"), 1500);
+			navigate("/reset-success");
 		} catch (err: unknown) {
 			if (err instanceof Error) {
 				setMessage(err.message || "An error occurred.");
@@ -94,67 +81,25 @@ const ResetPasswordPage: React.FC = () => {
 								</p>
 							)}
 
-							<div className="relative mb-2">
-								<input
-									type={showNewPassword ? "text" : "password"}
-									placeholder="New password"
-									value={newPassword}
-									onChange={(e) => setNewPassword(e.target.value)}
-									className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-sky-500"
-								/>
-								<button
-									type="button"
-									onClick={() => setShowNewPassword(!showNewPassword)}
-									className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-black"
-								>
-									{showNewPassword ? <Eye size={20} /> : <EyeOff size={20} />}
-								</button>
-                                <div className="absolute left-full top-1/2 transform -translate-y-1/2 ml-2 group">
-                                    <div className="w-5 h-5 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs cursor-pointer">
-                                    i
-                                    </div>
-                                    <div className="hidden group-hover:block absolute left-full top-1/2 transform -translate-y-1/2 ml-2 w-48 bg-gray-800 text-white text-xs rounded-lg p-2 shadow-lg">
-                                        Password must:
-                                        <ul className="list-disc list-inside mt-1">
-                                            {passwordRequirementsList.map((req, idx) => (
-                                                <li key={idx}>{req}</li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
+							<PasswordField
+								value={newPassword}
+								onChange={(e) => setNewPassword(e.target.value)}
+								showValidation={true}
+							/>
 
-							{/* Password validation errors */}
-							{validationErrors.length > 0 && (
-								<ul className="text-red-500 text-xs mb-4 list-disc ml-5">
-									{validationErrors.map((error, index) => (
-										<li key={index}>{error}</li>
-									))}
-								</ul>
-							)}
-
-							<div className="relative mb-4">
-								<input
-									type={showConfirmPassword ? "text" : "password"}
-									placeholder="Confirm password"
-									value={confirmPassword}
-									onChange={(e) => setConfirmPassword(e.target.value)}
-									className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-sky-500"
-								/>
-								<button
-									type="button"
-									onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-									className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-black"
-								>
-									{showConfirmPassword ? <Eye size={20} /> : <EyeOff size={20} />}
-								</button>
-							</div>
+							<PasswordField
+								label="Confirm Password"
+								value={confirmPassword}
+								onChange={(e) => setConfirmPassword(e.target.value)}
+								showValidation={false}
+                                showInfoIcon={false}
+							/>
 
 							<button
 								onClick={handleResetPassword}
 								disabled={isSubmitting}
-								className={`w-full bg-sky-600 text-white px-4 py-2 rounded-lg text-sm ${
-									isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-sky-700"
+								className={`w-full mt-2 bg-sky-600 text-white px-4 py-2 rounded-lg text-sm hover:underline hover:cursor-pointer ${
+									isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-sky-700" 
 								}`}
 							>
 								{isSubmitting ? "Submitting..." : "Reset Password"}

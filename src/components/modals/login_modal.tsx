@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import InputField from "../fields/input_field";
+import PasswordField from "../fields/password_field";
 import axios from "axios";
 import ResetPasswordModal from "./resetpassword_modal";
 import { validateEmail } from "@/lib/regexValidationLogin";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { postLogin, postReset } from "@/lib/loginAPI";
-import { Eye, EyeOff } from "lucide-react";
 
 interface LoginModalProps {
 	isOpen: boolean;
@@ -23,11 +23,9 @@ const LoginModal: React.FC<LoginModalProps> = ({
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
-	const [validationErrors, setValidationErrors] = useState<{
-		email?: string; }>({});
+	const [validationErrors, setValidationErrors] = useState<{ email?: string }>({});
 	const [isSubmitted, setIsSubmitted] = useState(false);
 	const [isLoggingIn, setIsLoggingIn] = useState(false);
-	const [showPassword, setShowPassword] = useState(false);
 
 	const [showResetModal, setShowResetModal] = useState(false);
 	const [resetEmail, setResetEmail] = useState("");
@@ -79,23 +77,15 @@ const LoginModal: React.FC<LoginModalProps> = ({
 		const value = e.target.value;
 		setUsername(value);
 		if (isSubmitted) {
-			if (value && !validateEmail(value)) {
-				setValidationErrors((prev) => ({
-					...prev,
-					email: "Please enter a valid email address",
-				}));
-			} else {
-				setValidationErrors((prev) => ({
-					...prev,
-					email: undefined,
-				}));
-			}
+			setValidationErrors((prev) => ({
+				...prev,
+				email: !validateEmail(value) ? "Please enter a valid email address" : undefined,
+			}));
 		}
 	};
 
 	const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const value = e.target.value;
-		setPassword(value);
+		setPassword(e.target.value);
 	};
 
 	const handleLogin = async () => {
@@ -103,7 +93,6 @@ const LoginModal: React.FC<LoginModalProps> = ({
 		setError("");
 		setIsLoggingIn(true);
 
-		// Validate email
 		if (!validateEmail(username)) {
 			setValidationErrors((prev) => ({
 				...prev,
@@ -192,22 +181,12 @@ const LoginModal: React.FC<LoginModalProps> = ({
 					error={isSubmitted ? validationErrors.email : undefined}
 				/>
 
-				<div className="relative mb-4">
-					<input
-						type={showPassword ? "text" : "password"}
-						placeholder="Enter your password"
-						value={password}
-						onChange={handlePasswordChange}
-						className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-sky-500"
-					/>
-					<button
-						type="button"
-						onClick={() => setShowPassword(!showPassword)}
-						className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-black"
-					>
-						{showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
-					</button>
-				</div>
+				<PasswordField
+					value={password}
+					onChange={handlePasswordChange}
+					showValidation={false}
+					showInfoIcon={false}
+				/>
 
 				<button
 					onClick={handleLogin}

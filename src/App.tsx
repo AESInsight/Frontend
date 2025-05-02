@@ -10,6 +10,7 @@ import ServicePage from "./components/pages/servicepage";
 import InsightPage from "./components/pages/insightpage";
 import AdminPage from "./components/pages/adminpage";
 import ResetPasswordPage from "./components/pages/resetpasswordpage";
+import ResetSuccessPage from "./components/pages/resetsuccess";
 import BgImage from "./components/bg_image";
 
 const App: React.FC = () => {
@@ -25,6 +26,7 @@ const App: React.FC = () => {
 				<Route path="/admin" element={<AdminPage />} />
 				<Route path="/insight" element={<InsightPage />} />
 				<Route path="/reset-password" element={<ResetPasswordPage />} />
+				<Route path="/reset-success" element={<ResetSuccessPage />} />
 			</Routes>
 		</Router>
 	);
