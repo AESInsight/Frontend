@@ -104,7 +104,7 @@ export function GenderSalaryBarChart({
 						return;
 
 					const date = new Date(item.timestamp);
-					const month = date.toLocaleDateString("da-DK", {
+					const month = date.toLocaleDateString("en-EN", {
 						month: "long",
 						year: "numeric",
 					});
@@ -135,18 +135,18 @@ export function GenderSalaryBarChart({
 					const getIndex = (label: string) => {
 						const [monthName, year] = label.split(" ");
 						const months = [
-							"januar",
-							"februar",
-							"marts",
-							"april",
-							"maj",
-							"juni",
-							"juli",
-							"august",
-							"september",
-							"oktober",
-							"november",
-							"december",
+							"January",
+							"February",
+							"March",
+							"April",
+							"May",
+							"June",
+							"July",
+							"August",
+							"September",
+							"October",
+							"November",
+							"December",
 						];
 						return (
 							parseInt(year) * 100 + months.indexOf(monthName.toLowerCase())
