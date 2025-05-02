@@ -211,7 +211,7 @@ export function GenderSalaryBarChart({
 							tickFormatter={(value) => `DKK ${value / 1000}k`}
 							domain={[0, 100000]}
 							ticks={[0, 25000, 50000, 75000, 100000]}
-							fontSize={12}
+							fontSize={10}
 							width={40}
 						/>
 						<ChartTooltip
