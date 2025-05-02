@@ -33,7 +33,6 @@ interface EmployeeTableProps {
 }
 
 const EmployeeTable: React.FC<EmployeeTableProps> = ({
-	data: externalData,
 	editable = true,
 	onSave,
 	onDelete,
@@ -41,39 +40,38 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
 	const [data, setData] = useState<TableRow[]>([]);
 
 	useEffect(() => {
-		if (externalData) {
-			setData(externalData);
-		} else {
-			const loadData = async () => {
-				try {
-					const employees: Employee[] = await fetchEmployees();
-					const salaries: Salary[] = await fetchAllSalaries();
+		const loadData = async () => {
+			try {
+				const employees: Employee[] = await fetchEmployees();
+				const salaries: Salary[] = await fetchAllSalaries();
 
-					const mergedData = employees.map((employee: Employee) => {
-						const latestSalary = salaries
-							.filter((salary: Salary) => salary.employeeID === employee.employeeID)
-							.sort((a: Salary, b: Salary) =>
-								new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-							)[0];
+				// Merge salaries into employees
+				const mergedData = employees.map((employee) => {
+					const latestSalary = salaries
+						.filter((salary) => salary.employeeID === employee.employeeID)
+						.sort(
+							(a, b) =>
+								new Date(b.timestamp).getTime() -
+								new Date(a.timestamp).getTime()
+						)[0];
 
-						return {
-							id: employee.employeeID,
-							jobTitle: employee.jobTitle,
-							salary: latestSalary ? latestSalary.salary : "N/A",
-							gender: employee.gender,
-							experience: employee.experience,
-						};
-					});
+					return {
+						id: employee.employeeID,
+						jobTitle: employee.jobTitle,
+						salary: latestSalary ? latestSalary.salary : "N/A",
+						gender: employee.gender,
+						experience: employee.experience,
+					};
+				});
 
-					setData(mergedData);
-				} catch (error) {
-					console.error("Failed to load data:", error);
-				}
-			};
+				setData(mergedData);
+			} catch (error) {
+				console.error("Failed to load data:", error);
+			}
+		};
 
-			loadData();
-		}
-	}, [externalData]);
+		loadData();
+	}, []);
 
 	return (
 		<div className="bg-white shadow-lg rounded-xl overflow-hidden w-full">
