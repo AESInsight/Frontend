@@ -31,4 +31,17 @@ export const fetchAllSalaries = async () => {
 	}
 };
 
+export const fetchJobTitles = async () => {
+	try {
+		const response = await apiClient.get("/employee/getAllJobTitles");
+		if (!response || !response.data) {
+			throw new Error("Invalid response from the server.");
+		}
+		return response.data;
+	} catch (error) {
+		console.error("Error fetching job titles:", error);
+		throw error;
+	}
+};
+
 export default apiClient;
