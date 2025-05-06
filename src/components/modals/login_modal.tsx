@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import InputField from "../fields/input_field";
+import PasswordField from "../fields/password_field";
 import axios from "axios";
 import ResetPasswordModal from "./resetpassword_modal";
-import { validateEmail, validatePassword } from "@/lib/regexValidationLogin";
-import PasswordField from "../fields/password_field";
+import { validateEmail } from "@/lib/regexValidationLogin";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { postLogin, postReset } from "@/lib/loginAPI";
@@ -23,10 +23,9 @@ const LoginModal: React.FC<LoginModalProps> = ({
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
-	const [validationErrors, setValidationErrors] = useState<{
-		email?: string;
-		password?: string;
-	}>({});
+	const [validationErrors, setValidationErrors] = useState<{ email?: string }>(
+		{}
+	);
 	const [isSubmitted, setIsSubmitted] = useState(false);
 	const [isLoggingIn, setIsLoggingIn] = useState(false);
 
@@ -80,30 +79,17 @@ const LoginModal: React.FC<LoginModalProps> = ({
 		const value = e.target.value;
 		setUsername(value);
 		if (isSubmitted) {
-			if (value && !validateEmail(value)) {
-				setValidationErrors((prev) => ({
-					...prev,
-					email: "Please enter a valid email address",
-				}));
-			} else {
-				setValidationErrors((prev) => ({
-					...prev,
-					email: undefined,
-				}));
-			}
+			setValidationErrors((prev) => ({
+				...prev,
+				email: !validateEmail(value)
+					? "Please enter a valid email address"
+					: undefined,
+			}));
 		}
 	};
 
 	const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const value = e.target.value;
-		setPassword(value);
-		if (isSubmitted) {
-			const { errors } = validatePassword(value);
-			setValidationErrors((prev) => ({
-				...prev,
-				password: errors.length > 0 ? errors[0] : undefined,
-			}));
-		}
+		setPassword(e.target.value);
 	};
 
 	const handleLogin = async () => {
@@ -111,22 +97,10 @@ const LoginModal: React.FC<LoginModalProps> = ({
 		setError("");
 		setIsLoggingIn(true);
 
-		// Validate email
 		if (!validateEmail(username)) {
 			setValidationErrors((prev) => ({
 				...prev,
 				email: "Please enter a valid email address",
-			}));
-			setIsLoggingIn(false);
-			return;
-		}
-
-		// Validate password
-		const passwordValidation = validatePassword(password);
-		if (!passwordValidation.isValid) {
-			setValidationErrors((prev) => ({
-				...prev,
-				password: passwordValidation.errors[0],
 			}));
 			setIsLoggingIn(false);
 			return;
@@ -214,8 +188,8 @@ const LoginModal: React.FC<LoginModalProps> = ({
 				<PasswordField
 					value={password}
 					onChange={handlePasswordChange}
-					error={validationErrors.password}
-					showValidation={isSubmitted}
+					showValidation={false}
+					showInfoIcon={false}
 				/>
 
 				<button
