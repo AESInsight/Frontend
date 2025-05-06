@@ -47,23 +47,25 @@ const Sidebar: React.FC = () => {
 			}`}
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
+			data-testid="sidebar"
 		>
 			{/* Sidebar Toggle Button */}
 			<button
 				className={`text-black text-xl mb-6 transition-all duration-300 hover:scale-110 self-center ${
 					isCollapsed ? "opacity-100" : "opacity-0"
 				}`}
+				data-testid="sidebar-toggle"
 			>
 				<FontAwesomeIcon icon={faBars} />
 			</button>
-			<div className="w-full mb-6">
+			<div className="w-full mb-6" data-testid="personal-info-container">
 				<PersonalInformationButton
 					isCollapsed={isCollapsed}
 					setIsDropdownOpen={setIsDropdownOpen}
 				/>
 			</div>
 			{/* Navigation Buttons */}
-			<div className="space-y-6 w-full">
+			<div className="space-y-6 w-full" data-testid="nav-buttons-container">
 				{[
 					{ icon: faInfoCircle, label: "About" },
 					{ icon: faBriefcase, label: "Services" },
