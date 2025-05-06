@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import InputField from "../fields/input_field";
 import PasswordField from "../fields/password_field";
 import axios from "axios";
-import { validateEmail, validatePassword } from "@/lib/regexValidationLogin";
+import ResetPasswordModal from "./resetpassword_modal";
+import { validateEmail } from "@/lib/regexValidationLogin";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { postLogin, postReset } from "@/lib/loginAPI";
 
 interface LoginModalProps {
 	isOpen: boolean;
@@ -19,23 +23,42 @@ const LoginModal: React.FC<LoginModalProps> = ({
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
-	const [validationErrors, setValidationErrors] = useState<{
-		email?: string;
-		password?: string;
-	}>({});
+	const [validationErrors, setValidationErrors] = useState<{ email?: string }>(
+		{}
+	);
 	const [isSubmitted, setIsSubmitted] = useState(false);
+	const [isLoggingIn, setIsLoggingIn] = useState(false);
+
+	const [showResetModal, setShowResetModal] = useState(false);
+	const [resetEmail, setResetEmail] = useState("");
+	const [resetMessage, setResetMessage] = useState("");
+	const [isResetError, setIsResetError] = useState(false);
+	const [isSending, setIsSending] = useState(false);
+
+	const resetLoginState = () => {
+		setUsername("");
+		setPassword("");
+		setError("");
+		setIsLoggingIn(false);
+		setValidationErrors({});
+		setIsSubmitted(false);
+	};
 
 	useEffect(() => {
 		if (isOpen) {
 			setTimeout(() => setFadeIn(true), 10);
 		} else {
 			setFadeIn(false);
+			resetLoginState();
 		}
 	}, [isOpen]);
 
 	useEffect(() => {
 		const handleKeyDown = (e: KeyboardEvent) => {
-			if (e.key === "Escape") onClose();
+			if (e.key === "Escape") {
+				resetLoginState();
+				onClose();
+			}
 		};
 		if (isOpen) {
 			window.addEventListener("keydown", handleKeyDown);
@@ -46,71 +69,46 @@ const LoginModal: React.FC<LoginModalProps> = ({
 	}, [isOpen, onClose]);
 
 	const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
-		if (e.target === e.currentTarget) onClose();
+		if (e.target === e.currentTarget) {
+			resetLoginState();
+			onClose();
+		}
 	};
 
 	const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const value = e.target.value;
 		setUsername(value);
 		if (isSubmitted) {
-			if (value && !validateEmail(value)) {
-				setValidationErrors(prev => ({
-					...prev,
-					email: 'Please enter a valid email address'
-				}));
-			} else {
-				setValidationErrors(prev => ({
-					...prev,
-					email: undefined
-				}));
-			}
+			setValidationErrors((prev) => ({
+				...prev,
+				email: !validateEmail(value)
+					? "Please enter a valid email address"
+					: undefined,
+			}));
 		}
 	};
 
 	const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const value = e.target.value;
-		setPassword(value);
-		if (isSubmitted) {
-			const { errors } = validatePassword(value);
-			setValidationErrors(prev => ({
-				...prev,
-				password: errors.length > 0 ? errors[0] : undefined
-			}));
-		}
+		setPassword(e.target.value);
 	};
 
 	const handleLogin = async () => {
 		setIsSubmitted(true);
 		setError("");
+		setIsLoggingIn(true);
 
-		// Validate email
 		if (!validateEmail(username)) {
-			setValidationErrors(prev => ({
+			setValidationErrors((prev) => ({
 				...prev,
-				email: 'Please enter a valid email address'
+				email: "Please enter a valid email address",
 			}));
-			return;
-		}
-
-		// Validate password
-		const passwordValidation = validatePassword(password);
-		if (!passwordValidation.isValid) {
-			setValidationErrors(prev => ({
-				...prev,
-				password: passwordValidation.errors[0]
-			}));
+			setIsLoggingIn(false);
 			return;
 		}
 
 		try {
-			const response = await axios.post(
-				"http://localhost:5170/api/auth/login",
-				{
-					username,
-					password,
-				}
-			);
-			onLoginSuccess(response.data.Token);
+			const response = await postLogin(username, password);
+			onLoginSuccess(response.Token);
 			onClose();
 		} catch (err) {
 			if (axios.isAxiosError(err)) {
@@ -120,6 +118,34 @@ const LoginModal: React.FC<LoginModalProps> = ({
 			} else {
 				setError("An unexpected error occurred.");
 			}
+		} finally {
+			setIsLoggingIn(false);
+		}
+	};
+
+	const handlePasswordReset = async () => {
+		if (!resetEmail) {
+			setResetMessage("Please enter your email address.");
+			setIsResetError(true);
+			return;
+		}
+
+		setIsSending(true);
+		try {
+			const response = await postReset(resetEmail);
+			setResetMessage(response.message || "Password reset email sent.");
+			setIsResetError(false);
+		} catch (err) {
+			if (axios.isAxiosError(err)) {
+				setResetMessage(
+					err.response?.data?.message || "Failed to send reset email."
+				);
+			} else {
+				setResetMessage("An unexpected error occurred.");
+			}
+			setIsResetError(true);
+		} finally {
+			setIsSending(false);
 		}
 	};
 
@@ -137,8 +163,20 @@ const LoginModal: React.FC<LoginModalProps> = ({
 					fadeIn ? "opacity-100 scale-100" : "opacity-0 scale-95"
 				}`}
 			>
+				<button
+					onClick={() => {
+						resetLoginState();
+						onClose();
+					}}
+					className="absolute top-3 left-3 text-gray-400 hover:text-black text-xl font-bold focus:outline-none hover:cursor-pointer"
+					aria-label="Close modal"
+				>
+					<FontAwesomeIcon icon={faTimes} size="sm" />
+				</button>
+
 				<h2 className="text-lg font-semibold mb-4 text-center">Login</h2>
 				{error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+
 				<InputField
 					label="Email"
 					placeholder="Enter your email"
@@ -150,25 +188,48 @@ const LoginModal: React.FC<LoginModalProps> = ({
 				<PasswordField
 					value={password}
 					onChange={handlePasswordChange}
-					error={validationErrors.password}
-					showValidation={isSubmitted}
+					showValidation={false}
+					showInfoIcon={false}
 				/>
 
-				<div className="flex justify-between mt-4">
+				<button
+					onClick={handleLogin}
+					disabled={isLoggingIn}
+					className={`w-full mt-2 bg-sky-600 text-white px-4 py-2 rounded-lg text-sm ${
+						isLoggingIn
+							? "opacity-50 cursor-not-allowed"
+							: "hover:bg-sky-700 hover:underline hover:cursor-pointer"
+					}`}
+				>
+					{isLoggingIn ? "Logging in..." : "Login"}
+				</button>
+
+				<div className="flex justify-center mt-4">
 					<button
-						onClick={onClose}
-						className="text-sm text-gray-600 hover:underline"
+						onClick={() => setShowResetModal(true)}
+						className="text-xs text-sky-600 hover:underline hover:cursor-pointer"
 					>
-						Cancel
-					</button>
-					<button
-						onClick={handleLogin}
-						className="bg-sky-600 text-white px-4 py-2 rounded-lg hover:bg-sky-700 text-sm"
-					>
-						Login
+						Forgot Password?
 					</button>
 				</div>
 			</div>
+
+			<ResetPasswordModal
+				isOpen={showResetModal}
+				onClose={() => {
+					setShowResetModal(false);
+					setResetEmail("");
+					setResetMessage("");
+					setIsResetError(false);
+					setIsSending(false);
+				}}
+				email={resetEmail}
+				onEmailChange={(e) => setResetEmail(e.target.value)}
+				onReset={handlePasswordReset}
+				message={resetMessage}
+				isError={isResetError}
+				isSending={isSending}
+			/>
 		</div>
 	);
 };
