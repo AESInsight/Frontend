@@ -20,13 +20,15 @@ const apiClient = axios.create({
 	},
 });
 
-export const postLogin = async (username: string, password: string) => {
-	const response = await apiClient.post("/auth/login", {username, password});
+export const postLogin = async (email: string, password: string) => {
+	const response = await apiClient.post("/auth/login", { email, password });
 	return response.data;
 };
 
 export const postReset = async (email: string) => {
-	const response = await apiClient.post("/PasswordReset/request-reset", {email});
+	const response = await apiClient.post("/PasswordReset/request-reset", {
+		email,
+	});
 	return response.data;
 };
 
