@@ -74,37 +74,39 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
 	}, []);
 
 	return (
-		<div className="bg-white shadow-lg rounded-xl overflow-hidden w-full">
+		<div className="bg-white shadow-lg rounded-xl overflow-hidden w-full" data-testid="employee-table">
 			{/* Table header */}
 			<div
 				className={`grid ${editable ? "grid-cols-[1fr_2fr_1fr_1fr_1fr_0.5fr]" : "grid-cols-[1fr_2fr_1fr_1fr_1fr]"} bg-gradient-to-r from-sky-600 to-sky-500 text-white font-bold`}
+				data-testid="table-header"
 			>
-				<div className="p-4">ID</div>
-				<div className="p-4">Job Title</div>
-				<div className="p-4">Salary</div>
-				<div className="p-4">Experience</div>
-				<div className="p-4">Gender</div>
-				{editable && <div className="p-4 text-center">Edit</div>}
+				<div className="p-4" data-testid="header-id">ID</div>
+				<div className="p-4" data-testid="header-job-title">Job Title</div>
+				<div className="p-4" data-testid="header-salary">Salary</div>
+				<div className="p-4" data-testid="header-experience">Experience</div>
+				<div className="p-4" data-testid="header-gender">Gender</div>
+				{editable && <div className="p-4 text-center" data-testid="header-edit">Edit</div>}
 			</div>
 
 			{/* Table body */}
-			<div className="overflow-y-auto max-h-96">
+			<div className="overflow-y-auto max-h-96" data-testid="table-body">
 				{data.map((row, index) => (
 					<div
 						key={row.id ?? index}
 						className={`grid ${editable ? "grid-cols-[1fr_2fr_1fr_1fr_1fr_0.5fr]" : "grid-cols-[1fr_2fr_1fr_1fr_1fr]"} border-b border-gray-200 hover:bg-blue-50`}
+						data-testid={`table-row-${index}`}
 					>
-						<div className="p-4 text-gray-700">{row.id ?? "N/A"}</div>
-						<div className="p-4 text-gray-700">{row.jobTitle || "N/A"}</div>
-						<div className="p-4 text-gray-700">{row.salary || "N/A"} kr.</div>
-						<div className="p-4 text-gray-700">
+						<div className="p-4 text-gray-700" data-testid={`row-${index}-id`}>{row.id ?? "N/A"}</div>
+						<div className="p-4 text-gray-700" data-testid={`row-${index}-job-title`}>{row.jobTitle || "N/A"}</div>
+						<div className="p-4 text-gray-700" data-testid={`row-${index}-salary`}>{row.salary || "N/A"} kr.</div>
+						<div className="p-4 text-gray-700" data-testid={`row-${index}-experience`}>
 							{row.experience
 								? `${row.experience} ${parseInt(row.experience.toString()) === 1 ? "yr." : "yrs."}`
 								: "-"}
 						</div>
-						<div className="p-4 text-gray-700">{row.gender || "N/A"}</div>
+						<div className="p-4 text-gray-700" data-testid={`row-${index}-gender`}>{row.gender || "N/A"}</div>
 						{editable && (
-							<div className="p-4 flex justify-center">
+							<div className="p-4 flex justify-center" data-testid={`row-${index}-edit`}>
 								<EditButton
 									position={row.jobTitle}
 									salary={row.salary ? row.salary.toString() : ""}

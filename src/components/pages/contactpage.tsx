@@ -62,19 +62,19 @@ const contacts = [
 
 const AboutPage: React.FC = () => {
 	return (
-		<div className="h-screen w-screen flex flex-col relative">
-			<div className="relative z-10 flex flex-col h-full w-full">
+		<div className="h-screen w-screen flex flex-col relative" data-testid="contact-page">
+			<div className="relative z-10 flex flex-col h-full w-full" data-testid="contact-content">
 				<Header />
-				<h1 className="text-3xl font-bold m-4 flex justify-center item-center overflow-y-auto pt-14">
+				<h1 className="text-3xl font-bold m-4 flex justify-center item-center overflow-y-auto pt-14" data-testid="contact-title">
 					Contact Us
 				</h1>
-				<div className="flex flex-1 w-full">
+				<div className="flex flex-1 w-full" data-testid="contact-main">
 					<Sidebar />
 
-					<div className="flex flex-1 justify-center items-center p-6">
-						<div className="grid grid-cols-3 gap-6">
+					<div className="flex flex-1 justify-center items-center p-6" data-testid="contact-grid-container">
+						<div className="grid grid-cols-3 gap-6" data-testid="contact-grid">
 							{contacts.map((contact, index) => (
-								<ContactBubble key={index} {...contact} />
+								<ContactBubble key={index} {...contact} data-testid={`contact-bubble-${index}`} />
 							))}
 						</div>
 					</div>
