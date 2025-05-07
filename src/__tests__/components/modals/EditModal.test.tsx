@@ -18,9 +18,9 @@ describe("EditModal", () => {
       onDelete: () => {},
       initialData: {
         position: "Software Engineer",
-        salary: 50000,
+        salary: "50000",
         gender: "Male",
-        experience: 5
+        experience: "5"
       }
     };
     

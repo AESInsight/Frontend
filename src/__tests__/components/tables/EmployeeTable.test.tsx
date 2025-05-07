@@ -1,5 +1,6 @@
-import { describe, expect, test } from "bun:test";
+import { describe, test, expect } from "bun:test";
 import EmployeeTable from "../../../components/tables/EmployeeTable";
+import { TableRow } from "../../../components/tables/EmployeeTable";
 
 describe("EmployeeTable Component", () => {
   test("component is a function", () => {
@@ -11,11 +12,22 @@ describe("EmployeeTable Component", () => {
   });
 
   test("component accepts required props", () => {
+    const mockData: TableRow[] = [{
+      id: 1,
+      jobTitle: "Developer",
+      salary: 50000,
+      gender: "Male",
+      experience: 5
+    }];
+    
     const props = {
+      data: mockData,
       editable: true,
-      onSave: (index: number, data: any) => {},
-      onDelete: (index: number) => {}
+      onSave: () => {},
+      onDelete: () => {}
     };
+    
+    expect(props).toHaveProperty("data");
     expect(props).toHaveProperty("editable");
     expect(props).toHaveProperty("onSave");
     expect(props).toHaveProperty("onDelete");
