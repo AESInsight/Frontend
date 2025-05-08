@@ -1,3 +1,10 @@
+# [1.10.0](https://github.com/AESInsight/Frontend/compare/v1.9.1...v1.10.0) (2025-05-08)
+
+
+### Features
+
+* adds alphabetical and numerical filtering for employee table ([0be4a59](https://github.com/AESInsight/Frontend/commit/0be4a5965031606995004a7dcb2fcb602aa27b4f))
+
 ## [1.9.1](https://github.com/AESInsight/Frontend/compare/v1.9.0...v1.9.1) (2025-05-08)
 
 
