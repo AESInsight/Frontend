@@ -40,8 +40,8 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
 	const [data, setData] = useState<TableRow[]>([]);
 	const [sortConfig, setSortConfig] = useState<{
 		key: keyof TableRow;
-		direction: "asc" | "desc" | null;
-	}>({ key: "id", direction: null });
+		direction: "asc" | "desc";
+	}>({ key: "id", direction: "asc" });
 
 	// Load Data
 	const loadData = async () => {
@@ -79,23 +79,19 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
 
 	// Handle Sorting
 	const handleSort = (key: keyof TableRow) => {
-		setSortConfig((prev) => {
-			if (prev.key === key && prev.direction === "asc") {
-				return { key, direction: "desc" };
-			} else if (prev.key === key && prev.direction === "desc") {
-				return { key, direction: null };
-			}
-			return { key, direction: "asc" };
-		});
+		setSortConfig((prev) => ({
+			key,
+			direction: prev.key === key && prev.direction === "asc" ? "desc" : "asc",
+		}));
 	};
 
 	const sortedData = [...data].sort((a, b) => {
-		if (sortConfig.direction === null) return 0;
+		const { key, direction } = sortConfig;
 
-		const aValue = a[sortConfig.key];
-		const bValue = b[sortConfig.key];
+		const aValue = a[key];
+		const bValue = b[key];
 
-		if (["id", "salary", "experience"].includes(sortConfig.key)) {
+		if (["id", "salary", "experience"].includes(key)) {
 			const aNum =
 				typeof aValue === "string" && aValue === "N/A"
 					? -Infinity
@@ -104,12 +100,12 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
 				typeof bValue === "string" && bValue === "N/A"
 					? -Infinity
 					: Number(bValue);
-			return sortConfig.direction === "asc" ? aNum - bNum : bNum - aNum;
+			return direction === "asc" ? aNum - bNum : bNum - aNum;
 		}
 
 		const aStr = aValue?.toString() || "";
 		const bStr = bValue?.toString() || "";
-		return sortConfig.direction === "asc"
+		return direction === "asc"
 			? aStr.localeCompare(bStr)
 			: bStr.localeCompare(aStr);
 	});
@@ -138,61 +134,42 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
 		}
 	};
 
+	// Render Sort Indicator
+	const getSortIndicator = (key: keyof TableRow) => {
+		if (sortConfig.key !== key) return "";
+		return sortConfig.direction === "asc" ? "↑" : "↓";
+	};
+
 	return (
 		<div className="bg-white shadow-lg rounded-xl overflow-hidden w-full">
 			{/* Table Header */}
 			<div className="grid grid-cols-[1fr_2fr_1fr_1fr_1fr_0.5fr] bg-gradient-to-r from-sky-600 to-sky-500 text-white font-bold">
 				<div className="p-4 cursor-pointer" onClick={() => handleSort("id")}>
-					ID{" "}
-					{sortConfig.key === "id"
-						? sortConfig.direction === "asc"
-							? "↑"
-							: "↓"
-						: ""}
+					ID {getSortIndicator("id")}
 				</div>
 				<div
 					className="p-4 cursor-pointer"
 					onClick={() => handleSort("jobTitle")}
 				>
-					Job Title{" "}
-					{sortConfig.key === "jobTitle"
-						? sortConfig.direction === "asc"
-							? "↑"
-							: "↓"
-						: ""}
+					Job Title {getSortIndicator("jobTitle")}
 				</div>
 				<div
 					className="p-4 cursor-pointer"
 					onClick={() => handleSort("salary")}
 				>
-					Salary{" "}
-					{sortConfig.key === "salary"
-						? sortConfig.direction === "asc"
-							? "↑"
-							: "↓"
-						: ""}
+					Salary {getSortIndicator("salary")}
 				</div>
 				<div
 					className="p-4 cursor-pointer"
 					onClick={() => handleSort("experience")}
 				>
-					Experience{" "}
-					{sortConfig.key === "experience"
-						? sortConfig.direction === "asc"
-							? "↑"
-							: "↓"
-						: ""}
+					Experience {getSortIndicator("experience")}
 				</div>
 				<div
 					className="p-4 cursor-pointer"
 					onClick={() => handleSort("gender")}
 				>
-					Gender{" "}
-					{sortConfig.key === "gender"
-						? sortConfig.direction === "asc"
-							? "↑"
-							: "↓"
-						: ""}
+					Gender {getSortIndicator("gender")}
 				</div>
 				{editable && <div className="p-4 text-center">Edit</div>}
 			</div>
