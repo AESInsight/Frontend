@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface AuthContextType {
 	isAuthenticated: boolean;
@@ -15,8 +16,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 	const [token, setToken] = useState<string | null>(null);
 
+	const navigate = useNavigate();
+	const location = useLocation();
+
 	useEffect(() => {
-		// Check for token in localStorage on mount
 		const storedToken = localStorage.getItem("authToken");
 		if (storedToken) {
 			setToken(storedToken);
@@ -34,6 +37,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 		setToken(null);
 		setIsAuthenticated(false);
 		localStorage.removeItem("authToken");
+
+		if (location.pathname === "/admin") {
+			navigate("/");
+		}
 	};
 
 	return (

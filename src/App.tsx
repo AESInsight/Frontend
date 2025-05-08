@@ -14,8 +14,8 @@ import { AuthProvider } from "./lib/context/auth_context";
 
 const App: React.FC = () => {
 	return (
-		<AuthProvider>
-			<Router>
+		<Router>
+			<AuthProvider>
 				<Sidebar />
 				<BgImage />
 				<Routes>
@@ -26,8 +26,8 @@ const App: React.FC = () => {
 					<Route path="/admin" element={<AdminPage />} />
 					<Route path="/insight" element={<InsightPage />} />
 				</Routes>
-			</Router>
-		</AuthProvider>
+			</AuthProvider>
+		</Router>
 	);
 };
 
