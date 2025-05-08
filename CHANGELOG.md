@@ -1,3 +1,11 @@
+## [1.9.1](https://github.com/AESInsight/Frontend/compare/v1.9.0...v1.9.1) (2025-05-08)
+
+
+### Bug Fixes
+
+* fixes login by adding auth context and provider ([2c13689](https://github.com/AESInsight/Frontend/commit/2c13689152ef57aadca272d825a772ab60093492))
+* redirects to homepage, if you log out on adminpage ([579610a](https://github.com/AESInsight/Frontend/commit/579610acd6f0f03bd6dfcdae6892478e9ec53663))
+
 # [1.9.0](https://github.com/AESInsight/Frontend/compare/v1.8.0...v1.9.0) (2025-05-08)
 
 
