@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/AESInsight/Frontend/compare/v1.7.0...v1.8.0) (2025-05-08)
+
+
+### Features
+
+* updates sidebar content so it's up to date ([c9a55e7](https://github.com/AESInsight/Frontend/commit/c9a55e73d68ecd2fa81f00b17d86ad0614b2c3b5))
+
 # [1.7.0](https://github.com/AESInsight/Frontend/compare/v1.6.0...v1.7.0) (2025-05-06)
 
 
