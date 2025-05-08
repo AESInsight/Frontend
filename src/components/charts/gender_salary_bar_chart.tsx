@@ -175,7 +175,7 @@ export function GenderSalaryBarChart({
 						Filtered by Job Title
 					</CardDescription>
 				</div>
-				<div className="flex flex-col items-end gap-1">
+				<div className="flex flex-col items-end gap-1 w-42">
 					<Select
 						options={jobTitles}
 						selected={selectedJobTitle}

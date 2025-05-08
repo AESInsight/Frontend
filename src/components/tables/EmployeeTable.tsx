@@ -8,6 +8,7 @@ export interface TableRow {
 	salary: number | string;
 	gender: string;
 	experience: number | string;
+	companyID?: number;
 }
 
 interface Employee {
@@ -42,39 +43,41 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
 		direction: "asc" | "desc" | null;
 	}>({ key: "id", direction: null });
 
+	// Load Data
+	const loadData = async () => {
+		try {
+			const employees: Employee[] = await fetchEmployees();
+			const salaries: Salary[] = await fetchAllSalaries();
+
+			const mergedData = employees.map((employee) => {
+				const latestSalary = salaries
+					.filter((salary) => salary.employeeID === employee.employeeID)
+					.sort(
+						(a, b) =>
+							new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+					)[0];
+
+				return {
+					id: employee.employeeID,
+					jobTitle: employee.jobTitle,
+					salary: latestSalary ? latestSalary.salary : "N/A",
+					gender: employee.gender,
+					experience: employee.experience,
+					companyID: employee.companyID,
+				};
+			});
+
+			setData(mergedData);
+		} catch (error) {
+			console.error("Failed to load data:", error);
+		}
+	};
+
 	useEffect(() => {
-		const loadData = async () => {
-			try {
-				const employees: Employee[] = await fetchEmployees();
-				const salaries: Salary[] = await fetchAllSalaries();
-
-				const mergedData = employees.map((employee) => {
-					const latestSalary = salaries
-						.filter((salary) => salary.employeeID === employee.employeeID)
-						.sort(
-							(a, b) =>
-								new Date(b.timestamp).getTime() -
-								new Date(a.timestamp).getTime()
-						)[0];
-
-					return {
-						id: employee.employeeID,
-						jobTitle: employee.jobTitle,
-						salary: latestSalary ? latestSalary.salary : "N/A",
-						gender: employee.gender,
-						experience: employee.experience,
-					};
-				});
-
-				setData(mergedData);
-			} catch (error) {
-				console.error("Failed to load data:", error);
-			}
-		};
-
 		loadData();
 	}, []);
 
+	// Handle Sorting
 	const handleSort = (key: keyof TableRow) => {
 		setSortConfig((prev) => {
 			if (prev.key === key && prev.direction === "asc") {
@@ -92,12 +95,7 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
 		const aValue = a[sortConfig.key];
 		const bValue = b[sortConfig.key];
 
-		// Handle numeric values (id, salary, experience)
-		if (
-			sortConfig.key === "id" ||
-			sortConfig.key === "salary" ||
-			sortConfig.key === "experience"
-		) {
+		if (["id", "salary", "experience"].includes(sortConfig.key)) {
 			const aNum =
 				typeof aValue === "string" && aValue === "N/A"
 					? -Infinity
@@ -106,112 +104,130 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
 				typeof bValue === "string" && bValue === "N/A"
 					? -Infinity
 					: Number(bValue);
-
-			if (sortConfig.direction === "asc") {
-				return aNum - bNum;
-			} else {
-				return bNum - aNum;
-			}
+			return sortConfig.direction === "asc" ? aNum - bNum : bNum - aNum;
 		}
 
-		// Handle string values (jobTitle, gender)
 		const aStr = aValue?.toString() || "";
 		const bStr = bValue?.toString() || "";
-		if (sortConfig.direction === "asc") {
-			return aStr.localeCompare(bStr);
-		} else {
-			return bStr.localeCompare(aStr);
-		}
+		return sortConfig.direction === "asc"
+			? aStr.localeCompare(bStr)
+			: bStr.localeCompare(aStr);
 	});
+
+	// Handle Save
+	const handleSave = async (index: number, updatedData: TableRow) => {
+		setData((prevData) => {
+			const newData = [...prevData];
+			newData[index] = { ...newData[index], ...updatedData };
+			return newData;
+		});
+
+		await loadData();
+
+		if (onSave) {
+			onSave(index, updatedData);
+		}
+	};
+
+	// Handle Delete
+	const handleDelete = async (index: number) => {
+		await loadData();
+
+		if (onDelete) {
+			onDelete(index);
+		}
+	};
 
 	return (
 		<div className="bg-white shadow-lg rounded-xl overflow-hidden w-full">
-			{/* Table header */}
-			<div
-				className={`grid ${editable ? "grid-cols-[1fr_2fr_1fr_1fr_1fr_0.5fr]" : "grid-cols-[1fr_2fr_1fr_1fr_1fr]"} bg-gradient-to-r from-sky-600 to-sky-500 text-white font-bold`}
-			>
+			{/* Table Header */}
+			<div className="grid grid-cols-[1fr_2fr_1fr_1fr_1fr_0.5fr] bg-gradient-to-r from-sky-600 to-sky-500 text-white font-bold">
 				<div className="p-4 cursor-pointer" onClick={() => handleSort("id")}>
 					ID{" "}
-					{sortConfig.key === "id" && sortConfig.direction === "asc"
-						? "↑"
-						: sortConfig.key === "id" && sortConfig.direction === "desc"
-							? "↓"
-							: ""}
+					{sortConfig.key === "id"
+						? sortConfig.direction === "asc"
+							? "↑"
+							: "↓"
+						: ""}
 				</div>
 				<div
 					className="p-4 cursor-pointer"
 					onClick={() => handleSort("jobTitle")}
 				>
 					Job Title{" "}
-					{sortConfig.key === "jobTitle" && sortConfig.direction === "asc"
-						? "↑"
-						: sortConfig.key === "jobTitle" && sortConfig.direction === "desc"
-							? "↓"
-							: ""}
+					{sortConfig.key === "jobTitle"
+						? sortConfig.direction === "asc"
+							? "↑"
+							: "↓"
+						: ""}
 				</div>
 				<div
 					className="p-4 cursor-pointer"
 					onClick={() => handleSort("salary")}
 				>
 					Salary{" "}
-					{sortConfig.key === "salary" && sortConfig.direction === "asc"
-						? "↑"
-						: sortConfig.key === "salary" && sortConfig.direction === "desc"
-							? "↓"
-							: ""}
+					{sortConfig.key === "salary"
+						? sortConfig.direction === "asc"
+							? "↑"
+							: "↓"
+						: ""}
 				</div>
 				<div
 					className="p-4 cursor-pointer"
 					onClick={() => handleSort("experience")}
 				>
 					Experience{" "}
-					{sortConfig.key === "experience" && sortConfig.direction === "asc"
-						? "↑"
-						: sortConfig.key === "experience" && sortConfig.direction === "desc"
-							? "↓"
-							: ""}
+					{sortConfig.key === "experience"
+						? sortConfig.direction === "asc"
+							? "↑"
+							: "↓"
+						: ""}
 				</div>
 				<div
 					className="p-4 cursor-pointer"
 					onClick={() => handleSort("gender")}
 				>
 					Gender{" "}
-					{sortConfig.key === "gender" && sortConfig.direction === "asc"
-						? "↑"
-						: sortConfig.key === "gender" && sortConfig.direction === "desc"
-							? "↓"
-							: ""}
+					{sortConfig.key === "gender"
+						? sortConfig.direction === "asc"
+							? "↑"
+							: "↓"
+						: ""}
 				</div>
 				{editable && <div className="p-4 text-center">Edit</div>}
 			</div>
 
-			{/* Table body */}
+			{/* Table Body */}
 			<div className="overflow-y-auto max-h-96">
 				{sortedData.map((row, index) => (
 					<div
 						key={row.id ?? index}
-						className={`grid ${editable ? "grid-cols-[1fr_2fr_1fr_1fr_1fr_0.5fr]" : "grid-cols-[1fr_2fr_1fr_1fr_1fr]"} border-b border-gray-200 hover:bg-blue-50`}
+						className="grid grid-cols-[1fr_2fr_1fr_1fr_1fr_0.5fr] border-b border-gray-200 hover:bg-blue-50"
 					>
 						<div className="p-4 text-gray-700">{row.id ?? "N/A"}</div>
-						<div className="p-4 text-gray-700">{row.jobTitle || "N/A"}</div>
-						<div className="p-4 text-gray-700">{row.salary || "N/A"} kr.</div>
-						<div className="p-4 text-gray-700">
-							{row.experience
-								? `${row.experience} ${parseInt(row.experience.toString()) === 1 ? "yr." : "yrs."}`
-								: "-"}
+						<div className="ml-2 p-4 text-gray-700">
+							{row.jobTitle || "N/A"}
 						</div>
-						<div className="p-4 text-gray-700">{row.gender || "N/A"}</div>
+						<div className="ml-4 p-4 text-gray-700">
+							{row.salary || "N/A"} kr.
+						</div>
+						<div className="ml-4 p-4 text-gray-700">
+							{row.experience ? `${row.experience} yrs` : "-"}
+						</div>
+						<div className="ml-6 p-4 text-gray-700">{row.gender || "N/A"}</div>
 						{editable && (
-							<div className="p-4 flex justify-center">
+							<div className="ml-6 p-4 flex justify-center">
 								<EditButton
+									id={row.id || ""}
 									position={row.jobTitle}
 									salary={row.salary ? row.salary.toString() : ""}
-									experience={row.experience.toString()}
 									gender={row.gender}
+									experience={row.experience.toString()}
+									companyID={row.companyID || 0}
 									onSave={(updatedData) =>
-										onSave && onSave(index, { ...row, ...updatedData })
+										handleSave(index, { ...row, ...updatedData })
 									}
-									onDelete={() => onDelete && onDelete(index)}
+									onDelete={() => handleDelete(index)}
 								/>
 							</div>
 						)}
