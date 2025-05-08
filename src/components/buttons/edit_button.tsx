@@ -42,10 +42,8 @@ const EditButton: React.FC<EditButtonProps> = ({
 	};
 
 	const handleDelete = () => {
-		if (window.confirm("Are you sure you want to delete this row?")) {
-			onDelete();
-			setIsOpen(false);
-		}
+		onDelete();
+		setIsOpen(false);
 	};
 
 	return (
