@@ -7,11 +7,12 @@ import { validateEmail } from "@/lib/regexValidationLogin";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { postLogin, postReset } from "@/lib/loginAPI";
+import { useAuth } from "@/lib/context/auth_context";
 
 interface LoginModalProps {
 	isOpen: boolean;
 	onClose: () => void;
-	onLoginSuccess: (token: string) => void;
+	onLoginSuccess: (jwtToken: string) => void;
 }
 
 const LoginModal: React.FC<LoginModalProps> = ({
@@ -19,6 +20,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
 	onClose,
 	onLoginSuccess,
 }) => {
+	const { login } = useAuth();
 	const [fadeIn, setFadeIn] = useState(false);
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
@@ -108,8 +110,8 @@ const LoginModal: React.FC<LoginModalProps> = ({
 
 		try {
 			const response = await postLogin(username, password);
+			login(response.Token);
 			onLoginSuccess(response.Token);
-			onClose();
 		} catch (err) {
 			if (axios.isAxiosError(err)) {
 				setError(

@@ -9,19 +9,22 @@ import ContactPage from "./components/pages/contactpage";
 import InsightPage from "./components/pages/insightpage";
 import AdminPage from "./components/pages/adminpage";
 import BgImage from "./components/bg_image";
+import { AuthProvider } from "./lib/context/auth_context";
 
 const App: React.FC = () => {
 	return (
 		<Router>
-			<Sidebar />
-			<BgImage />
-			<Routes>
-				<Route path="/" element={<Homepage />} />
-				<Route path="/about" element={<AboutPage />} />
-				<Route path="/contact" element={<ContactPage />} />
-				<Route path="/admin" element={<AdminPage />} />
-				<Route path="/insight" element={<InsightPage />} />
-			</Routes>
+			<AuthProvider>
+				<Sidebar />
+				<BgImage />
+				<Routes>
+					<Route path="/" element={<Homepage />} />
+					<Route path="/about" element={<AboutPage />} />
+					<Route path="/contact" element={<ContactPage />} />
+					<Route path="/admin" element={<AdminPage />} />
+					<Route path="/insight" element={<InsightPage />} />
+				</Routes>
+			</AuthProvider>
 		</Router>
 	);
 };
