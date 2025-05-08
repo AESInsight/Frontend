@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 
@@ -13,7 +11,7 @@ type SelectProps = {
 };
 
 export function Select({
-	options,
+	options = [], // Default to empty array
 	selected,
 	onChange,
 	label,
@@ -23,7 +21,7 @@ export function Select({
 	const [isOpen, setIsOpen] = useState(false);
 
 	return (
-		<div className={`relative w-44 text-sm ${className}`}>
+		<div className={`relative w-full text-sm ${className}`}>
 			{label && <span className="block mb-1">{label}</span>}
 			<button
 				onClick={() => setIsOpen((prev) => !prev)}
@@ -42,18 +40,22 @@ export function Select({
 			{isOpen && (
 				<div className="absolute z-10 mt-1 w-full rounded-md border bg-white shadow-md">
 					<ul className="max-h-48 overflow-y-auto py-1">
-						{options.map((option) => (
-							<li
-								key={option}
-								onClick={() => {
-									onChange(option);
-									setIsOpen(false);
-								}}
-								className="px-3 py-2 hover:bg-muted-foreground/10 cursor-pointer"
-							>
-								{option}
-							</li>
-						))}
+						{options.length === 0 ? (
+							<li className="px-3 py-2 text-gray-500">No options available</li>
+						) : (
+							options.map((option) => (
+								<li
+									key={option}
+									onClick={() => {
+										onChange(option);
+										setIsOpen(false);
+									}}
+									className="px-3 py-2 hover:bg-muted-foreground/10 cursor-pointer"
+								>
+									{option}
+								</li>
+							))
+						)}
 					</ul>
 				</div>
 			)}

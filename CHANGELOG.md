@@ -1,3 +1,22 @@
+# [1.9.0](https://github.com/AESInsight/Frontend/compare/v1.8.0...v1.9.0) (2025-05-08)
+
+
+### Bug Fixes
+
+* removes extra "are you sure" popup when deleting an employee ([7fdb7e3](https://github.com/AESInsight/Frontend/commit/7fdb7e39027703e5713ed75fc4faeac226a10ca2))
+
+
+### Features
+
+* edit modal updates data in db, and new status modal for success/error messages when updating data ([12ecb5a](https://github.com/AESInsight/Frontend/commit/12ecb5a725443775375e1b73daf820f0ad9d580d))
+
+# [1.8.0](https://github.com/AESInsight/Frontend/compare/v1.7.0...v1.8.0) (2025-05-08)
+
+
+### Features
+
+* updates sidebar content so it's up to date ([c9a55e7](https://github.com/AESInsight/Frontend/commit/c9a55e73d68ecd2fa81f00b17d86ad0614b2c3b5))
+
 # [1.7.0](https://github.com/AESInsight/Frontend/compare/v1.6.0...v1.7.0) (2025-05-06)
 
 

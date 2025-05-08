@@ -6,7 +6,6 @@ import "./index.css";
 import Homepage from "./components/pages/homepage";
 import AboutPage from "./components/pages/aboutpage";
 import ContactPage from "./components/pages/contactpage";
-import ServicePage from "./components/pages/servicepage";
 import InsightPage from "./components/pages/insightpage";
 import AdminPage from "./components/pages/adminpage";
 import BgImage from "./components/bg_image";

@@ -141,7 +141,7 @@ export function SalaryPieChart({
 						Sorted by Industry
 					</CardDescription>
 				</div>
-				<div className="flex flex-col items-end gap-1">
+				<div className="flex flex-col items-end gap-1 w-42">
 					<Select
 						options={industries}
 						selected={selectedIndustry}

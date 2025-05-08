@@ -9,20 +9,30 @@ const AboutPage: React.FC = () => {
 				<Header />
 				<div className="flex flex-1 w-full overflow-y-auto pt-14">
 					<Sidebar />
-					<div className="flex flex-1 justify-center items-center">
-						<div className="bg-white p-8 rounded-lg shadow-lg max-w-2xl">
-							<h1 className="text-4xl font-bold mb-4 text-center">About Us</h1>
-							<p className="text-gray-700 text-lg mb-4">
-								Welcome to our website! We are a deticated team of students, and
-								the developers of AES-Insight
+					<div className="flex flex-1 justify-center items-center p-6">
+						<div className="bg-white p-6 rounded-lg shadow-md max-w-2xl border border-gray-200">
+							<h1 className="text-3xl font-semibold mb-6 text-gray-900 text-center">
+								About Us
+							</h1>
+							<p className="text-gray-600 mb-4">
+								Welcome to our website! We are a dedicated team of students and
+								the developers of AES-Insight.
 							</p>
-							<p className="text-gray-700 text-lg mb-4">
+							<p className="text-gray-600 mb-4">
 								Our mission is to deliver a high-quality product for our
-								semester-project (and get a good grade ofc..)
+								semester-project (and get a good grade, of course!).
 							</p>
-							<p className="text-gray-700 text-lg">
-								Thank you for visiting our site. More info can be found on our
-								Github: https://github.com/AESInsight/
+							<p className="text-gray-600">
+								Thank you for visiting our site. More info can be found on our{" "}
+								<a
+									href="https://github.com/AESInsight/"
+									target="_blank"
+									rel="noopener noreferrer"
+									className="text-blue-600 hover:text-blue-800 underline"
+								>
+									Github
+								</a>
+								.
 							</p>
 						</div>
 					</div>
