@@ -127,12 +127,14 @@ export function PositionBarChart({
 						Filtered by Industry
 					</CardDescription>
 				</div>
-				<Select
-					options={industries}
-					selected={selectedIndustry}
-					onChange={setSelectedIndustry}
-					placeholder="Select an Industry"
-				/>
+				<div className="flex flex-col items-end gap-1 w-42">
+					<Select
+						options={industries}
+						selected={selectedIndustry}
+						onChange={setSelectedIndustry}
+						placeholder="Select an Industry"
+					/>
+				</div>
 			</CardHeader>
 
 			<CardContent className="p-2 flex-1">

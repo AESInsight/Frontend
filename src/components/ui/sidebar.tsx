@@ -42,7 +42,7 @@ const Sidebar: React.FC = () => {
 
 	return (
 		<div
-			className={`fixed top-16 left-0 h-[calc(100vh-4rem)] bg-white/10 backdrop-blur-lg shadow-lg transition-all duration-200 flex flex-col p-4 items-center z-[100] ${
+			className={`fixed top-16 left-0 h-[calc(100vh-4rem)] bg-white/10 backdrop-blur-lg shadow-lg transition-all duration-200 flex flex-col p-4 items-center ${
 				isCollapsed ? "w-16" : "w-64"
 			}`}
 			onMouseEnter={handleMouseEnter}
