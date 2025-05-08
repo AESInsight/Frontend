@@ -1,11 +1,13 @@
 import React from "react";
-
 import LoginButton from "../buttons/header_buttons/login_button";
 import AdminButton from "../buttons/header_buttons/admin_button";
 import InsightButton from "../buttons/header_buttons/Insight_button";
 import SearchBar from "./search_bar";
+import { useAuth } from "@/lib/context/auth_context";
 
 const Header: React.FC = () => {
+	const { isAuthenticated } = useAuth();
+
 	return (
 		<header className="fixed overflow-hidden z-20 bg-gradient-to-r from-sky-700 to-sky-400 flex items-center justify-between h-16 w-full border-b-2 border-black">
 			<div className="flex items-center space-x-4 flex-grow">
@@ -21,7 +23,7 @@ const Header: React.FC = () => {
 
 			{/* Buttons on the right */}
 			<div className="flex space-x-6 mr-6">
-				<AdminButton />
+				{isAuthenticated && <AdminButton />}
 				<InsightButton />
 				<LoginButton />
 			</div>
