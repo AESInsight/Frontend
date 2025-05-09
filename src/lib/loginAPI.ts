@@ -26,7 +26,9 @@ export const postLogin = async (email: string, password: string) => {
 };
 
 export const postReset = async (email: string) => {
-	const response = await apiClient.post("/PasswordReset/request-reset", {email});
+	const response = await apiClient.post("/PasswordReset/request-reset", {
+		email,
+	});
 	return response.data;
 };
 
