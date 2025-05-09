@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import InputField from "../fields/input_field";
 import EmployeeTable from "../tables/EmployeeTable";
+import AddEmployeeButton from "../buttons/add_employee_button";
 
 interface Employee {
 	employeeID: number;
@@ -79,6 +80,9 @@ const InsightPage: React.FC = () => {
 
 						{filteredEmployees && filteredEmployees.length > 0 ? (
 							<div className="max-w-6xl mx-auto w-full px-4">
+								<div className="mb-4">
+									<AddEmployeeButton />
+								</div>
 								<EmployeeTable
 									editable={true}
 									data={filteredEmployees.map((e) => ({

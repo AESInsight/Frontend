@@ -44,6 +44,41 @@ export const fetchJobTitles = async () => {
 	}
 };
 
+export const addEmployee = async (employeeData: {
+	jobTitle: string;
+	experience: number;
+	gender: string;
+	companyID: number;
+	salaries?: { employee: string; salary: number; timestamp: string }[];
+}) => {
+	// Add Employee with salaries in the payload
+	const employeePayload: {
+		jobTitle: string;
+		experience: number;
+		gender: string;
+		companyID: number;
+		salaries?: { employee: string; salary: number; timestamp: string }[];
+	} = {
+		jobTitle: employeeData.jobTitle.trim(),
+		experience: Math.floor(employeeData.experience),
+		gender: employeeData.gender,
+		companyID: Math.floor(employeeData.companyID),
+	};
+
+	// Include salaries in the payload if provided
+	if (employeeData.salaries && employeeData.salaries.length > 0) {
+		employeePayload.salaries = employeeData.salaries.map((salaryEntry) => ({
+			employee: salaryEntry.employee,
+			salary: Math.floor(salaryEntry.salary),
+			timestamp: salaryEntry.timestamp,
+		}));
+	}
+
+	await apiClient.post("/employee/add", [employeePayload]);
+
+	return { message: "Employee and salary added successfully." };
+};
+
 export const updateEmployee = async (
 	id: number,
 	employeeData: {
