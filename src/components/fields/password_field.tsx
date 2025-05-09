@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import InputField from "./input_field";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark, faCheck, faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
+import {
+	faXmark,
+	faCheck,
+	faCircleExclamation,
+} from "@fortawesome/free-solid-svg-icons";
 import { Eye, EyeOff } from "lucide-react";
 
 interface PasswordFieldProps {
@@ -32,11 +36,14 @@ const PasswordField: React.FC<PasswordFieldProps> = ({
 		{ text: "Minimum 8 characters long", regex: /.{8,}/ },
 		{ text: "At least one uppercase letter", regex: /[A-Z]/ },
 		{ text: "At least one number", regex: /\d/ },
-		{ text: "At least one special character", regex: /[~`!@#$%^&*()\-_=+[\]{}|;:'",<.>/?]/ },
+		{
+			text: "At least one special character",
+			regex: /[~`!@#$%^&*()\-_=+[\]{}|;:'",<.>/?]/,
+		},
 	];
 
 	const getValidationStatus = () => {
-		return passwordRequirements.map(req => ({
+		return passwordRequirements.map((req) => ({
 			text: req.text,
 			isValid: req.regex.test(value),
 		}));
@@ -55,7 +62,9 @@ const PasswordField: React.FC<PasswordFieldProps> = ({
 						<button
 							type="button"
 							className={`focus:outline-none ${
-								isInvalid ? 'text-red-500 hover:text-red-700' : 'text-gray-700 hover:text-gray-900'
+								isInvalid
+									? "text-red-500 hover:text-red-700"
+									: "text-gray-700 hover:text-gray-900"
 							}`}
 							onMouseEnter={() => setShowTooltip(true)}
 							onMouseLeave={() => setShowTooltip(false)}

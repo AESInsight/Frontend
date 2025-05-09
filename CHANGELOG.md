@@ -1,3 +1,56 @@
+# [1.10.0](https://github.com/AESInsight/Frontend/compare/v1.9.1...v1.10.0) (2025-05-08)
+
+
+### Features
+
+* adds alphabetical and numerical filtering for employee table ([0be4a59](https://github.com/AESInsight/Frontend/commit/0be4a5965031606995004a7dcb2fcb602aa27b4f))
+
+## [1.9.1](https://github.com/AESInsight/Frontend/compare/v1.9.0...v1.9.1) (2025-05-08)
+
+
+### Bug Fixes
+
+* fixes login by adding auth context and provider ([2c13689](https://github.com/AESInsight/Frontend/commit/2c13689152ef57aadca272d825a772ab60093492))
+* redirects to homepage, if you log out on adminpage ([579610a](https://github.com/AESInsight/Frontend/commit/579610acd6f0f03bd6dfcdae6892478e9ec53663))
+
+# [1.9.0](https://github.com/AESInsight/Frontend/compare/v1.8.0...v1.9.0) (2025-05-08)
+
+
+### Bug Fixes
+
+* removes extra "are you sure" popup when deleting an employee ([7fdb7e3](https://github.com/AESInsight/Frontend/commit/7fdb7e39027703e5713ed75fc4faeac226a10ca2))
+
+
+### Features
+
+* edit modal updates data in db, and new status modal for success/error messages when updating data ([12ecb5a](https://github.com/AESInsight/Frontend/commit/12ecb5a725443775375e1b73daf820f0ad9d580d))
+
+# [1.8.0](https://github.com/AESInsight/Frontend/compare/v1.7.0...v1.8.0) (2025-05-08)
+
+
+### Features
+
+* updates sidebar content so it's up to date ([c9a55e7](https://github.com/AESInsight/Frontend/commit/c9a55e73d68ecd2fa81f00b17d86ad0614b2c3b5))
+
+# [1.7.0](https://github.com/AESInsight/Frontend/compare/v1.6.0...v1.7.0) (2025-05-06)
+
+
+### Bug Fixes
+
+* adds replaces two placeholder charts with better ones for future use ([f1022b8](https://github.com/AESInsight/Frontend/commit/f1022b849d6fe5edf771661f79a1237f0345c869))
+* better color scheme for charts ([a8972cc](https://github.com/AESInsight/Frontend/commit/a8972cc0b6f4de75df3cdb20a7302f87d3ef2555))
+* chart 1 works, fetches data from backend ([2aac15b](https://github.com/AESInsight/Frontend/commit/2aac15bd3453e24b164e4403fb04d8f36a417ce4))
+* fixes type error ([09bf21f](https://github.com/AESInsight/Frontend/commit/09bf21fb3fd9b97796f8af1285320357234033e1))
+* forgot to update paths ([2027e30](https://github.com/AESInsight/Frontend/commit/2027e3044a3c6fbf98770780e41eb21a45adaf60))
+* salary table ([08dfe82](https://github.com/AESInsight/Frontend/commit/08dfe82a990a47095a603fdf2d4c7a0131cad8e4))
+* update file names for consistency and import paths ([9b6ceec](https://github.com/AESInsight/Frontend/commit/9b6ceec183860d95f95d117c59160f92ded67f11))
+
+
+### Features
+
+* adds (for now) placeholder charts with dummy data on homepage. Also realised that we had an unnecessary index css file in root ([a21123a](https://github.com/AESInsight/Frontend/commit/a21123a04b5ff894b4ee3a5e28d9a0da754c16f7))
+* adds checkboxes which sync the selected job title or industry with charts that use the same select component ([3b029d8](https://github.com/AESInsight/Frontend/commit/3b029d82d87ee6dc426da77d70f709cb497f7b6d))
+
 # [1.6.0](https://github.com/AESInsight/Frontend/compare/v1.5.4...v1.6.0) (2025-04-29)
 
 
