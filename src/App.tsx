@@ -8,6 +8,8 @@ import AboutPage from "./components/pages/aboutpage";
 import ContactPage from "./components/pages/contactpage";
 import InsightPage from "./components/pages/insightpage";
 import AdminPage from "./components/pages/adminpage";
+import ResetPasswordPage from "./components/pages/resetpasswordpage";
+import ResetSuccessPage from "./components/pages/resetsuccess";
 import BgImage from "./components/bg_image";
 import { AuthProvider } from "./lib/context/auth_context";
 
@@ -23,6 +25,8 @@ const App: React.FC = () => {
 					<Route path="/contact" element={<ContactPage />} />
 					<Route path="/admin" element={<AdminPage />} />
 					<Route path="/insight" element={<InsightPage />} />
+					<Route path="/reset-password" element={<ResetPasswordPage />} />
+					<Route path="/reset-success" element={<ResetSuccessPage />} />
 				</Routes>
 			</AuthProvider>
 		</Router>
