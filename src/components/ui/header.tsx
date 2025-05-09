@@ -2,7 +2,6 @@ import React from "react";
 import LoginButton from "../buttons/header_buttons/login_button";
 import AdminButton from "../buttons/header_buttons/admin_button";
 import InsightButton from "../buttons/header_buttons/Insight_button";
-import SearchBar from "./search_bar";
 import { useAuth } from "@/lib/context/auth_context";
 
 const Header: React.FC = () => {
@@ -17,8 +16,6 @@ const Header: React.FC = () => {
 					className="h-20 w-64 object-contain ml-1 cursor-pointer"
 					onClick={() => (window.location.href = "/")}
 				/>
-				{/* Search bar */}
-				<SearchBar />
 			</div>
 
 			{/* Buttons on the right */}
