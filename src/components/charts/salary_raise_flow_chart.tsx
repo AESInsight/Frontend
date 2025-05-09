@@ -175,12 +175,14 @@ export function SalaryRaiseFlowChart({
 						Filtered by Job Title
 					</CardDescription>
 				</div>
-				<Select
-					options={jobTitles}
-					selected={selectedJobTitle}
-					onChange={setSelectedJobTitle}
-					placeholder="Select a Job Title"
-				/>
+				<div className="flex flex-col items-end gap-1 w-42">
+					<Select
+						options={jobTitles}
+						selected={selectedJobTitle}
+						onChange={setSelectedJobTitle}
+						placeholder="Select a Job Title"
+					/>
+				</div>
 			</CardHeader>
 			<CardContent className="p-2 flex-1">
 				<ChartContainer config={chartConfig} className="h-[250px] w-full">

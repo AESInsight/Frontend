@@ -1,3 +1,37 @@
+# [1.10.0](https://github.com/AESInsight/Frontend/compare/v1.9.1...v1.10.0) (2025-05-08)
+
+
+### Features
+
+* adds alphabetical and numerical filtering for employee table ([0be4a59](https://github.com/AESInsight/Frontend/commit/0be4a5965031606995004a7dcb2fcb602aa27b4f))
+
+## [1.9.1](https://github.com/AESInsight/Frontend/compare/v1.9.0...v1.9.1) (2025-05-08)
+
+
+### Bug Fixes
+
+* fixes login by adding auth context and provider ([2c13689](https://github.com/AESInsight/Frontend/commit/2c13689152ef57aadca272d825a772ab60093492))
+* redirects to homepage, if you log out on adminpage ([579610a](https://github.com/AESInsight/Frontend/commit/579610acd6f0f03bd6dfcdae6892478e9ec53663))
+
+# [1.9.0](https://github.com/AESInsight/Frontend/compare/v1.8.0...v1.9.0) (2025-05-08)
+
+
+### Bug Fixes
+
+* removes extra "are you sure" popup when deleting an employee ([7fdb7e3](https://github.com/AESInsight/Frontend/commit/7fdb7e39027703e5713ed75fc4faeac226a10ca2))
+
+
+### Features
+
+* edit modal updates data in db, and new status modal for success/error messages when updating data ([12ecb5a](https://github.com/AESInsight/Frontend/commit/12ecb5a725443775375e1b73daf820f0ad9d580d))
+
+# [1.8.0](https://github.com/AESInsight/Frontend/compare/v1.7.0...v1.8.0) (2025-05-08)
+
+
+### Features
+
+* updates sidebar content so it's up to date ([c9a55e7](https://github.com/AESInsight/Frontend/commit/c9a55e73d68ecd2fa81f00b17d86ad0614b2c3b5))
+
 # [1.7.0](https://github.com/AESInsight/Frontend/compare/v1.6.0...v1.7.0) (2025-05-06)
 
 

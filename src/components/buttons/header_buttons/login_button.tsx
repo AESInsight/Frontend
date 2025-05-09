@@ -2,29 +2,21 @@ import React, { useState } from "react";
 import LoginModal from "../../modals/login_modal";
 import StyledHeaderButton from "./styled_header_button";
 import { faSignIn, faSignOut } from "@fortawesome/free-solid-svg-icons";
+import { useAuth } from "@/lib/context/auth_context";
 
 const LoginButton: React.FC = () => {
 	const [isOpen, setIsOpen] = useState(false);
-	const [loggedIn, setLoggedIn] = useState(false);
+	const { isAuthenticated, login, logout } = useAuth();
 
 	const handleLoginSuccess = (jwtToken: string) => {
-		setLoggedIn(true);
-		localStorage.setItem("authToken", jwtToken); // Store the token in localStorage
-	};
-
-	const handleLogout = () => {
-		setLoggedIn(false);
-		localStorage.removeItem("authToken"); // Remove the token from localStorage
+		login(jwtToken);
+		setIsOpen(false);
 	};
 
 	return (
 		<>
-			{loggedIn ? (
-				<StyledHeaderButton
-					icon={faSignOut}
-					text="Logout"
-					onClick={handleLogout}
-				/>
+			{isAuthenticated ? (
+				<StyledHeaderButton icon={faSignOut} text="Logout" onClick={logout} />
 			) : (
 				<StyledHeaderButton
 					icon={faSignIn}
