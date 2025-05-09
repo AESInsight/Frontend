@@ -11,6 +11,7 @@ interface InputFieldProps {
 	suffix?: string;
 	maxLength?: number;
 	error?: string;
+	"data-testid"?: string;
 }
 
 const InputField: React.FC<InputFieldProps> = ({
@@ -23,6 +24,7 @@ const InputField: React.FC<InputFieldProps> = ({
 	suffix,
 	maxLength,
 	error,
+	"data-testid": testId,
 }) => {
 	return (
 		<div className="mb-4">
@@ -38,6 +40,7 @@ const InputField: React.FC<InputFieldProps> = ({
 						value={value}
 						onChange={onChange}
 						maxLength={maxLength}
+						data-testid={testId}
 						className={`px-3 py-2 border focus:outline-none focus:ring ${
 							error
 								? "border-red-500 focus:ring-red-200"

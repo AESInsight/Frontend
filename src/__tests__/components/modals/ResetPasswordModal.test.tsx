@@ -1,28 +1,37 @@
-import { describe, test, expect } from "bun:test";
+import { render, screen, fireEvent } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import ResetPasswordModal from "../../../components/modals/resetpassword_modal";
 
 describe("ResetPasswordModal", () => {
-  test("component is a function", () => {
-    expect(typeof ResetPasswordModal).toBe("function");
+  const mockProps = {
+    isOpen: true,
+    onClose: jest.fn(),
+    email: "",
+    onEmailChange: jest.fn(),
+    onReset: jest.fn(),
+    message: "",
+    isError: false,
+    isSending: false
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
-  test("component is defined", () => {
-    expect(ResetPasswordModal).toBeDefined();
+  test("renders modal when isOpen is true", () => {
+    render(<ResetPasswordModal {...mockProps} />);
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
   });
 
-  test("component has required props", () => {
-    const props = {
-      isOpen: true,
-      onClose: () => {},
-      email: "",
-      onEmailChange: () => {},
-      onReset: () => {},
-      message: "",
-      isError: false,
-      isSending: false
-    };
-    
-    // Verify that the component accepts the required props
-    expect(() => <ResetPasswordModal {...props} />).not.toThrow();
+  test("calls onClose when close button is clicked", () => {
+    render(<ResetPasswordModal {...mockProps} />);
+    fireEvent.click(screen.getByRole("button", { name: /close/i }));
+    expect(mockProps.onClose).toHaveBeenCalled();
   });
-}); 
+
+  test("calls onReset when reset button is clicked", () => {
+    render(<ResetPasswordModal {...mockProps} />);
+    fireEvent.click(screen.getByRole("button", { name: /reset/i }));
+    expect(mockProps.onReset).toHaveBeenCalled();
+  });
+});

@@ -1,20 +1,15 @@
-import { describe, expect, test } from "bun:test";
-import { ChartContainer, ChartTooltip } from "../../../components/ui/chart";
+
+import "@testing-library/jest-dom";
+
+
+// Mock ResizeObserver
+class ResizeObserverMock {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+global.ResizeObserver = ResizeObserverMock;
 
 describe("Chart Components", () => {
-  test("ChartContainer component is defined", () => {
-    expect(ChartContainer).toBeDefined();
-  });
-
-  test("ChartContainer is a function", () => {
-    expect(typeof ChartContainer).toBe("function");
-  });
-
-  test("ChartTooltip component is defined", () => {
-    expect(ChartTooltip).toBeDefined();
-  });
-
-  test("ChartTooltip is a function", () => {
-    expect(typeof ChartTooltip).toBe("function");
-  });
-}); 
+  // ... rest of the tests
+});

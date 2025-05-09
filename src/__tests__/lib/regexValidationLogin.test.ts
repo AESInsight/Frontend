@@ -1,4 +1,3 @@
-import { describe, test, expect } from "bun:test";
 import { validateEmail, validatePassword, getPasswordStrength } from "../../lib/regexValidationLogin";
 
 describe("Login Validation Functions", () => {
@@ -67,4 +66,4 @@ describe("Login Validation Functions", () => {
       expect(getPasswordStrength("")).toBe("weak");
     });
   });
-}); 
+});

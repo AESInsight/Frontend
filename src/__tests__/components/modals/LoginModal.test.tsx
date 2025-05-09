@@ -1,23 +1,32 @@
-import { describe, test, expect } from "bun:test";
+import { render, screen, fireEvent } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import LoginModal from "../../../components/modals/login_modal";
 
 describe("LoginModal", () => {
-  test("component is a function", () => {
-    expect(typeof LoginModal).toBe("function");
+  const mockProps = {
+    isOpen: true,
+    onClose: jest.fn(),
+    onLoginSuccess: jest.fn()
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
-  test("component is defined", () => {
-    expect(LoginModal).toBeDefined();
+  test("renders modal when isOpen is true", () => {
+    render(<LoginModal {...mockProps} />);
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
   });
 
-  test("component has required props", () => {
-    const props = {
-      isOpen: true,
-      onClose: () => {},
-      onLoginSuccess: () => {}
-    };
-    
-    // Verify that the component accepts the required props
-    expect(() => <LoginModal {...props} />).not.toThrow();
+  test("calls onClose when close button is clicked", () => {
+    render(<LoginModal {...mockProps} />);
+    fireEvent.click(screen.getByRole("button", { name: /close/i }));
+    expect(mockProps.onClose).toHaveBeenCalled();
   });
-}); 
+
+  test("calls onLoginSuccess when login form is submitted", () => {
+    render(<LoginModal {...mockProps} />);
+    fireEvent.click(screen.getByRole("button", { name: /login/i }));
+    expect(mockProps.onLoginSuccess).toHaveBeenCalled();
+  });
+});

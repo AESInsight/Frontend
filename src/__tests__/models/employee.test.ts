@@ -1,5 +1,3 @@
-import { describe, expect, test } from "bun:test";
-
 interface Employee {
   employeeID: number;
   jobTitle: string;
@@ -70,4 +68,4 @@ describe("Employee Models", () => {
     expect(typeof salary.salary).toBe("number");
     expect(typeof salary.timestamp).toBe("string");
   });
-}); 
+});

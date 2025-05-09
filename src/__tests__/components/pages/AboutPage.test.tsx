@@ -1,36 +1,27 @@
-import { describe, expect, test } from "bun:test";
+import { render, screen } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import AboutPage from "../../../components/pages/aboutpage";
+import { TestWrapper } from "../../test-utils";
 
 describe("AboutPage Component", () => {
-  test("component is a function", () => {
-    expect(typeof AboutPage).toBe("function");
+  test("renders main sections", () => {
+    render(
+      <TestWrapper>
+        <AboutPage />
+      </TestWrapper>
+    );
+    expect(screen.getByText(/about us/i)).toBeInTheDocument();
   });
 
-  test("component is defined", () => {
-    expect(AboutPage).toBeDefined();
+  test("renders with correct structure", () => {
+    render(
+      <TestWrapper>
+        <AboutPage />
+      </TestWrapper>
+    );
+    
+    expect(screen.getByTestId("header")).toBeInTheDocument();
+    expect(screen.getByTestId("about-page")).toBeInTheDocument();
+    expect(screen.getByTestId("about-content")).toBeInTheDocument();
   });
-
-  test("component has required sections", () => {
-    const aboutPageSource = AboutPage.toString();
-    const expectedSections = [
-      "About Us",
-      "Welcome to our website! We are a deticated team of students",
-      "Our mission is to deliver a high-quality product",
-      "Thank you for visiting our site"
-    ];
-    expectedSections.forEach(section => {
-      expect(aboutPageSource).toContain(section);
-    });
-  });
-
-  test("component imports required components", () => {
-    const aboutPageSource = AboutPage.toString();
-    const requiredComponents = [
-      "Header",
-      "Sidebar"
-    ];
-    requiredComponents.forEach(component => {
-      expect(aboutPageSource).toContain(component);
-    });
-  });
-}); 
+});

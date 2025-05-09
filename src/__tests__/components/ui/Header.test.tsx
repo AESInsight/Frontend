@@ -1,12 +1,17 @@
-import { describe, expect, test } from "bun:test";
+import { render, screen } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import Header from "../../../components/ui/header";
 
 describe("Header Component", () => {
-  test("component is a function", () => {
-    expect(typeof Header).toBe("function");
+  test("renders header with logo", () => {
+    render(<Header />);
+    expect(screen.getByTestId("header-logo")).toBeInTheDocument();
   });
 
-  test("component is defined", () => {
-    expect(Header).toBeDefined();
+  test("renders with correct structure", () => {
+    render(<Header />);
+    expect(screen.getByTestId("header")).toBeInTheDocument();
+    expect(screen.getByTestId("header-left")).toBeInTheDocument();
+    expect(screen.getByTestId("header-buttons")).toBeInTheDocument();
   });
-}); 
+});

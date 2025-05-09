@@ -1,12 +1,16 @@
-import { describe, expect, test } from "bun:test";
+import { render, screen } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import SearchBar from "../../../components/ui/search_bar";
 
 describe("SearchBar Component", () => {
-  test("component is a function", () => {
-    expect(typeof SearchBar).toBe("function");
+  test("renders search bar with icon", () => {
+    render(<SearchBar />);
+    expect(screen.getByTestId("search-icon")).toBeInTheDocument();
   });
 
-  test("component is defined", () => {
-    expect(SearchBar).toBeDefined();
+  test("renders search input", () => {
+    render(<SearchBar />);
+    expect(screen.getByTestId("search-input")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("Search for data...")).toBeInTheDocument();
   });
-}); 
+});

@@ -1,17 +1,15 @@
-import { describe, test, expect, mock } from "bun:test";
 
-// Mock the functions directly
-const mockPostLogin = mock(async () => ({
+const mockPostLogin = jest.fn(async () => ({
   token: "mock-token",
   message: "Success"
 }));
 
-const mockPostReset = mock(async () => ({
+const mockPostReset = jest.fn(async () => ({
   message: "If your email is registered, you will receive a password reset link."
 }));
 
 // Mock the module
-mock.module("../../lib/loginAPI", () => ({
+jest.mock("../../lib/loginAPI", () => ({
   postLogin: mockPostLogin,
   postReset: mockPostReset
 }));
@@ -45,4 +43,4 @@ describe("Login API Functions", () => {
       });
     });
   });
-}); 
+});

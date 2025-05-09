@@ -1,5 +1,3 @@
-import { describe, expect, test } from "bun:test";
-
 interface EditModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -101,4 +99,4 @@ describe("Modal Models", () => {
     expect(typeof editModalProps.onDelete).toBe("function");
     expect(typeof editModalProps.initialData).toBe("object");
   });
-}); 
+});

@@ -86,6 +86,7 @@ const PersonalInformationButton: React.FC<{
 					isCollapsed ? "justify-center" : "justify-start space-x-4"
 				}`}
 				onClick={toggleCollapse}
+				data-testid="personal-info-button"
 			>
 				<FontAwesomeIcon
 					icon={faUser}

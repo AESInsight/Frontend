@@ -1,37 +1,15 @@
-import { describe, expect, test } from "bun:test";
+import { render, screen } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import Homepage from "../../../components/pages/homepage";
 
-describe("Homepage Component", () => {
-  test("component is a function", () => {
-    expect(typeof Homepage).toBe("function");
-  });
+// Mock the ChartProvider
+jest.mock("../../../components/charts/chart_provider", () => ({
+  ChartProvider: ({ children }: { children: React.ReactNode }) => <div>{children}</div>
+}));
 
-  test("component is defined", () => {
-    expect(Homepage).toBeDefined();
+describe("Homepage", () => {
+  test("renders homepage", () => {
+    render(<Homepage />);
+    expect(screen.getByText(/welcome to aes-insight/i)).toBeInTheDocument();
   });
-
-  test("component has required sections", () => {
-    const homepageSource = Homepage.toString();
-    const expectedSections = [
-      "Welcome to AES-Insight",
-      "Your trusted partner in data security and insights",
-      "2025 AES-Insight. All rights reserved"
-    ];
-    expectedSections.forEach(section => {
-      expect(homepageSource).toContain(section);
-    });
-  });
-
-  test("component imports required components", () => {
-    const homepageSource = Homepage.toString();
-    const requiredComponents = [
-      "Header",
-      "Sidebar",
-      "ChartProvider",
-      "GroupedCharts"
-    ];
-    requiredComponents.forEach(component => {
-      expect(homepageSource).toContain(component);
-    });
-  });
-}); 
+});

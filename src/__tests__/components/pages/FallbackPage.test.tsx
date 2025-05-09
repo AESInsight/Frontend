@@ -1,18 +1,20 @@
-import { describe, expect, test } from "bun:test";
+import { render, screen } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import DefaultComponent from "../../../components/pages/fallbackpage";
 
 describe("FallbackPage Component", () => {
-  test("component is a function", () => {
-    expect(typeof DefaultComponent).toBe("function");
+  test("renders main sections", () => {
+    render(<DefaultComponent />);
+    
+    expect(screen.getByText("Welcome to AESInsight")).toBeInTheDocument();
+    expect(screen.getByText("The Webside is under construction")).toBeInTheDocument();
   });
 
-  test("component is defined", () => {
-    expect(DefaultComponent).toBeDefined();
+  test("renders with correct structure", () => {
+    render(<DefaultComponent />);
+    
+    expect(screen.getByRole("banner")).toBeInTheDocument(); // Header
+    expect(screen.getByRole("navigation")).toBeInTheDocument(); // Sidebar
+    expect(screen.getByRole("main")).toBeInTheDocument();
   });
-
-  test("component has basic structure", () => {
-    const fallbackPageSource = DefaultComponent.toString();
-    expect(fallbackPageSource).toContain("Welcome to AESInsight");
-    expect(fallbackPageSource).toContain("The Webside is under construction");
-  });
-}); 
+});

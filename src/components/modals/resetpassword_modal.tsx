@@ -33,22 +33,19 @@ const ResetPasswordModal: React.FC<ResetPasswordModal> = ({
                 if (e.target === e.currentTarget) onClose();
             }}
         >
-            <div className="relative bg-white p-6 rounded-2xl shadow-xl w-80 border-2 border-black">
-				{/* X-Knap */}
-				<button
-					onClick={onClose}
-					className="absolute top-3 left-3 text-gray-400 hover:text-black text-xl font-bold focus:outline-none hover:cursor-pointer"
-					aria-label="Close reset modal"
-				>
-					<button
-                        onClick={onClose}
-                        className="absolute left-1 text-gray-400 hover:text-black text-xl font-bold focus:outline-none hover:cursor-pointer"
-                        aria-label="Close modal"
-                    >
-                        <FontAwesomeIcon icon={faTimes} size="sm" />
-                    </button>
-				</button>
-                <h2 className="text-lg font-semibold mb-4 text-center">
+            <div className="relative bg-white p-6 rounded-2xl shadow-xl w-80 border-2 border-black"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="reset-title"
+            >
+                <button
+                    onClick={onClose}
+                    className="absolute top-3 left-3 text-gray-400 hover:text-black text-xl font-bold focus:outline-none hover:cursor-pointer"
+                    aria-label="Close reset modal"
+                >
+                    <FontAwesomeIcon icon={faTimes} size="sm" />
+                </button>
+                <h2 id="reset-title" className="text-lg font-semibold mb-4 text-center">
                     Reset Password
                 </h2>
                 {message && (

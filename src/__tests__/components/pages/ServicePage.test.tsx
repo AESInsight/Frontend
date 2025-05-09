@@ -1,19 +1,38 @@
-import { describe, expect, test } from "bun:test";
+import { render, screen } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import ServicePage from "../../../components/pages/servicepage";
+import { TestWrapper } from "../../test-utils";
 
 describe("ServicePage Component", () => {
-  test("component is a function", () => {
-    expect(typeof ServicePage).toBe("function");
+  test("renders main sections", () => {
+    render(
+      <TestWrapper>
+        <ServicePage />
+      </TestWrapper>
+    );
+    expect(screen.getByText(/our services/i)).toBeInTheDocument();
   });
 
-  test("component is defined", () => {
-    expect(ServicePage).toBeDefined();
+  test("renders with correct structure", () => {
+    render(
+      <TestWrapper>
+        <ServicePage />
+      </TestWrapper>
+    );
+    
+    expect(screen.getByTestId("header")).toBeInTheDocument();
+    expect(screen.getByTestId("service-page")).toBeInTheDocument();
+    expect(screen.getByTestId("service-content")).toBeInTheDocument();
   });
 
-  test("component has basic structure", () => {
-    const servicePageSource = ServicePage.toString();
-    expect(servicePageSource).toContain("Header");
-    expect(servicePageSource).toContain("Sidebar");
-    expect(servicePageSource).toContain("Service 1");
+  test("renders service cards", () => {
+    render(
+      <TestWrapper>
+        <ServicePage />
+      </TestWrapper>
+    );
+    
+    const serviceCards = screen.getAllByTestId("service-card");
+    expect(serviceCards.length).toBeGreaterThan(0);
   });
-}); 
+});

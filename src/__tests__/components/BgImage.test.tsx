@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { render } from "@testing-library/react";
 import BgImage from "../../components/bg_image";
 
 describe("BgImage Component", () => {
@@ -9,7 +9,7 @@ describe("BgImage Component", () => {
 
   test("component accepts className prop", () => {
     // Test that the component can be called with className prop
-    const result = BgImage({ className: "test-class" });
-    expect(result).toBeDefined();
+    const { container } = render(<BgImage className="test-class" />);
+    expect(container.firstChild).toHaveClass("test-class");
   });
-}); 
+});

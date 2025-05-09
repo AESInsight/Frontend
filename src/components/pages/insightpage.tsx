@@ -45,12 +45,12 @@ const InsightPage: React.FC = () => {
 		.sort((a, b) => a.employeeID - b.employeeID); // Sort by EmployeeID
 
 	return (
-		<div className="h-screen w-screen flex flex-col relative">
+		<div className="h-screen w-screen flex flex-col relative" data-testid="insight-page">
 			<div className="relative z-10 flex flex-col h-full">
 				<Header />
 				<div className="flex flex-1 overflow-y-auto pt-14">
 					<Sidebar />
-					<main className="flex-1 p-4 text-black">
+					<main className="flex-1 p-4 text-black" data-testid="insight-content">
 						<h1 className="text-3xl font-bold mb-4 text-center">
 							Employee Insights
 						</h1>
@@ -84,7 +84,7 @@ const InsightPage: React.FC = () => {
 
 						{/* Employee Table */}
 						{filteredEmployees && filteredEmployees.length > 0 ? (
-							<div className="max-w-6xl mx-auto w-full px-4">
+							<div className="max-w-6xl mx-auto w-full px-4" data-testid="employee-table">
 								<EmployeeTable
 									editable={false}
 									data={filteredEmployees.map((e) => ({

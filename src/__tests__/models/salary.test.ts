@@ -1,4 +1,3 @@
-import { describe, expect, test } from "bun:test";
 import type { MonthlyEntry, SalaryEntry, JobSalaryData, SalaryRaiseData, EmployeeData } from "../../lib/types/salary";
 
 describe("Salary Models", () => {
@@ -76,4 +75,4 @@ describe("Salary Models", () => {
     expect(employeeData).toHaveProperty("gender");
     expect(employeeData).toHaveProperty("jobTitle");
   });
-}); 
+});

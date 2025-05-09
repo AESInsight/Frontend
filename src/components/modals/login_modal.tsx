@@ -162,6 +162,9 @@ const LoginModal: React.FC<LoginModalProps> = ({
 				className={`bg-white rounded-2xl shadow-xl p-6 w-80 transform transition-all duration-300 border-2 border-black ${
 					fadeIn ? "opacity-100 scale-100" : "opacity-0 scale-95"
 				}`}
+				role="dialog"
+				aria-modal="true"
+				aria-labelledby="login-title"
 			>
 				<button
 					onClick={() => {
@@ -174,7 +177,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
 					<FontAwesomeIcon icon={faTimes} size="sm" />
 				</button>
 
-				<h2 className="text-lg font-semibold mb-4 text-center">Login</h2>
+				<h2 id="login-title" className="text-lg font-semibold mb-4 text-center">Login</h2>
 				{error && <p className="text-red-500 text-sm mb-4">{error}</p>}
 
 				<InputField
