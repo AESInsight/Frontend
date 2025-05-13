@@ -32,7 +32,6 @@ const AdminPage: React.FC = () => {
 			if (!token) return [];
 			const companyId = parseInt(localStorage.getItem('companyId') || "0");
 			if (!companyId) {
-				console.error("No company ID found");
 				return [];
 			}
 			

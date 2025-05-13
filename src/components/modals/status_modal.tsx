@@ -28,7 +28,7 @@ const StatusModal: React.FC<StatusModalProps> = ({
 			const timer = setTimeout(() => {
 				setShow(false);
 				onClose();
-			}, 3000); // Auto-close after 3 seconds for success/error
+			}, 2000);
 			return () => clearTimeout(timer);
 		}
 	}, [isOpen, status, onClose]);
@@ -89,7 +89,6 @@ const StatusModal: React.FC<StatusModalProps> = ({
 					show ? "opacity-100 scale-100" : "opacity-0 scale-95"
 				}`}
 			>
-				{/* Close button */}
 				<button
 					onClick={() => {
 						setShow(false);
