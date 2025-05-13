@@ -27,7 +27,7 @@ const InputField: React.FC<InputFieldProps> = ({
 	return (
 		<div className="mb-4">
 			{label && (
-				<label className="block mb-1 text-sm text-gray-700">{label}</label>
+				<label className="block mb-1 text-sm text-gray-700 text-left">{label}</label>
 			)}
 
 			<div className={`flex ${error ? "flex-col" : ""}`}>

@@ -21,12 +21,29 @@ const apiClient = axios.create({
 });
 
 export const postLogin = async (email: string, password: string) => {
-	const response = await apiClient.post("/Auth/login", {email, password});
+	const response = await apiClient.post("/Auth/login", { email, password });
 	return response.data;
 };
 
+// For requesting a password reset link (only email)
 export const postReset = async (email: string) => {
-	const response = await apiClient.post("/PasswordReset/request-reset", {email});
+	const response = await apiClient.post("/PasswordReset/request-reset", {
+		email,
+	});
+	return response.data;
+};
+
+// For actually resetting the password (token, newPassword, confirmPassword)
+export const postResetPassword = async (
+	token: string,
+	newPassword: string,
+	confirmPassword: string
+) => {
+	const response = await apiClient.post("/PasswordReset/reset", {
+		token,
+		newPassword,
+		confirmPassword,
+	});
 	return response.data;
 };
 
