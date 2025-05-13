@@ -3,7 +3,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import AddEmployeeModal from "../modals/add_employee_modal";
 
-const AddEmployeeButton: React.FC = () => {
+interface AddEmployeeButtonProps {
+	onEmployeeAdded?: () => void; // New prop for callback
+}
+
+const AddEmployeeButton: React.FC<AddEmployeeButtonProps> = ({
+	onEmployeeAdded,
+}) => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
 	const handleOpen = () => setIsModalOpen(true);
@@ -19,7 +25,11 @@ const AddEmployeeButton: React.FC = () => {
 				<span>Add Employee</span>
 			</button>
 
-			<AddEmployeeModal isOpen={isModalOpen} onClose={handleClose} />
+			<AddEmployeeModal
+				isOpen={isModalOpen}
+				onClose={handleClose}
+				onEmployeeAdded={onEmployeeAdded} // Pass the callback
+			/>
 		</>
 	);
 };

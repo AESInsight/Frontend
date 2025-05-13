@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
 	fetchCompanyEmployees,
 	fetchAllSalaries,
@@ -11,7 +11,6 @@ import Header from "../ui/header";
 import Sidebar from "../ui/sidebar";
 import { useAuth } from "@/lib/context/auth_context";
 import CompanyEmployeeTable from "../tables/CompanyEmployeeTable";
-import { useQueryClient } from "@tanstack/react-query";
 import AddEmployeeButton from "../buttons/add_employee_button";
 
 interface EmployeeUpdateData {
@@ -67,6 +66,13 @@ const AdminPage: React.FC = () => {
 		},
 		enabled: !!token,
 	});
+
+	// Handle employee addition
+	const handleEmployeeAdded = async () => {
+		await queryClient.invalidateQueries({
+			queryKey: ["companyEmployees", token],
+		});
+	};
 
 	const handleSave = async (index: number, updatedData: EmployeeUpdateData) => {
 		try {
@@ -134,7 +140,8 @@ const AdminPage: React.FC = () => {
 						{employees.length > 0 ? (
 							<div className="max-w-6xl mx-auto w-full px-4">
 								<div className="mb-4">
-									<AddEmployeeButton />
+									<AddEmployeeButton onEmployeeAdded={handleEmployeeAdded} />{" "}
+									{/* Pass callback */}
 								</div>
 								<CompanyEmployeeTable
 									editable={true}

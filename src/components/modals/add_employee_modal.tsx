@@ -8,11 +8,13 @@ import { getCompanyId } from "@/lib/utils";
 interface AddEmployeeModalProps {
 	isOpen: boolean;
 	onClose: () => void;
+	onEmployeeAdded?: () => void; // Callback to notify parent of successful addition
 }
 
 const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({
 	isOpen,
 	onClose,
+	onEmployeeAdded,
 }) => {
 	const [fadeIn, setFadeIn] = useState(false);
 	const [jobTitles, setJobTitles] = useState<string[]>([]);
@@ -84,8 +86,21 @@ const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({
 			const salaryValue =
 				parseInt(newEmployeeData.salary.replace(/\D/g, "")) || 0;
 
-			if (!newEmployeeData.gender || experienceValue <= 0 || salaryValue <= 0) {
-				throw new Error("Please fill all fields with valid values");
+			// Enhanced validation
+			if (!newEmployeeData.position) {
+				throw new Error("Please select a job title");
+			}
+			if (!newEmployeeData.gender) {
+				throw new Error("Please select a gender");
+			}
+			if (experienceValue <= 0) {
+				throw new Error("Experience must be a positive number");
+			}
+			if (salaryValue <= 0) {
+				throw new Error("Salary must be a positive number");
+			}
+			if (!companyId) {
+				throw new Error("Company ID is missing");
 			}
 
 			const employeeData = {
@@ -93,18 +108,31 @@ const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({
 				experience: experienceValue,
 				gender: newEmployeeData.gender,
 				salary: salaryValue,
-				companyId: companyId ?? 0,
+				companyId: companyId, // Fixed syntax
 			};
 
 			await addEmployee(employeeData);
 
 			setStatusModalState("success");
 			setStatusModalMessage("Employee and salary added successfully!");
+
+			// Reset form
+			setNewEmployeeData({
+				position: "",
+				salary: "",
+				gender: "",
+				experience: "",
+				companyID: companyId,
+			});
+
+			onEmployeeAdded?.(); // Trigger table update
 			onClose();
-		} catch {
+		} catch (error) {
 			setStatusModalState("error");
 			setStatusModalMessage(
-				"Failed to add employee and salary. Please try again."
+				error instanceof Error
+					? error.message
+					: "Failed to add employee. Please try again."
 			);
 		}
 	};
