@@ -1,3 +1,10 @@
+## [1.10.3](https://github.com/AESInsight/Frontend/compare/v1.10.2...v1.10.3) (2025-05-13)
+
+
+### Bug Fixes
+
+* fix reset password ([4715111](https://github.com/AESInsight/Frontend/commit/4715111bc8b7b7089d29be9c87aab95e2128203f))
+
 ## [1.10.2](https://github.com/AESInsight/Frontend/compare/v1.10.1...v1.10.2) (2025-05-13)
 
 
