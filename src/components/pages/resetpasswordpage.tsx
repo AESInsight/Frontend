@@ -1,14 +1,13 @@
 import React, { useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { validatePassword } from "@/lib/regexValidationLogin";
 import Header from "../ui/header";
+import InputField from "../fields/input_field";
 import PasswordField from "../fields/password_field";
 import { postResetPassword } from "@/lib/loginAPI";
 
 const ResetPasswordPage: React.FC = () => {
-	const [searchParams] = useSearchParams();
-	const token = searchParams.get("token") || "";
-
+	const [token, setToken] = useState("");
 	const [newPassword, setNewPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
 	const [message, setMessage] = useState("");
@@ -18,14 +17,13 @@ const ResetPasswordPage: React.FC = () => {
 	const navigate = useNavigate();
 
 	const handleResetPassword = async () => {
-		if (!newPassword || !confirmPassword) {
+		if (!token || !newPassword || !confirmPassword) {
 			setMessage("Please fill in all fields.");
 			setIsError(true);
 			return;
 		}
 
 		const { isValid, errors } = validatePassword(newPassword);
-
 		if (!isValid) {
 			setMessage(errors[0]);
 			setIsError(true);
@@ -42,9 +40,6 @@ const ResetPasswordPage: React.FC = () => {
 
 		try {
 			const data = await postResetPassword(token, newPassword, confirmPassword);
-			if (!data || !data.message)
-				throw new Error("Invalid response from server.");
-
 			setMessage(data.message || "Password reset successful!");
 			setIsError(false);
 			navigate("/reset-success");
@@ -79,7 +74,15 @@ const ResetPasswordPage: React.FC = () => {
 								</p>
 							)}
 
+							<InputField
+								label="Reset Token"
+								placeholder="Enter your reset token"
+								value={token}
+								onChange={(e) => setToken(e.target.value)}
+							/>
+
 							<PasswordField
+								label="New Password"
 								value={newPassword}
 								onChange={(e) => setNewPassword(e.target.value)}
 								showValidation={true}
