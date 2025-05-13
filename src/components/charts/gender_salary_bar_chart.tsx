@@ -135,27 +135,18 @@ export function GenderSalaryBarChart({
 					const getIndex = (label: string) => {
 						const [monthName, year] = label.split(" ");
 						const months = [
-							"January",
-							"February",
-							"March",
-							"April",
-							"May",
-							"June",
-							"July",
-							"August",
-							"September",
-							"October",
-							"November",
-							"December",
+							"January", "February", "March", "April", "May", "June",
+							"July", "August", "September", "October", "November", "December"
 						];
-						return (
-							parseInt(year) * 100 + months.indexOf(monthName.toLowerCase())
-						);
+						return parseInt(year) * 100 + months.indexOf(monthName);
 					};
 					return getIndex(a.month) - getIndex(b.month);
 				});
 
-				setChartData(finalData);
+					// Sorteret i forvejen – tag de sidste 12 måneder med data
+					const last12Months = finalData.slice(-12);
+					setChartData(last12Months);
+
 			} catch (err) {
 				console.error("Could not load chart data", err);
 			}
