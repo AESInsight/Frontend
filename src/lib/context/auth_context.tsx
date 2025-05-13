@@ -20,11 +20,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 	const location = useLocation();
 
 	useEffect(() => {
-		const storedToken = localStorage.getItem("authToken");
-		if (storedToken) {
-			setToken(storedToken);
-			setIsAuthenticated(true);
-		}
+		const token = localStorage.getItem("authToken");
+		setIsAuthenticated(!!token);
+		setToken(token);
 	}, []);
 
 	const login = (newToken: string) => {
@@ -37,6 +35,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 		setToken(null);
 		setIsAuthenticated(false);
 		localStorage.removeItem("authToken");
+		localStorage.removeItem("companyId");
 
 		if (location.pathname === "/admin") {
 			navigate("/");
@@ -52,7 +51,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
 export const useAuth = () => {
 	const context = useContext(AuthContext);
-	if (!context) {
+	if (context === undefined) {
 		throw new Error("useAuth must be used within an AuthProvider");
 	}
 	return context;
