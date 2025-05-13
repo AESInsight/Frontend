@@ -1,11 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { fetchCompanyEmployees, type Employee, updateEmployee, deleteEmployee } from "../../lib/employeeAPI";
+import { fetchCompanyEmployees, fetchAllSalaries, type Employee, updateEmployee, deleteEmployee } from "../../lib/employeeAPI";
 import Header from "../ui/header";
 import Sidebar from "../ui/sidebar";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import InputField from "../fields/input_field";
 import { useAuth } from "@/lib/context/auth_context";
 import CompanyEmployeeTable from "../tables/CompanyEmployeeTable";
 import { useQueryClient } from "@tanstack/react-query";
@@ -17,92 +14,64 @@ interface EmployeeUpdateData {
 	experience: number;
 }
 
+interface SalaryEntry {
+	employeeID: number;
+	salary: number;
+	timestamp: string;
+}
+
 const AdminPage: React.FC = () => {
-	const [searchTerm, setSearchTerm] = useState("");
-	const { isAuthenticated } = useAuth();
-	const companyId = localStorage.getItem('companyId');
-	const token = localStorage.getItem('authToken');
+	const { token } = useAuth();
 	const queryClient = useQueryClient();
-	const [tableData, setTableData] = useState<Array<{
-		id: number;
-		jobTitle: string;
-		salary: number;
-		gender: string;
-		experience: number;
-	}>>([]);
+	const [employees, setEmployees] = useState<Employee[]>([]);
 
-	useEffect(() => {
-		console.log('Admin Page State:', {
-			isAuthenticated,
-			companyId,
-			token: token ? 'exists' : 'missing',
-			storedCompanyId: localStorage.getItem('companyId'),
-			storedToken: localStorage.getItem('authToken')
-		});
-	}, [isAuthenticated, companyId, token]);
-
-	const {
-		data: employees,
-		isLoading,
-		isError,
-		error,
-	} = useQuery<Employee[]>({
-		queryKey: ["employees", companyId],
-		queryFn: () => {
-			console.log('Fetching employees with:', { companyId, token: token ? 'exists' : 'missing' });
-			if (!token) {
-				throw new Error("Not authenticated");
-			}
+	// Fetch employees and salaries
+	const { isLoading } = useQuery({
+		queryKey: ["companyEmployees", token],
+		queryFn: async () => {
+			if (!token) return [];
+			const companyId = parseInt(localStorage.getItem('companyId') || "0");
 			if (!companyId) {
-				throw new Error("No company ID found");
+				console.error("No company ID found");
+				return [];
 			}
-			return fetchCompanyEmployees(parseInt(companyId));
+			
+			const employees = await fetchCompanyEmployees(companyId);
+			const salaries: SalaryEntry[] = await fetchAllSalaries();
+			
+			// Merge employees with their latest salary
+			const mergedData = employees.map(employee => {
+				const latestSalary = salaries
+					.filter((salary: SalaryEntry) => salary.employeeID === employee.employeeID)
+					.sort((a: SalaryEntry, b: SalaryEntry) => 
+						new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+					)[0];
+
+				return {
+					...employee,
+					salary: latestSalary ? latestSalary.salary : 0
+				};
+			});
+
+			setEmployees(mergedData);
+			return mergedData;
 		},
-		enabled: !!token && !!companyId,
-		retry: false
+		enabled: !!token,
 	});
-
-	// Filter employees based on search term
-	const filteredEmployees = employees
-		?.filter((employee: Employee) => {
-			const search = searchTerm.toLowerCase();
-			return (
-				employee.jobTitle.toLowerCase().includes(search) ||
-				employee.gender.toLowerCase().includes(search) ||
-				String(employee.employeeID).includes(search) ||
-				String(employee.experience).includes(search)
-			);
-		})
-		.sort((a: Employee, b: Employee) => a.employeeID - b.employeeID);
-
-	// Transform the data for the table
-	useEffect(() => {
-		const newTableData = filteredEmployees?.map((e: Employee) => ({
-			id: e.employeeID,
-			jobTitle: e.jobTitle || '',
-			salary: e.salary || 0,
-			gender: e.gender || '',
-			experience: e.experience || 0,
-		})) || [];
-		setTableData(newTableData);
-	}, [filteredEmployees]);
 
 	const handleSave = async (index: number, updatedData: EmployeeUpdateData) => {
 		try {
-			// Get the employee ID from the current data
-			const employeeId = tableData[index].id;
+			const employeeId = employees[index].employeeID;
 			
-			// Call the API to update the employee
 			await updateEmployee(employeeId, {
 				...updatedData,
-				companyID: parseInt(companyId || "0")
+				companyID: parseInt(localStorage.getItem('companyId') || "0")
 			});
 
-			// Update local state and invalidate cache
-			const newData = [...tableData];
+			const newData = [...employees];
 			newData[index] = { ...newData[index], ...updatedData };
-			setTableData(newData);
-			await queryClient.invalidateQueries({ queryKey: ["employees", companyId] });
+			setEmployees(newData);
+			await queryClient.invalidateQueries({ queryKey: ["companyEmployees", token] });
 		} catch (error) {
 			console.error("Error saving employee:", error);
 		}
@@ -110,17 +79,14 @@ const AdminPage: React.FC = () => {
 
 	const handleDelete = async (index: number) => {
 		try {
-			// Get the employee ID from the current data
-			const employeeId = tableData[index].id;
+			const employeeId = employees[index].employeeID;
 			
-			// Call the API to delete the employee
 			await deleteEmployee(employeeId);
 
-			// Update local state and invalidate cache
-			const newData = [...tableData];
+			const newData = [...employees];
 			newData.splice(index, 1);
-			setTableData(newData);
-			await queryClient.invalidateQueries({ queryKey: ["employees", companyId] });
+			setEmployees(newData);
+			await queryClient.invalidateQueries({ queryKey: ["companyEmployees", token] });
 		} catch (error) {
 			console.error("Error deleting employee:", error);
 		}
@@ -141,41 +107,26 @@ const AdminPage: React.FC = () => {
 							</div>
 						)}
 
-						{token && !companyId && (
+						{token && !localStorage.getItem('companyId') && (
 							<div className="text-center text-red-500 mt-4">
 								<p>You must be logged in with a company account to view this page.</p>
 							</div>
 						)}
 
-						{isError && (
-							<div className="text-center text-red-500">
-								<p>Error: {(error as Error)?.message}</p>
-							</div>
-						)}
-
-						{/* Search Bar */}
-						<div className="flex justify-center mb-6">
-							<div className="relative w-120">
-								<FontAwesomeIcon
-									icon={faSearch}
-									className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"
-								/>
-								<InputField
-									placeholder="Search employee data..."
-									value={searchTerm}
-									onChange={(e) => setSearchTerm(e.target.value)}
-									className="w-full h-9 pl-10 p-2 text-black bg-white border border-sky-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 mt-4"
-								/>
-							</div>
-						</div>
-
 						{isLoading && <p className="text-center">Loading...</p>}
 
-						{tableData.length > 0 ? (
+						{employees.length > 0 ? (
 							<div className="max-w-6xl mx-auto w-full px-4">
 								<CompanyEmployeeTable
 									editable={true}
-									data={tableData}
+									data={employees.map(emp => ({
+										id: emp.employeeID,
+										jobTitle: emp.jobTitle,
+										salary: emp.salary,
+										gender: emp.gender,
+										experience: emp.experience,
+										companyID: emp.companyID
+									}))}
 									onSave={handleSave}
 									onDelete={handleDelete}
 								/>

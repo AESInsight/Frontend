@@ -4,6 +4,7 @@ import {
 	faSpinner,
 	faCheckCircle,
 	faTimesCircle,
+	faTimes
 } from "@fortawesome/free-solid-svg-icons";
 
 interface StatusModalProps {
@@ -27,7 +28,7 @@ const StatusModal: React.FC<StatusModalProps> = ({
 			const timer = setTimeout(() => {
 				setShow(false);
 				onClose();
-			}, 1000); // Auto-close after 2 seconds for success/error
+			}, 3000); // Auto-close after 3 seconds for success/error
 			return () => clearTimeout(timer);
 		}
 	}, [isOpen, status, onClose]);
@@ -84,10 +85,22 @@ const StatusModal: React.FC<StatusModalProps> = ({
 			}`}
 		>
 			<div
-				className={`bg-white rounded-2xl shadow-xl p-6 w-80 transform transition-all duration-300 border-2 border-black ${
+				className={`relative bg-white rounded-2xl shadow-xl p-6 w-80 transform transition-all duration-300 border-2 border-black ${
 					show ? "opacity-100 scale-100" : "opacity-0 scale-95"
 				}`}
 			>
+				{/* Close button */}
+				<button
+					onClick={() => {
+						setShow(false);
+						onClose();
+					}}
+					className="absolute top-2 right-2 text-gray-400 hover:text-black text-xl font-bold focus:outline-none hover:cursor-pointer"
+					aria-label="Close modal"
+				>
+					<FontAwesomeIcon icon={faTimes} size="sm" />
+				</button>
+
 				{getStatusContent()}
 			</div>
 		</div>
