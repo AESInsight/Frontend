@@ -3,6 +3,8 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { validatePassword } from "@/lib/regexValidationLogin";
 import Header from "../ui/header";
 import PasswordField from "../fields/password_field";
+import { postReset } from "@/lib/loginAPI";
+
 
 const ResetPasswordPage: React.FC = () => {
 	const [searchParams] = useSearchParams();
@@ -40,16 +42,8 @@ const ResetPasswordPage: React.FC = () => {
 		setIsSubmitting(true);
 
 		try {
-			const response = await fetch("/api/reset-password", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ token, newPassword, confirmPassword }),
-			});
-			const data = await response.json();
-
-			if (!response.ok) throw new Error(data.message || "Unknown error");
+			const data = await postReset(token, newPassword, confirmPassword);
+			if (!data|| !data.message) throw new Error("Invalid response from server.");
 
 			setMessage(data.message || "Password reset successful!");
 			setIsError(false);
