@@ -37,8 +37,25 @@ export const postLogin = async (email: string, password: string): Promise<LoginR
 	}
 };
 
+// For requesting a password reset link (only email)
 export const postReset = async (email: string) => {
-	const response = await apiClient.post("/PasswordReset/request-reset", { email });
+	const response = await apiClient.post("/PasswordReset/request-reset", {
+		email,
+	});
+	return response.data;
+};
+
+// For actually resetting the password (token, newPassword, confirmPassword)
+export const postResetPassword = async (
+	token: string,
+	newPassword: string,
+	confirmPassword: string
+) => {
+	const response = await apiClient.post("/PasswordReset/reset", {
+		token,
+		newPassword,
+		confirmPassword,
+	});
 	return response.data;
 };
 
