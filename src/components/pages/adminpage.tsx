@@ -1,48 +1,109 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { fetchEmployees } from "../../lib/employeeAPI";
+import {
+	fetchCompanyEmployees,
+	fetchAllSalaries,
+	type Employee,
+	updateEmployee,
+	deleteEmployee,
+} from "../../lib/employeeAPI";
 import Header from "../ui/header";
 import Sidebar from "../ui/sidebar";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import InputField from "../fields/input_field";
-import EmployeeTable from "../tables/EmployeeTable";
+import { useAuth } from "@/lib/context/auth_context";
+import CompanyEmployeeTable from "../tables/CompanyEmployeeTable";
+import { useQueryClient } from "@tanstack/react-query";
 import AddEmployeeButton from "../buttons/add_employee_button";
 
-interface Employee {
-	employeeID: number;
+interface EmployeeUpdateData {
 	jobTitle: string;
 	salary: number;
-	experience: number;
 	gender: string;
-	companyID: number;
+	experience: number;
 }
 
-const InsightPage: React.FC = () => {
-	const [searchTerm, setSearchTerm] = useState("");
+interface SalaryEntry {
+	employeeID: number;
+	salary: number;
+	timestamp: string;
+}
 
-	const {
-		data: employees,
-		isLoading,
-		isError,
-		error,
-	} = useQuery<Employee[]>({
-		queryKey: ["employees"],
-		queryFn: fetchEmployees,
+const AdminPage: React.FC = () => {
+	const { token } = useAuth();
+	const queryClient = useQueryClient();
+	const [employees, setEmployees] = useState<Employee[]>([]);
+
+	// Fetch employees and salaries
+	const { isLoading } = useQuery({
+		queryKey: ["companyEmployees", token],
+		queryFn: async () => {
+			if (!token) return [];
+			const companyId = parseInt(localStorage.getItem("companyId") || "0");
+			if (!companyId) {
+				return [];
+			}
+
+			const employees = await fetchCompanyEmployees(companyId);
+			const salaries: SalaryEntry[] = await fetchAllSalaries();
+
+			// Merge employees with their latest salary
+			const mergedData = employees.map((employee) => {
+				const latestSalary = salaries
+					.filter(
+						(salary: SalaryEntry) => salary.employeeID === employee.employeeID
+					)
+					.sort(
+						(a: SalaryEntry, b: SalaryEntry) =>
+							new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+					)[0];
+
+				return {
+					...employee,
+					salary: latestSalary ? latestSalary.salary : 0,
+				};
+			});
+
+			setEmployees(mergedData);
+			return mergedData;
+		},
+		enabled: !!token,
 	});
 
-	const filteredEmployees = employees
-		?.filter((employee) => {
-			const search = searchTerm.toLowerCase();
-			return (
-				employee.jobTitle.toLowerCase().includes(search) ||
-				employee.gender.toLowerCase().includes(search) ||
-				String(employee.employeeID).includes(search) ||
-				String(employee.salary).includes(search) ||
-				String(employee.experience).includes(search)
-			);
-		})
-		.sort((a, b) => a.employeeID - b.employeeID);
+	const handleSave = async (index: number, updatedData: EmployeeUpdateData) => {
+		try {
+			const employeeId = employees[index].employeeID;
+
+			await updateEmployee(employeeId, {
+				...updatedData,
+				companyID: parseInt(localStorage.getItem("companyId") || "0"),
+			});
+
+			const newData = [...employees];
+			newData[index] = { ...newData[index], ...updatedData };
+			setEmployees(newData);
+			await queryClient.invalidateQueries({
+				queryKey: ["companyEmployees", token],
+			});
+		} catch (error) {
+			console.error("Error saving employee:", error);
+		}
+	};
+
+	const handleDelete = async (index: number) => {
+		try {
+			const employeeId = employees[index].employeeID;
+
+			await deleteEmployee(employeeId);
+
+			const newData = [...employees];
+			newData.splice(index, 1);
+			setEmployees(newData);
+			await queryClient.invalidateQueries({
+				queryKey: ["companyEmployees", token],
+			});
+		} catch (error) {
+			console.error("Error deleting employee:", error);
+		}
+	};
 
 	return (
 		<div className="h-screen w-screen flex flex-col relative">
@@ -53,45 +114,40 @@ const InsightPage: React.FC = () => {
 					<main className="flex-1 p-4 text-black">
 						<h1 className="text-3xl font-bold mb-4 text-center">Admin Page</h1>
 
-						{/* Search Bar */}
-						<div className="flex justify-center mb-6">
-							<div className="relative w-120">
-								<FontAwesomeIcon
-									icon={faSearch}
-									className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"
-								/>
-								<InputField
-									placeholder="Search employee data..."
-									value={searchTerm}
-									onChange={(e) => setSearchTerm(e.target.value)}
-									className="w-full h-9 pl-10 p-2 text-black bg-white border border-sky-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 mt-4"
-								/>
-							</div>
-						</div>
-
-						{isLoading && <p className="text-center">Loading...</p>}
-
-						{isError && (
-							<div className="text-center text-red-500">
-								<p>Error fetching employees.</p>
-								<p>{(error as Error)?.message}</p>
+						{!token && (
+							<div className="text-center text-red-500 mt-4">
+								<p>You must be logged in to view this page.</p>
 							</div>
 						)}
 
-						{filteredEmployees && filteredEmployees.length > 0 ? (
+						{token && !localStorage.getItem("companyId") && (
+							<div className="text-center text-red-500 mt-4">
+								<p>
+									You must be logged in with a company account to view this
+									page.
+								</p>
+							</div>
+						)}
+
+						{isLoading && <p className="text-center">Loading...</p>}
+
+						{employees.length > 0 ? (
 							<div className="max-w-6xl mx-auto w-full px-4">
 								<div className="mb-4">
 									<AddEmployeeButton />
 								</div>
-								<EmployeeTable
+								<CompanyEmployeeTable
 									editable={true}
-									data={filteredEmployees.map((e) => ({
-										id: e.employeeID,
-										jobTitle: e.jobTitle,
-										salary: e.salary,
-										gender: e.gender,
-										experience: e.experience,
+									data={employees.map((emp) => ({
+										id: emp.employeeID,
+										jobTitle: emp.jobTitle,
+										salary: emp.salary,
+										gender: emp.gender,
+										experience: emp.experience,
+										companyID: emp.companyID,
 									}))}
+									onSave={handleSave}
+									onDelete={handleDelete}
 								/>
 							</div>
 						) : (
@@ -104,4 +160,4 @@ const InsightPage: React.FC = () => {
 	);
 };
 
-export default InsightPage;
+export default AdminPage;

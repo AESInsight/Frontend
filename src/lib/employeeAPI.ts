@@ -1,5 +1,6 @@
 import axios from "axios";
 import API_BASE_URL from "../config";
+import axiosInstance from "./loginAPI";
 
 const apiClient = axios.create({
 	baseURL: API_BASE_URL,
@@ -8,12 +9,32 @@ const apiClient = axios.create({
 	},
 });
 
-export const fetchEmployees = async () => {
+export interface Employee {
+	employeeID: number;
+	jobTitle: string;
+	salary: number;
+	experience: number;
+	gender: string;
+	companyID: number;
+}
+
+export const fetchEmployees = async (): Promise<Employee[]> => {
+	const response = await axiosInstance.get("/employee/GetAllEmployees");
+	return response.data;
+};
+
+export const fetchCompanyEmployees = async (
+	companyId: number
+): Promise<Employee[]> => {
 	try {
-		const response = await apiClient.get("/employee/GetAllEmployees");
+		console.log("Fetching employees for company:", companyId);
+		console.log("Current token:", localStorage.getItem("authToken"));
+
+		const response = await axiosInstance.get(`/employee/company/${companyId}`);
+		console.log("Response:", response.data);
 		return response.data;
 	} catch (error) {
-		console.error("Error fetching employees:", error);
+		console.error("Error fetching company employees:", error);
 		throw error;
 	}
 };
@@ -48,7 +69,7 @@ export const addEmployee = async (employeeData: {
 	jobTitle: string;
 	experience: number;
 	gender: string;
-	companyID: number;
+	companyId: number;
 	salaries?: { employee: string; salary: number; timestamp: string }[];
 }) => {
 	// Add Employee with salaries in the payload
@@ -56,13 +77,13 @@ export const addEmployee = async (employeeData: {
 		jobTitle: string;
 		experience: number;
 		gender: string;
-		companyID: number;
+		companyId: number;
 		salaries?: { employee: string; salary: number; timestamp: string }[];
 	} = {
 		jobTitle: employeeData.jobTitle.trim(),
 		experience: Math.floor(employeeData.experience),
 		gender: employeeData.gender,
-		companyID: Math.floor(employeeData.companyID),
+		companyId: employeeData.companyId,
 	};
 
 	// Include salaries in the payload if provided

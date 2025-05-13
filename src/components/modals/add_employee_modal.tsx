@@ -3,6 +3,7 @@ import InputField from "../fields/input_field";
 import { addEmployee, fetchJobTitles } from "../../lib/employeeAPI";
 import { Select } from "../ui/select";
 import StatusModal from "./status_modal";
+import { getCompanyId } from "@/lib/utils";
 
 interface AddEmployeeModalProps {
 	isOpen: boolean;
@@ -23,13 +24,14 @@ const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({
 	const [statusModalMessage, setStatusModalMessage] = useState<
 		string | undefined
 	>(undefined);
+	const companyId = getCompanyId();
 
 	const [newEmployeeData, setNewEmployeeData] = useState({
 		position: "",
 		salary: "",
 		gender: "",
 		experience: "",
-		companyID: 1,
+		companyID: companyId,
 	});
 
 	useEffect(() => {
@@ -90,8 +92,8 @@ const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({
 				jobTitle: newEmployeeData.position.trim() || "Software Developer",
 				experience: experienceValue,
 				gender: newEmployeeData.gender,
-				companyID: newEmployeeData.companyID,
 				salary: salaryValue,
+				companyId: companyId ?? 0,
 			};
 
 			await addEmployee(employeeData);

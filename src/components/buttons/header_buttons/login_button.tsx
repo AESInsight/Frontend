@@ -8,15 +8,27 @@ const LoginButton: React.FC = () => {
 	const [isOpen, setIsOpen] = useState(false);
 	const { isAuthenticated, login, logout } = useAuth();
 
-	const handleLoginSuccess = (jwtToken: string) => {
+	const handleLoginSuccess = (jwtToken: string, companyId: number | null) => {
+		console.log('Login success in button:', { jwtToken, companyId });
 		login(jwtToken);
 		setIsOpen(false);
+	};
+
+	const handleLogout = () => {
+		console.log('Logging out...');
+		localStorage.removeItem('authToken');
+		localStorage.removeItem('companyId');
+		logout();
 	};
 
 	return (
 		<>
 			{isAuthenticated ? (
-				<StyledHeaderButton icon={faSignOut} text="Logout" onClick={logout} />
+				<StyledHeaderButton 
+					icon={faSignOut} 
+					text="Logout" 
+					onClick={handleLogout} 
+				/>
 			) : (
 				<StyledHeaderButton
 					icon={faSignIn}

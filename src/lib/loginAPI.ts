@@ -20,9 +20,21 @@ const apiClient = axios.create({
 	},
 });
 
-export const postLogin = async (email: string, password: string) => {
-	const response = await apiClient.post("/Auth/login", { email, password });
-	return response.data;
+interface LoginResponse {
+	token: string;
+	companyID: number | null;
+}
+
+export const postLogin = async (email: string, password: string): Promise<LoginResponse> => {
+	try {
+		console.log('Login request:', { email });
+		const response = await apiClient.post("/Auth/login", { email, password });
+		console.log('Login response data:', response.data);
+		return response.data;
+	} catch (error) {
+		console.error('Login error:', error);
+		throw error;
+	}
 };
 
 // For requesting a password reset link (only email)
