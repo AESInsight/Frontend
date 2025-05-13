@@ -12,7 +12,7 @@ import { useAuth } from "@/lib/context/auth_context";
 interface LoginModalProps {
 	isOpen: boolean;
 	onClose: () => void;
-	onLoginSuccess: (jwtToken: string) => void;
+	onLoginSuccess: (jwtToken: string, companyId: number | null) => void;
 }
 
 const LoginModal: React.FC<LoginModalProps> = ({
@@ -110,9 +110,24 @@ const LoginModal: React.FC<LoginModalProps> = ({
 
 		try {
 			const response = await postLogin(username, password);
-			login(response.Token);
-			onLoginSuccess(response.Token);
+			console.log('Full login response:', response);
+
+			// Store the token
+			localStorage.setItem("authToken", response.token);
+			
+			// Store the company ID if it exists
+			if (response.companyID) {
+				console.log('Storing company ID:', response.companyID);
+				localStorage.setItem("companyId", response.companyID.toString());
+			} else {
+				console.log('No company ID in response');
+			}
+
+			login(response.token);
+			onLoginSuccess(response.token, response.companyID);
+			onClose();
 		} catch (err) {
+			console.error('Login error:', err);
 			if (axios.isAxiosError(err)) {
 				setError(
 					err.response?.data?.message || "Login failed. Please try again."
