@@ -26,6 +26,7 @@ const App: React.FC = () => {
 					<Route path="/admin" element={<AdminPage />} />
 					<Route path="/insight" element={<InsightPage />} />
 					<Route path="/reset-password" element={<ResetPasswordPage />} />
+					<Route path="/dist/reset-password" element={<ResetPasswordPage />} />
 					<Route path="/reset-success" element={<ResetSuccessPage />} />
 				</Routes>
 			</AuthProvider>
