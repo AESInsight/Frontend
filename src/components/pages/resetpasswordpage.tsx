@@ -107,6 +107,9 @@ const ResetPasswordPage: React.FC = () => {
 						</div>
 					</main>
 				</div>
+				<footer className="p-2 bg-gray-800 text-white text-center text-xs relative z-10">
+					<p>2025 AES-Insight. All rights reserved.</p>
+				</footer>
 			</div>
 		</div>
 	);
