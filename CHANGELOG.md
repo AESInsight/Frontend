@@ -1,3 +1,11 @@
+# [1.11.0](https://github.com/AESInsight/Frontend/compare/v1.10.4...v1.11.0) (2025-05-14)
+
+
+### Features
+
+* adds add employee button and modal for admin page ([d670358](https://github.com/AESInsight/Frontend/commit/d670358c624e4daacb29140a68b51be152bcb727))
+* adds add employee button to adminpage ([4990351](https://github.com/AESInsight/Frontend/commit/4990351080e93440c6a4478dc09af3c0b7fcd584))
+
 ## [1.10.4](https://github.com/AESInsight/Frontend/compare/v1.10.3...v1.10.4) (2025-05-13)
 
 
