@@ -119,6 +119,9 @@ const AdminPage: React.FC = () => {
 					<Sidebar />
 					<main className="flex-1 p-4 text-black">
 						<h1 className="text-3xl font-bold mb-4 text-center">Admin Page</h1>
+						<p className="mb-6">
+							Add / Edit / Delete Employees for your Company
+						</p>
 
 						{!token && (
 							<div className="text-center text-red-500 mt-4">
