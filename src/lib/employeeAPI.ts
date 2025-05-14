@@ -27,11 +27,7 @@ export const fetchCompanyEmployees = async (
 	companyId: number
 ): Promise<Employee[]> => {
 	try {
-		console.log("Fetching employees for company:", companyId);
-		console.log("Current token:", localStorage.getItem("authToken"));
-
 		const response = await axiosInstance.get(`/employee/company/${companyId}`);
-		console.log("Response:", response.data);
 		return response.data;
 	} catch (error) {
 		console.error("Error fetching company employees:", error);
@@ -69,33 +65,65 @@ export const addEmployee = async (employeeData: {
 	jobTitle: string;
 	experience: number;
 	gender: string;
+	salary: number;
 	companyId: number;
-	salaries?: { employee: string; salary: number; timestamp: string }[];
 }) => {
-	// Add Employee with salaries in the payload
-	const employeePayload: {
-		jobTitle: string;
-		experience: number;
-		gender: string;
-		companyId: number;
-		salaries?: { employee: string; salary: number; timestamp: string }[];
-	} = {
+	// Step 1: Add the employee
+	const employeePayload = {
 		jobTitle: employeeData.jobTitle.trim(),
 		experience: Math.floor(employeeData.experience),
 		gender: employeeData.gender,
 		companyId: employeeData.companyId,
 	};
 
-	// Include salaries in the payload if provided
-	if (employeeData.salaries && employeeData.salaries.length > 0) {
-		employeePayload.salaries = employeeData.salaries.map((salaryEntry) => ({
-			employee: salaryEntry.employee,
-			salary: Math.floor(salaryEntry.salary),
-			timestamp: salaryEntry.timestamp,
-		}));
+	const employeeResponse = await apiClient.post("/employee/add", [
+		employeePayload,
+	]);
+
+	// Step 2: Extract employeeID from response
+	let employeeID: number;
+
+	if (
+		Array.isArray(employeeResponse.data) &&
+		employeeResponse.data[0]?.employeeID
+	) {
+		employeeID = employeeResponse.data[0].employeeID;
+	} else if (employeeResponse.data?.employeeID) {
+		// Handle case where response is a single object
+		employeeID = employeeResponse.data.employeeID;
+	} else if (employeeResponse.data?.id) {
+		// Handle case where ID field is named 'id'
+		employeeID = employeeResponse.data.id;
+	} else {
+		// Fallback: Fetch the employee using fetchCompanyEmployees
+		const companyEmployees = await fetchCompanyEmployees(
+			employeeData.companyId
+		);
+		const matchingEmployee = companyEmployees.find(
+			(emp) =>
+				emp.jobTitle === employeeData.jobTitle &&
+				emp.experience === Math.floor(employeeData.experience) &&
+				emp.gender === employeeData.gender &&
+				emp.companyID === employeeData.companyId
+		);
+
+		if (!matchingEmployee) {
+			throw new Error(
+				"Failed to find newly added employee in company employees list"
+			);
+		}
+
+		employeeID = matchingEmployee.employeeID;
 	}
 
-	await apiClient.post("/employee/add", [employeePayload]);
+	// Step 3: Add the salary using the employeeID
+	const salaryPayload = {
+		employeeID,
+		salary: Math.floor(employeeData.salary),
+		timestamp: new Date().toISOString(),
+	};
+
+	await apiClient.post("/salary/add", salaryPayload);
 
 	return { message: "Employee and salary added successfully." };
 };

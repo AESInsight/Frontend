@@ -8,7 +8,7 @@ import { getCompanyId } from "@/lib/utils";
 interface AddEmployeeModalProps {
 	isOpen: boolean;
 	onClose: () => void;
-	onEmployeeAdded?: () => void; // Callback to notify parent of successful addition
+	onEmployeeAdded?: () => void;
 }
 
 const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({
@@ -79,6 +79,7 @@ const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({
 
 	const handleAddEmployee = async () => {
 		setIsStatusModalOpen(true);
+		onClose();
 		setStatusModalState("loading");
 
 		try {
@@ -86,7 +87,6 @@ const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({
 			const salaryValue =
 				parseInt(newEmployeeData.salary.replace(/\D/g, "")) || 0;
 
-			// Enhanced validation
 			if (!newEmployeeData.position) {
 				throw new Error("Please select a job title");
 			}
@@ -108,7 +108,7 @@ const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({
 				experience: experienceValue,
 				gender: newEmployeeData.gender,
 				salary: salaryValue,
-				companyId: companyId, // Fixed syntax
+				companyId: companyId,
 			};
 
 			await addEmployee(employeeData);
@@ -116,7 +116,6 @@ const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({
 			setStatusModalState("success");
 			setStatusModalMessage("Employee and salary added successfully!");
 
-			// Reset form
 			setNewEmployeeData({
 				position: "",
 				salary: "",
@@ -125,8 +124,12 @@ const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({
 				companyID: companyId,
 			});
 
-			onEmployeeAdded?.(); // Trigger table update
-			onClose();
+			onEmployeeAdded?.();
+
+			// Refresh the page after a short delay to show the success message
+			setTimeout(() => {
+				window.location.reload();
+			}, 1000);
 		} catch (error) {
 			setStatusModalState("error");
 			setStatusModalMessage(

@@ -47,7 +47,6 @@ const EditModal: React.FC<EditModalProps> = ({
 		string | undefined
 	>(undefined);
 
-	// Fetch job titles on mount
 	useEffect(() => {
 		const loadJobTitles = async () => {
 			try {
@@ -103,7 +102,7 @@ const EditModal: React.FC<EditModalProps> = ({
 	const handleSave = async () => {
 		setIsStatusModalOpen(true);
 		setStatusModalState("loading");
-		onClose(); // Close EditModal immediately
+		onClose();
 
 		try {
 			const salaryValue = parseInt(editedData.salary.replace(/\D/g, "")) || 0;
@@ -121,8 +120,13 @@ const EditModal: React.FC<EditModalProps> = ({
 
 			onSave({
 				...editedData,
-				salary: salaryValue.toString(), // Convert back to string as expected by `onSave`
+				salary: salaryValue.toString(),
 			});
+
+			// Refresh the page after a short delay to show the success message
+			setTimeout(() => {
+				window.location.reload();
+			}, 1000);
 		} catch (error) {
 			console.error("Failed to save changes:", error);
 			setStatusModalState("error");
@@ -134,7 +138,7 @@ const EditModal: React.FC<EditModalProps> = ({
 		if (window.confirm("Are you sure you want to delete this employee?")) {
 			setIsStatusModalOpen(true);
 			setStatusModalState("loading");
-			onClose(); // Close EditModal immediately
+			onClose();
 
 			try {
 				console.log("Deleting employee with ID:", Number(initialData.id));
@@ -143,6 +147,11 @@ const EditModal: React.FC<EditModalProps> = ({
 				setStatusModalState("success");
 				setStatusModalMessage("Employee deleted successfully!");
 				onDelete();
+
+				// Refresh the page after a short delay to show the success message
+				setTimeout(() => {
+					window.location.reload();
+				}, 1000);
 			} catch (error) {
 				console.error("Failed to delete employee:", error);
 				setStatusModalState("error");
