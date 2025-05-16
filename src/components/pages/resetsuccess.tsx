@@ -1,14 +1,16 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../ui/header";
 import LoginModal from "../modals/login_modal"; // <- tilføj dette
 
 const ResetSuccessPage: React.FC = () => {
 	const [isLoginOpen, setIsLoginOpen] = useState(false);
+	const navigate = useNavigate();
 
 	const handleLoginSuccess = (jwtToken: string) => {
 		localStorage.setItem("authToken", jwtToken);
 		setIsLoginOpen(false);
-		// navigate if needed
+		navigate("/");
 	};
 
 	return (

@@ -1,42 +1,22 @@
 import React, { useEffect, useState } from "react";
 import InputField from "../fields/input_field";
-import {
-	updateEmployee,
-	deleteEmployee,
-	fetchJobTitles,
-} from "../../lib/employeeAPI";
+import { addEmployee, fetchJobTitles } from "../../lib/employeeAPI";
 import { Select } from "../ui/select";
 import StatusModal from "./status_modal";
+import { getCompanyId } from "@/lib/utils";
 
-interface EditModalProps {
+interface AddEmployeeModalProps {
 	isOpen: boolean;
 	onClose: () => void;
-	onSave: (updatedData: {
-		position: string;
-		salary: string;
-		gender: string;
-		experience: string;
-	}) => void;
-	onDelete: () => void;
-	initialData: {
-		id: number | string;
-		position: string;
-		salary: string;
-		gender: string;
-		experience: string;
-		companyID: number;
-	};
+	onEmployeeAdded?: () => void;
 }
 
-const EditModal: React.FC<EditModalProps> = ({
+const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({
 	isOpen,
 	onClose,
-	onSave,
-	onDelete,
-	initialData,
+	onEmployeeAdded,
 }) => {
 	const [fadeIn, setFadeIn] = useState(false);
-	const [editedData, setEditedData] = useState(initialData);
 	const [jobTitles, setJobTitles] = useState<string[]>([]);
 	const genderOptions = ["Male", "Female"];
 	const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
@@ -46,20 +26,22 @@ const EditModal: React.FC<EditModalProps> = ({
 	const [statusModalMessage, setStatusModalMessage] = useState<
 		string | undefined
 	>(undefined);
+	const companyId = getCompanyId();
+
+	const [newEmployeeData, setNewEmployeeData] = useState({
+		position: "",
+		salary: "",
+		gender: "",
+		experience: "",
+		companyID: companyId,
+	});
 
 	useEffect(() => {
 		const loadJobTitles = async () => {
 			try {
 				const response = await fetchJobTitles();
-				const titles = response.jobTitles || [];
-				const validTitles = Array.isArray(titles)
-					? titles.filter(
-							(title) => typeof title === "string" && title.trim() !== ""
-						)
-					: [];
-				setJobTitles(validTitles);
-			} catch (error) {
-				console.error("Failed to load job titles:", error);
+				setJobTitles(response.jobTitles || []);
+			} catch {
 				setJobTitles([]);
 			}
 		};
@@ -78,6 +60,7 @@ const EditModal: React.FC<EditModalProps> = ({
 		const handleKeyDown = (e: KeyboardEvent) => {
 			if (e.key === "Escape") onClose();
 		};
+
 		if (isOpen) {
 			window.addEventListener("keydown", handleKeyDown);
 		}
@@ -91,72 +74,69 @@ const EditModal: React.FC<EditModalProps> = ({
 	};
 
 	const handleChange = (field: string, value: string) => {
-		setEditedData((prev) => ({ ...prev, [field]: value }));
+		setNewEmployeeData((prev) => ({ ...prev, [field]: value }));
 	};
 
-	const formatSalary = (value: string) => {
-		if (!value) return "";
-		return parseInt(value, 10).toLocaleString("da-DK");
-	};
-
-	const handleSave = async () => {
+	const handleAddEmployee = async () => {
 		setIsStatusModalOpen(true);
-		setStatusModalState("loading");
 		onClose();
+		setStatusModalState("loading");
 
 		try {
-			const salaryValue = parseInt(editedData.salary.replace(/\D/g, "")) || 0;
+			const experienceValue = parseInt(newEmployeeData.experience) || 0;
+			const salaryValue =
+				parseInt(newEmployeeData.salary.replace(/\D/g, "")) || 0;
 
-			await updateEmployee(Number(initialData.id), {
-				jobTitle: editedData.position,
-				experience: parseInt(editedData.experience) || 0,
-				gender: editedData.gender,
-				companyID: initialData.companyID,
+			if (!newEmployeeData.position) {
+				throw new Error("Please select a job title");
+			}
+			if (!newEmployeeData.gender) {
+				throw new Error("Please select a gender");
+			}
+			if (experienceValue <= 0) {
+				throw new Error("Experience must be a positive number");
+			}
+			if (salaryValue <= 0) {
+				throw new Error("Salary must be a positive number");
+			}
+			if (!companyId) {
+				throw new Error("Company ID is missing");
+			}
+
+			const employeeData = {
+				jobTitle: newEmployeeData.position.trim() || "Software Developer",
+				experience: experienceValue,
+				gender: newEmployeeData.gender,
 				salary: salaryValue,
-			});
+				companyId: companyId,
+			};
+
+			await addEmployee(employeeData);
 
 			setStatusModalState("success");
-			setStatusModalMessage("Employee updated successfully!");
+			setStatusModalMessage("Employee and salary added successfully!");
 
-			onSave({
-				...editedData,
-				salary: salaryValue.toString(),
+			setNewEmployeeData({
+				position: "",
+				salary: "",
+				gender: "",
+				experience: "",
+				companyID: companyId,
 			});
+
+			onEmployeeAdded?.();
 
 			// Refresh the page after a short delay to show the success message
 			setTimeout(() => {
 				window.location.reload();
 			}, 1000);
 		} catch (error) {
-			console.error("Failed to save changes:", error);
 			setStatusModalState("error");
-			setStatusModalMessage("Failed to save changes. Please try again.");
-		}
-	};
-
-	const handleDelete = async () => {
-		if (window.confirm("Are you sure you want to delete this employee?")) {
-			setIsStatusModalOpen(true);
-			setStatusModalState("loading");
-			onClose();
-
-			try {
-				console.log("Deleting employee with ID:", Number(initialData.id));
-				await deleteEmployee(Number(initialData.id));
-				console.log("Employee deleted successfully");
-				setStatusModalState("success");
-				setStatusModalMessage("Employee deleted successfully!");
-				onDelete();
-
-				// Refresh the page after a short delay to show the success message
-				setTimeout(() => {
-					window.location.reload();
-				}, 1000);
-			} catch (error) {
-				console.error("Failed to delete employee:", error);
-				setStatusModalState("error");
-				setStatusModalMessage("Failed to delete employee. Please try again.");
-			}
+			setStatusModalMessage(
+				error instanceof Error
+					? error.message
+					: "Failed to add employee. Please try again."
+			);
 		}
 	};
 
@@ -177,13 +157,13 @@ const EditModal: React.FC<EditModalProps> = ({
 						}`}
 					>
 						<h2 className="text-lg font-semibold mb-4 text-center">
-							Edit Details
+							Add Employee
 						</h2>
 
 						<Select
 							label="Position"
 							options={jobTitles}
-							selected={editedData.position}
+							selected={newEmployeeData.position}
 							onChange={(value) => handleChange("position", value)}
 							placeholder="Select a job title"
 							className="mb-4 w-full"
@@ -192,14 +172,8 @@ const EditModal: React.FC<EditModalProps> = ({
 						<InputField
 							label="Salary"
 							placeholder="Enter salary"
-							value={formatSalary(editedData.salary)}
-							onChange={(e) => {
-								let numericValue = e.target.value.replace(/\D/g, "");
-								if (numericValue.length > 7) {
-									numericValue = numericValue.slice(0, 7);
-								}
-								handleChange("salary", numericValue);
-							}}
+							value={newEmployeeData.salary}
+							onChange={(e) => handleChange("salary", e.target.value)}
 							type="text"
 							suffix="kr."
 						/>
@@ -207,7 +181,7 @@ const EditModal: React.FC<EditModalProps> = ({
 						<Select
 							label="Gender"
 							options={genderOptions}
-							selected={editedData.gender}
+							selected={newEmployeeData.gender}
 							onChange={(value) => handleChange("gender", value)}
 							placeholder="Select gender"
 							className="mb-4 w-full"
@@ -216,16 +190,10 @@ const EditModal: React.FC<EditModalProps> = ({
 						<InputField
 							label="Experience"
 							placeholder="Enter experience"
-							value={editedData.experience}
-							onChange={(e) => {
-								let numericValue = e.target.value.replace(/\D/g, "");
-								if (numericValue.length > 2) {
-									numericValue = numericValue.slice(0, 2);
-								}
-								handleChange("experience", numericValue);
-							}}
+							value={newEmployeeData.experience}
+							onChange={(e) => handleChange("experience", e.target.value)}
 							type="text"
-							suffix={editedData.experience === "1" ? "yr." : "yrs."}
+							suffix="yrs."
 						/>
 
 						<div className="flex justify-between mt-4">
@@ -236,16 +204,10 @@ const EditModal: React.FC<EditModalProps> = ({
 								Cancel
 							</button>
 							<button
-								onClick={handleSave}
+								onClick={handleAddEmployee}
 								className="bg-sky-600 text-white px-4 py-2 rounded-lg hover:bg-sky-700 text-sm"
 							>
-								Save Changes
-							</button>
-							<button
-								onClick={handleDelete}
-								className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 text-sm"
-							>
-								Delete
+								Add Employee
 							</button>
 						</div>
 					</div>
@@ -262,4 +224,4 @@ const EditModal: React.FC<EditModalProps> = ({
 	);
 };
 
-export default EditModal;
+export default AddEmployeeModal;
