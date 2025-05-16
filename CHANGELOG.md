@@ -1,3 +1,10 @@
+# [1.12.0](https://github.com/AESInsight/Frontend/compare/v1.11.0...v1.12.0) (2025-05-16)
+
+
+### Features
+
+* redirect to homepage added ([05a41cd](https://github.com/AESInsight/Frontend/commit/05a41cd0352a8ab140423408246bf18eaa44dfaf))
+
 # [1.11.0](https://github.com/AESInsight/Frontend/compare/v1.10.4...v1.11.0) (2025-05-14)
 
 
