@@ -1,3 +1,10 @@
+## [1.12.2](https://github.com/AESInsight/Frontend/compare/v1.12.1...v1.12.2) (2025-05-20)
+
+
+### Bug Fixes
+
+* redirect ([294a724](https://github.com/AESInsight/Frontend/commit/294a724a4a3ae8565c7f4a464a2f25045c95a5bb))
+
 ## [1.12.1](https://github.com/AESInsight/Frontend/compare/v1.12.0...v1.12.1) (2025-05-20)
 
 
