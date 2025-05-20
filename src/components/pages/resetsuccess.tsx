@@ -7,11 +7,15 @@ const ResetSuccessPage: React.FC = () => {
 	const [isLoginOpen, setIsLoginOpen] = useState(false);
 	const navigate = useNavigate();
 
-	const handleLoginSuccess = (jwtToken: string) => {
-		localStorage.setItem("authToken", jwtToken);
-		setIsLoginOpen(false);
-		navigate("/");
-	};
+	const handleLoginSuccess = (jwtToken: string, companyId: number | null) => {
+	localStorage.setItem("authToken", jwtToken);
+	if (companyId !== null) {
+		localStorage.setItem("companyID", companyId.toString());
+	}
+	setIsLoginOpen(false);
+	navigate("/");
+};
+
 
 	return (
 		<div className="h-screen w-screen flex flex-col relative">
