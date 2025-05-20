@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import EditButton from "../buttons/edit_button";
 
 interface EmployeeUpdateData {
@@ -22,20 +22,59 @@ interface CompanyEmployeeTableProps {
 	onDelete?: (index: number) => void;
 }
 
+type SortKey = "id" | "jobTitle" | "salary" | "experience" | "gender";
+
 const CompanyEmployeeTable: React.FC<CompanyEmployeeTableProps> = ({
 	editable = false,
 	data,
 	onSave,
 	onDelete,
 }) => {
-	// Handle Save
+	const [sortedData, setSortedData] = useState([...data]);
+	const [sortConfig, setSortConfig] = useState<{
+		key: SortKey;
+		direction: "asc" | "desc";
+	}>({ key: "id", direction: "asc" });
+
+	useEffect(() => {
+		handleSort(sortConfig.key, sortConfig.direction); // re-sort on data change
+	}, [data]);
+
+	const handleSort = (key: SortKey, directionOverride?: "asc" | "desc") => {
+		const direction =
+			directionOverride ||
+			(sortConfig.key === key && sortConfig.direction === "asc"
+				? "desc"
+				: "asc");
+
+		const sorted = [...data].sort((a, b) => {
+			const aVal = a[key];
+			const bVal = b[key];
+
+			if (typeof aVal === "number" && typeof bVal === "number") {
+				return direction === "asc" ? aVal - bVal : bVal - aVal;
+			}
+
+			return direction === "asc"
+				? aVal.toString().localeCompare(bVal.toString())
+				: bVal.toString().localeCompare(aVal.toString());
+		});
+
+		setSortedData(sorted);
+		setSortConfig({ key, direction });
+	};
+
+	const getSortIndicator = (key: SortKey) => {
+		if (sortConfig.key !== key) return "";
+		return sortConfig.direction === "asc" ? "↑" : "↓";
+	};
+
 	const handleSave = async (index: number, updatedData: EmployeeUpdateData) => {
 		if (onSave) {
 			onSave(index, updatedData);
 		}
 	};
 
-	// Handle Delete
 	const handleDelete = async (index: number) => {
 		if (onDelete) {
 			onDelete(index);
@@ -46,17 +85,39 @@ const CompanyEmployeeTable: React.FC<CompanyEmployeeTableProps> = ({
 		<div className="bg-white shadow-lg rounded-xl overflow-hidden w-full">
 			{/* Table Header */}
 			<div className="grid grid-cols-[1fr_2fr_1fr_1fr_1fr_0.5fr] bg-gradient-to-r from-sky-600 to-sky-500 text-white font-bold">
-				<div className="p-4">ID</div>
-				<div className="p-4">Job Title</div>
-				<div className="p-4">Salary</div>
-				<div className="p-4">Experience</div>
-				<div className="p-4">Gender</div>
+				<div className="p-4 cursor-pointer" onClick={() => handleSort("id")}>
+					ID {getSortIndicator("id")}
+				</div>
+				<div
+					className="p-4 cursor-pointer"
+					onClick={() => handleSort("jobTitle")}
+				>
+					Job Title {getSortIndicator("jobTitle")}
+				</div>
+				<div
+					className="p-4 cursor-pointer"
+					onClick={() => handleSort("salary")}
+				>
+					Salary {getSortIndicator("salary")}
+				</div>
+				<div
+					className="p-4 cursor-pointer"
+					onClick={() => handleSort("experience")}
+				>
+					Experience {getSortIndicator("experience")}
+				</div>
+				<div
+					className="p-4 cursor-pointer"
+					onClick={() => handleSort("gender")}
+				>
+					Gender {getSortIndicator("gender")}
+				</div>
 				{editable && <div className="p-4 text-center">Edit</div>}
 			</div>
 
 			{/* Table Body */}
 			<div className="overflow-y-auto max-h-96">
-				{data.map((employee, index) => (
+				{sortedData.map((employee, index) => (
 					<div
 						key={employee.id}
 						className="grid grid-cols-[1fr_2fr_1fr_1fr_1fr_0.5fr] border-b border-gray-200 hover:bg-blue-50"
