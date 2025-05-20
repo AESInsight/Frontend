@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../ui/header";
-import LoginModal from "../modals/login_modal"; // <- tilføj dette
+import LoginModal from "../modals/login_modal";
 
 const ResetSuccessPage: React.FC = () => {
 	const [isLoginOpen, setIsLoginOpen] = useState(false);
