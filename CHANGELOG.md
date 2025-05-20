@@ -1,3 +1,12 @@
+## [1.12.4](https://github.com/AESInsight/Frontend/compare/v1.12.3...v1.12.4) (2025-05-20)
+
+
+### Bug Fixes
+
+* fix reset ([7c9b4aa](https://github.com/AESInsight/Frontend/commit/7c9b4aa6988851654c829adbf4e0b70456b5ad4c))
+* fix reset success ([0628fe7](https://github.com/AESInsight/Frontend/commit/0628fe76f60472a451287da9c9665ff19568eec0))
+* fix reset success ([d31af4f](https://github.com/AESInsight/Frontend/commit/d31af4fd4eae11b1ce02d724c9928f470d6745bc))
+
 ## [1.12.3](https://github.com/AESInsight/Frontend/compare/v1.12.2...v1.12.3) (2025-05-20)
 
 
