@@ -1,3 +1,10 @@
+## [1.12.1](https://github.com/AESInsight/Frontend/compare/v1.12.0...v1.12.1) (2025-05-20)
+
+
+### Bug Fixes
+
+* Add employee button visible when you have no employees ([eb1a665](https://github.com/AESInsight/Frontend/commit/eb1a665f65e732b1f8192c4a8f06ff187c421a34))
+
 # [1.12.0](https://github.com/AESInsight/Frontend/compare/v1.11.0...v1.12.0) (2025-05-16)
 
 
