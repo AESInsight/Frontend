@@ -139,12 +139,10 @@ const AdminPage: React.FC = () => {
 						)}
 
 						{isLoading && <p className="text-center">Loading...</p>}
-
 						{employees.length > 0 ? (
 							<div className="max-w-6xl mx-auto w-full px-4">
 								<div className="mb-4">
-									<AddEmployeeButton onEmployeeAdded={handleEmployeeAdded} />{" "}
-									{/* Pass callback */}
+									<AddEmployeeButton onEmployeeAdded={handleEmployeeAdded} />
 								</div>
 								<CompanyEmployeeTable
 									editable={true}
@@ -161,7 +159,14 @@ const AdminPage: React.FC = () => {
 								/>
 							</div>
 						) : (
-							!isLoading && <p className="text-center">No employees found.</p>
+							!isLoading && (
+								<>
+									<p className="text-center">No employees found.</p>
+									<div className="mt-4 flex justify-center items-center">
+										<AddEmployeeButton onEmployeeAdded={handleEmployeeAdded} />
+									</div>
+								</>
+							)
 						)}
 					</main>
 				</div>

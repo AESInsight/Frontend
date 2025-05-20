@@ -1,3 +1,24 @@
+## [1.12.3](https://github.com/AESInsight/Frontend/compare/v1.12.2...v1.12.3) (2025-05-20)
+
+
+### Bug Fixes
+
+* fix reset success ([b15cb52](https://github.com/AESInsight/Frontend/commit/b15cb52cac0603d10e298277c4da5159c5ca691c))
+
+## [1.12.2](https://github.com/AESInsight/Frontend/compare/v1.12.1...v1.12.2) (2025-05-20)
+
+
+### Bug Fixes
+
+* redirect ([294a724](https://github.com/AESInsight/Frontend/commit/294a724a4a3ae8565c7f4a464a2f25045c95a5bb))
+
+## [1.12.1](https://github.com/AESInsight/Frontend/compare/v1.12.0...v1.12.1) (2025-05-20)
+
+
+### Bug Fixes
+
+* Add employee button visible when you have no employees ([eb1a665](https://github.com/AESInsight/Frontend/commit/eb1a665f65e732b1f8192c4a8f06ff187c421a34))
+
 # [1.12.0](https://github.com/AESInsight/Frontend/compare/v1.11.0...v1.12.0) (2025-05-16)
 
 
