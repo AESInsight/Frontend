@@ -113,17 +113,19 @@ const AdminPage: React.FC = () => {
 		}
 	};
 
-	// Filter employees based on search input
 	const filteredEmployees = employees.filter((emp) => {
-		const search = searchTerm.toLowerCase();
-		return (
-			emp.jobTitle.toLowerCase().includes(search) ||
-			emp.gender.toLowerCase().includes(search) ||
-			String(emp.employeeID).includes(search) ||
-			String(emp.salary).includes(search) ||
-			String(emp.experience).includes(search)
-		);
-	});
+	const search = searchTerm.trim().toLowerCase();
+
+	if (/^\d+$/.test(search)) {
+		return String(emp.employeeID).includes(search);
+	}
+
+	return (
+		emp.jobTitle.toLowerCase().includes(search) ||
+		emp.gender.toLowerCase().includes(search)
+	);
+});
+
 
 	return (
 		<div className="h-screen w-screen flex flex-col relative">

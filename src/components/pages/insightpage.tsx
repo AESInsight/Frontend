@@ -61,17 +61,20 @@ const InsightPage: React.FC = () => {
 
 	// Apply search filter
 	const filteredEmployees = mergedEmployees
-		?.filter((employee) => {
-			const search = searchTerm.toLowerCase();
-			return (
-				employee.jobTitle.toLowerCase().includes(search) ||
-				employee.gender.toLowerCase().includes(search) ||
-				String(employee.employeeID).includes(search) ||
-				String(employee.salary).includes(search) ||
-				String(employee.experience).includes(search)
-			);
-		})
-		.sort((a, b) => a.employeeID - b.employeeID); // optional: sort by ID
+	?.filter((employee) => {
+		const search = searchTerm.trim().toLowerCase();
+
+		if (/^\d+$/.test(search)) {
+			return String(employee.employeeID).includes(search);
+		}
+
+		return (
+			employee.jobTitle.toLowerCase().includes(search) ||
+			employee.gender.toLowerCase().includes(search)
+		);
+	})
+	.sort((a, b) => a.employeeID - b.employeeID);
+
 
 	return (
 		<div className="h-screen w-screen flex flex-col relative">
