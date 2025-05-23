@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../ui/header";
 import Sidebar from "../ui/sidebar";
 import ContactBubble from "../ui/contact_bubble";
@@ -60,7 +60,19 @@ const contacts = [
 	},
 ];
 
+function useIsDesktop() {
+	const [isDesktop, setIsDesktop] = useState(false);
+	useEffect(() => {
+		const check = () => setIsDesktop(window.innerWidth >= 768);
+		check();
+		window.addEventListener('resize', check);
+		return () => window.removeEventListener('resize', check);
+	}, []);
+	return isDesktop;
+}
+
 const AboutPage: React.FC = () => {
+	const isDesktop = useIsDesktop();
 	return (
 		<div className="h-screen w-screen flex flex-col relative">
 			<div className="relative z-10 flex flex-col h-full w-full">
@@ -68,11 +80,11 @@ const AboutPage: React.FC = () => {
 				<h1 className="text-3xl font-bold m-4 flex justify-center item-center overflow-y-auto pt-14">
 					Contact Us
 				</h1>
-				<div className="flex flex-1 w-full">
-					<Sidebar />
+				<div className="flex flex-1 w-full justify-center items-center">
+					{isDesktop && <Sidebar />}
 
-					<div className="flex flex-1 justify-center items-center p-6">
-						<div className="grid grid-cols-3 gap-6">
+					<div className="w-full flex justify-center items-center p-2 sm:p-6">
+						<div className="grid grid-cols-2 md:grid-cols-3 gap-6 mx-auto max-w-xs sm:max-w-md md:max-w-full justify-items-center">
 							{contacts.map((contact, index) => (
 								<ContactBubble key={index} {...contact} />
 							))}

@@ -45,37 +45,37 @@ const CompanyEmployeeTable: React.FC<CompanyEmployeeTableProps> = ({
 	return (
 		<div className="bg-white shadow-lg rounded-xl overflow-hidden w-full">
 			{/* Table Header */}
-			<div className="grid grid-cols-[1fr_2fr_1fr_1fr_1fr_0.5fr] bg-gradient-to-r from-sky-600 to-sky-500 text-white font-bold">
-				<div className="p-4">ID</div>
-				<div className="p-4">Job Title</div>
-				<div className="p-4">Salary</div>
-				<div className="p-4">Experience</div>
-				<div className="p-4">Gender</div>
-				{editable && <div className="p-4 text-center">Edit</div>}
+			<div className="grid grid-cols-[0.7fr_2fr_1.2fr_1fr_1fr_0.7fr] md:grid-cols-[1fr_2fr_1fr_1fr_1fr_0.5fr] bg-gradient-to-r from-sky-600 to-sky-500 text-white font-bold text-sm md:text-base">
+				<div className="p-3 md:p-4">ID</div>
+				<div className="p-3 md:p-4">Job Title</div>
+				<div className="p-3 md:p-4">Salary</div>
+				<div className="p-3 md:p-4">Exp</div>
+				<div className="p-3 md:p-4">Gender</div>
+				{editable && <div className="p-3 md:p-4 text-center">Edit</div>}
 			</div>
 
 			{/* Table Body */}
-			<div className="overflow-y-auto max-h-96">
+			<div className="overflow-x-auto">
 				{data.map((employee, index) => (
 					<div
 						key={employee.id}
-						className="grid grid-cols-[1fr_2fr_1fr_1fr_1fr_0.5fr] border-b border-gray-200 hover:bg-blue-50"
+						className="grid grid-cols-[0.7fr_2fr_1.2fr_1fr_1fr_0.7fr] md:grid-cols-[1fr_2fr_1fr_1fr_1fr_0.5fr] border-b border-gray-200 hover:bg-blue-50 text-sm md:text-base"
 					>
-						<div className="p-4 text-gray-700">{employee.id}</div>
-						<div className="ml-2 p-4 text-gray-700">
+						<div className="p-3 md:p-4 text-gray-700">{employee.id}</div>
+						<div className="p-3 md:p-4 text-gray-700">
 							{employee.jobTitle || "N/A"}
 						</div>
-						<div className="ml-4 p-4 text-gray-700">
+						<div className="p-3 md:p-4 text-gray-700">
 							{employee.salary ? `${employee.salary} kr.` : "N/A"}
 						</div>
-						<div className="ml-4 p-4 text-gray-700">
+						<div className="p-3 md:p-4 text-gray-700">
 							{employee.experience ? `${employee.experience} yrs` : "N/A"}
 						</div>
-						<div className="ml-6 p-4 text-gray-700">
+						<div className="p-3 md:p-4 text-gray-700">
 							{employee.gender || "N/A"}
 						</div>
 						{editable && (
-							<div className="ml-6 p-4 flex justify-center">
+							<div className="p-3 md:p-4 flex justify-center">
 								<EditButton
 									id={employee.id}
 									position={employee.jobTitle || ""}

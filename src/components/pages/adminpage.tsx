@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
 	fetchCompanyEmployees,
@@ -26,10 +26,22 @@ interface SalaryEntry {
 	timestamp: string;
 }
 
+function useIsDesktop() {
+	const [isDesktop, setIsDesktop] = useState(false);
+	useEffect(() => {
+		const check = () => setIsDesktop(window.innerWidth >= 768);
+		check();
+		window.addEventListener('resize', check);
+		return () => window.removeEventListener('resize', check);
+	}, []);
+	return isDesktop;
+}
+
 const AdminPage: React.FC = () => {
 	const { token } = useAuth();
 	const queryClient = useQueryClient();
 	const [employees, setEmployees] = useState<Employee[]>([]);
+	const isDesktop = useIsDesktop();
 
 	// Fetch employees and salaries
 	const { isLoading } = useQuery({
@@ -116,7 +128,7 @@ const AdminPage: React.FC = () => {
 			<div className="relative z-10 flex flex-col h-full">
 				<Header />
 				<div className="flex flex-1 overflow-y-auto pt-14">
-					<Sidebar />
+					{isDesktop && <Sidebar />}
 					<main className="flex-1 p-4 text-black">
 						<h1 className="text-3xl font-bold mb-4 text-center">Admin Page</h1>
 						<p className="mb-6">

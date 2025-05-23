@@ -12,12 +12,14 @@ import ResetPasswordPage from "./components/pages/resetpasswordpage";
 import ResetSuccessPage from "./components/pages/resetsuccess";
 import BgImage from "./components/bg_image";
 import { AuthProvider } from "./lib/context/auth_context";
+import { useIsDesktop } from "./lib/context/desktop_context";
 
 const App: React.FC = () => {
+	const isDesktop = useIsDesktop();
 	return (
 		<Router>
 			<AuthProvider>
-				<Sidebar />
+				{isDesktop && <Sidebar />}
 				<BgImage />
 				<Routes>
 					<Route path="/" element={<Homepage />} />
