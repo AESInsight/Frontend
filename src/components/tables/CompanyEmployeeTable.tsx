@@ -30,7 +30,7 @@ const CompanyEmployeeTable: React.FC<CompanyEmployeeTableProps> = ({
 	onSave,
 	onDelete,
 }) => {
-	const [sortedData, setSortedData] = useState([...data]);
+	const [, setSortedData] = useState([...data]);
 	const [sortConfig, setSortConfig] = useState<{
 		key: SortKey;
 		direction: "asc" | "desc";
@@ -84,36 +84,36 @@ const CompanyEmployeeTable: React.FC<CompanyEmployeeTableProps> = ({
 	return (
 		<div className="bg-white shadow-lg rounded-xl overflow-hidden w-full">
 			{/* Table Header */}
-			<div className="grid grid-cols-[0.7fr_2fr_1.2fr_1fr_1fr_0.7fr] md:grid-cols-[1fr_2fr_1fr_1fr_1fr_0.5fr] bg-gradient-to-r from-sky-600 to-sky-500 text-white font-bold text-sm md:text-base">
-				<div className="p-3 md:p-4" onClick={() => handleSort("id")}>
+			<div className="grid grid-cols-[0.7fr_2fr_1.2fr_1fr_1fr_0.7fr] md:grid-cols-[1fr_2fr_1fr_1fr_1fr_0.5fr] bg-gradient-to-r from-sky-600 to-sky-500 text-white font-bold text-[8px] md:text-base">
+				<div className="p-1 md:p-4 cursor-pointer" onClick={() => handleSort("id")}>
           ID {getSortIndicator("id")}
         </div>
 				<div
-          className="p-3 md:p-4"
+          className="p-1 md:p-4 cursor-pointer"
           onClick={() => handleSort("jobTitle")}
           >
-					Job Title {getSortIndicator("jobTitle")}
-          Job Title</div>
+					Job {getSortIndicator("jobTitle")}
+        </div>
       
 				<div
-          className="p-3 md:p-4"
+          className="p-1 md:p-4 cursor-pointer"
           onClick={() => handleSort("salary")}
           >
-          Salary {getSortIndicator("salary")}
-          Salary</div>
+          Sal {getSortIndicator("salary")}
+        </div>
 				<div
-          className="p-3 md:p-4"
+          className="p-1 md:p-4 cursor-pointer"
           onClick={() => handleSort("experience")}
           >
-          Experience {getSortIndicator("experience")}
-          Exp</div>
+          Exp {getSortIndicator("experience")}
+        </div>
 				<div
-          className="p-3 md:p-4"
+          className="p-1 md:p-4 cursor-pointer"
           onClick={() => handleSort("gender")}
           >
-          Gender {getSortIndicator("gender")}
-          Gender</div>
-				{editable && <div className="p-3 md:p-4 text-center">Edit</div>}
+          Gen {getSortIndicator("gender")}
+        </div>
+				{editable && <div className="p-1 md:p-4 text-center">Edit</div>}
 			</div>
 
 			{/* Table Body */}
@@ -121,7 +121,7 @@ const CompanyEmployeeTable: React.FC<CompanyEmployeeTableProps> = ({
 				{data.map((employee, index) => (
 					<div
 						key={employee.id}
-						className="grid grid-cols-[0.7fr_2fr_1.2fr_1fr_1fr_0.7fr] md:grid-cols-[1fr_2fr_1fr_1fr_1fr_0.5fr] border-b border-gray-200 hover:bg-blue-50 text-sm md:text-base"
+						className="grid grid-cols-[0.7fr_2fr_1.2fr_1fr_1fr_0.7fr] md:grid-cols-[1fr_2fr_1fr_1fr_1fr_0.5fr] border-b border-gray-200 hover:bg-blue-50 text-[8px] md:text-base"
 					>
 						<div className="p-3 md:p-4 text-gray-700">{employee.id}</div>
 						<div className="p-3 md:p-4 text-gray-700">

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchEmployees, fetchAllSalaries } from "../../lib/employeeAPI";
 import Header from "../ui/header";
@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import InputField from "../fields/input_field";
 import EmployeeTable from "../tables/EmployeeTable";
+import { useIsDesktop } from "@/lib/context/desktop_context";
 
 // Define the Employee and Salary types
 interface Employee {

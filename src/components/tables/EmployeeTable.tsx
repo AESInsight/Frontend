@@ -30,45 +30,6 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
 		direction: "asc" | "desc";
 	}>({ key: "id", direction: "asc" });
 
-	// Load Data
-	const loadData = async () => {
-		try {
-			const employees: Employee[] = await fetchEmployees();
-			const salaries: Salary[] = await fetchAllSalaries();
-
-			const mergedData = employees.map((employee) => {
-				const latestSalary = salaries
-					.filter((salary) => salary.employeeID === employee.employeeID)
-					.sort(
-						(a, b) =>
-							new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-					)[0];
-
-				return {
-					id: employee.employeeID,
-					jobTitle: employee.jobTitle,
-					salary: latestSalary ? latestSalary.salary : "N/A",
-					gender: employee.gender,
-					experience: employee.experience,
-					companyID: employee.companyID,
-				};
-			});
-
-			setData(mergedData);
-		} catch (error) {
-			console.error("Failed to load data:", error);
-		}
-	};
-
-	useEffect(() => {
-		if (editable) {
-			loadData();
-		} else if (propData) {
-			setData(propData);
-		}
-	}, [editable, propData]);
-
-	// Handle Sorting
 	const handleSort = (key: keyof TableRow) => {
 		setSortConfig((prev) => ({
 			key,
@@ -128,43 +89,31 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
 	return (
 		<div className="bg-white shadow-lg rounded-xl overflow-hidden w-full">
 			{/* Table Header */}
-			<div className="grid grid-cols-[0.4fr_1.4fr_0.7fr_0.6fr_0.6fr_0.4fr] md:grid-cols-[1fr_2fr_1fr_1fr_1fr_0.5fr] bg-gradient-to-r from-sky-600 to-sky-500 text-white font-bold text-[8px] md:text-base">
+			<div className="grid grid-cols-[1fr_2fr_1fr_1fr_1fr_0.5fr] bg-sky-600 text-white font-bold text-[8px] md:text-base">
 				<div className="p-1 md:p-4 cursor-pointer" onClick={() => handleSort("id")}>
 					ID {getSortIndicator("id")}
 				</div>
-				<div
-					className="p-1 md:p-4 cursor-pointer"
-					onClick={() => handleSort("jobTitle")}
-				>
+				<div className="p-1 md:p-4 cursor-pointer" onClick={() => handleSort("jobTitle")}>
 					Job {getSortIndicator("jobTitle")}
 				</div>
-				<div
-					className="p-1 md:p-4 cursor-pointer"
-					onClick={() => handleSort("salary")}
-				>
+				<div className="p-1 md:p-4 cursor-pointer" onClick={() => handleSort("salary")}>
 					Sal {getSortIndicator("salary")}
 				</div>
-				<div
-					className="p-1 md:p-4 cursor-pointer"
-					onClick={() => handleSort("experience")}
-				>
+				<div className="p-1 md:p-4 cursor-pointer" onClick={() => handleSort("experience")}>
 					Exp {getSortIndicator("experience")}
 				</div>
-				<div
-					className="p-1 md:p-4 cursor-pointer"
-					onClick={() => handleSort("gender")}
-				>
+				<div className="p-1 md:p-4 cursor-pointer" onClick={() => handleSort("gender")}>
 					Gen {getSortIndicator("gender")}
 				</div>
 				{editable && <div className="p-1 md:p-4 text-center">Edit</div>}
 			</div>
 
 			{/* Table Body */}
-			<div className="overflow-x-auto">
+			<div className="overflow-y-auto max-h-96">
 				{sortedData.map((row, index) => (
 					<div
 						key={row.id ?? index}
-						className="grid grid-cols-[0.4fr_1.4fr_0.7fr_0.6fr_0.6fr_0.4fr] md:grid-cols-[1fr_2fr_1fr_1fr_1fr_0.5fr] border-b border-gray-200 hover:bg-blue-50 text-[8px] md:text-base"
+						className="grid grid-cols-[1fr_2fr_1fr_1fr_1fr_0.5fr] border-b border-gray-200 hover:bg-blue-50 text-[8px] md:text-base"
 					>
 						<div className="p-1 md:p-4 text-gray-700">{row.id ?? "N/A"}</div>
 						<div className="p-1 md:p-4 text-gray-700 truncate">
