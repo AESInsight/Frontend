@@ -5,17 +5,7 @@ import { ChartProvider } from "../charts/context/chart_context";
 import { GroupedCharts } from "../charts/grouped_charts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
-
-function useIsDesktop() {
-	const [isDesktop, setIsDesktop] = React.useState(false);
-	React.useEffect(() => {
-		const check = () => setIsDesktop(window.innerWidth >= 768);
-		check();
-		window.addEventListener('resize', check);
-		return () => window.removeEventListener('resize', check);
-	}, []);
-	return isDesktop;
-}
+import { useIsDesktop } from "@/lib/context/desktop_context";
 
 const Homepage: React.FC = () => {
 	const isDesktop = useIsDesktop();

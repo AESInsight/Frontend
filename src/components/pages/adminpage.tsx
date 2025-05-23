@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
 	fetchCompanyEmployees,
@@ -15,6 +15,7 @@ import AddEmployeeButton from "../buttons/add_employee_button";
 import InputField from "../fields/input_field";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { useIsDesktop } from "@/lib/context/desktop_context";
 
 interface EmployeeUpdateData {
 	jobTitle: string;
@@ -27,17 +28,6 @@ interface SalaryEntry {
 	employeeID: number;
 	salary: number;
 	timestamp: string;
-}
-
-function useIsDesktop() {
-	const [isDesktop, setIsDesktop] = useState(false);
-	useEffect(() => {
-		const check = () => setIsDesktop(window.innerWidth >= 768);
-		check();
-		window.addEventListener('resize', check);
-		return () => window.removeEventListener('resize', check);
-	}, []);
-	return isDesktop;
 }
 
 const AdminPage: React.FC = () => {

@@ -1,17 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Header from "../ui/header";
 import Sidebar from "../ui/sidebar";
-
-function useIsDesktop() {
-	const [isDesktop, setIsDesktop] = useState(false);
-	useEffect(() => {
-		const check = () => setIsDesktop(window.innerWidth >= 768);
-		check();
-		window.addEventListener('resize', check);
-		return () => window.removeEventListener('resize', check);
-	}, []);
-	return isDesktop;
-}
+import { useIsDesktop } from "@/lib/context/desktop_context";
 
 const AboutPage: React.FC = () => {
 	const isDesktop = useIsDesktop();

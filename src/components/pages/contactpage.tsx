@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Header from "../ui/header";
 import Sidebar from "../ui/sidebar";
 import ContactBubble from "../ui/contact_bubble";
+import { useIsDesktop } from "@/lib/context/desktop_context";
 
 const contacts = [
 	{
@@ -59,17 +60,6 @@ const contacts = [
 		initials: "ka",
 	},
 ];
-
-function useIsDesktop() {
-	const [isDesktop, setIsDesktop] = useState(false);
-	useEffect(() => {
-		const check = () => setIsDesktop(window.innerWidth >= 768);
-		check();
-		window.addEventListener('resize', check);
-		return () => window.removeEventListener('resize', check);
-	}, []);
-	return isDesktop;
-}
 
 const AboutPage: React.FC = () => {
 	const isDesktop = useIsDesktop();
