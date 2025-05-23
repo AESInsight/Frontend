@@ -89,23 +89,23 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
 	return (
 		<div className="bg-white shadow-lg rounded-xl overflow-hidden w-full">
 			{/* Table Header */}
-			<div className="grid grid-cols-[1fr_2fr_1fr_1fr_1fr_0.5fr] bg-sky-600 text-white font-bold">
-				<div className="p-4 cursor-pointer" onClick={() => handleSort("id")}>
+			<div className="grid grid-cols-[1fr_2fr_1fr_1fr_1fr_0.5fr] bg-sky-600 text-white font-bold text-[8px] md:text-base">
+				<div className="p-1 md:p-4 cursor-pointer" onClick={() => handleSort("id")}>
 					ID {getSortIndicator("id")}
 				</div>
-				<div className="p-4 cursor-pointer" onClick={() => handleSort("jobTitle")}>
-					Job Title {getSortIndicator("jobTitle")}
+				<div className="p-1 md:p-4 cursor-pointer" onClick={() => handleSort("jobTitle")}>
+					Job {getSortIndicator("jobTitle")}
 				</div>
-				<div className="p-4 cursor-pointer" onClick={() => handleSort("salary")}>
-					Salary {getSortIndicator("salary")}
+				<div className="p-1 md:p-4 cursor-pointer" onClick={() => handleSort("salary")}>
+					Sal {getSortIndicator("salary")}
 				</div>
-				<div className="p-4 cursor-pointer" onClick={() => handleSort("experience")}>
-					Experience {getSortIndicator("experience")}
+				<div className="p-1 md:p-4 cursor-pointer" onClick={() => handleSort("experience")}>
+					Exp {getSortIndicator("experience")}
 				</div>
-				<div className="p-4 cursor-pointer" onClick={() => handleSort("gender")}>
-					Gender {getSortIndicator("gender")}
+				<div className="p-1 md:p-4 cursor-pointer" onClick={() => handleSort("gender")}>
+					Gen {getSortIndicator("gender")}
 				</div>
-				{editable && <div className="p-4 text-center">Edit</div>}
+				{editable && <div className="p-1 md:p-4 text-center">Edit</div>}
 			</div>
 
 			{/* Table Body */}
@@ -113,17 +113,23 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
 				{sortedData.map((row, index) => (
 					<div
 						key={row.id ?? index}
-						className="grid grid-cols-[1fr_2fr_1fr_1fr_1fr_0.5fr] border-b border-gray-200 hover:bg-blue-50"
+						className="grid grid-cols-[1fr_2fr_1fr_1fr_1fr_0.5fr] border-b border-gray-200 hover:bg-blue-50 text-[8px] md:text-base"
 					>
-						<div className="p-4 text-gray-700">{row.id ?? "N/A"}</div>
-						<div className="ml-2 p-4 text-gray-700">{row.jobTitle || "N/A"}</div>
-						<div className="ml-4 p-4 text-gray-700">{row.salary || "N/A"} kr.</div>
-						<div className="ml-4 p-4 text-gray-700">
-							{row.experience ? `${row.experience} yrs` : "-"}
+						<div className="p-1 md:p-4 text-gray-700">{row.id ?? "N/A"}</div>
+						<div className="p-1 md:p-4 text-gray-700 truncate">
+							{row.jobTitle || "N/A"}
 						</div>
-						<div className="ml-6 p-4 text-gray-700">{row.gender || "N/A"}</div>
+						<div className="p-1 md:p-4 text-gray-700">
+							{row.salary || "N/A"} kr
+						</div>
+						<div className="p-1 md:p-4 text-gray-700">
+							{row.experience ? `${row.experience}y` : "-"}
+						</div>
+						<div className="p-1 md:p-4 text-gray-700">
+							{row.gender || "N/A"}
+						</div>
 						{editable && (
-							<div className="ml-6 p-4 flex justify-center">
+							<div className="p-1 md:p-4 flex justify-center">
 								<EditButton
 									id={row.id || ""}
 									position={row.jobTitle}

@@ -19,9 +19,9 @@ const StyledHeaderButton: React.FC<StyledHeaderButtonProps> = ({
 	return (
 		<button
 			onClick={onClick}
-			className={`text-white text-md	 flex items-center gap-2 py-2 rounded-md transition-transform duration-300 ease-in-out hover:scale-115 cursor-pointer ${className}`}
+			className={`text-white text-xs md:text-md flex items-center gap-1 md:gap-2 py-1 md:py-2 rounded-md transition-transform duration-300 ease-in-out hover:scale-115 cursor-pointer ${className}`}
 		>
-			<FontAwesomeIcon icon={icon} />
+			<FontAwesomeIcon icon={icon} className="text-sm md:text-base" />
 			<span>{text}</span>
 		</button>
 	);

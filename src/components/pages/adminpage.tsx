@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState} from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
 	fetchCompanyEmployees,
@@ -15,6 +15,7 @@ import AddEmployeeButton from "../buttons/add_employee_button";
 import InputField from "../fields/input_field";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { useIsDesktop } from "@/lib/context/desktop_context";
 
 interface EmployeeUpdateData {
 	jobTitle: string;
@@ -33,6 +34,7 @@ const AdminPage: React.FC = () => {
 	const { token } = useAuth();
 	const queryClient = useQueryClient();
 	const [employees, setEmployees] = useState<Employee[]>([]);
+	const isDesktop = useIsDesktop();
 	const [searchTerm, setSearchTerm] = useState("");
 
 	// Fetch employees and salaries
@@ -132,25 +134,25 @@ const AdminPage: React.FC = () => {
 			<div className="relative z-10 flex flex-col h-full">
 				<Header />
 				<div className="flex flex-1 overflow-y-auto pt-14">
-					<Sidebar />
-					<main className="flex-1 p-4 text-black">
-						<h1 className="text-3xl font-bold mb-4 text-center">Admin Page</h1>
-						<p className="mb-6 text-center">
+					{isDesktop && <Sidebar />}
+					<main className="flex-1 p-2 md:p-4 md:pl-8 text-black">
+						<h1 className="text-2xl md:text-3xl font-bold mb-2 md:mb-4 text-center">Admin Page</h1>
+						<p className="mb-4 md:mb-6 text-center text-sm md:text-base">
 							Add / Edit / Delete Employees for your Company
 						</p>
 
 						{/* Search Bar */}
-						<div className="flex justify-center mb-6">
-							<div className="relative w-120">
+						<div className="flex justify-center mb-4 md:mb-6">
+							<div className="relative w-full max-w-[95%] md:max-w-6xl">
 								<FontAwesomeIcon
 									icon={faSearch}
-									className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+									className="absolute left-2 md:left-3 top-[45%] md:top-1/2 transform -translate-y-1/2 text-gray-500 text-[8px] md:text-base"
 								/>
 								<InputField
 									placeholder="Search employee data..."
 									value={searchTerm}
 									onChange={(e) => setSearchTerm(e.target.value)}
-									className="w-full h-9 pl-10 p-2 text-black bg-white border border-sky-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 mt-4"
+									className="w-full h-7 md:h-9 pl-5 md:pl-10 p-1.5 md:p-2 text-[10px] md:text-base text-black bg-white border border-sky-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 mt-2 md:mt-4"
 								/>
 							</div>
 						</div>
@@ -174,8 +176,8 @@ const AdminPage: React.FC = () => {
 
 
 						{filteredEmployees.length > 0 ? (
-							<div className="max-w-6xl mx-auto w-full px-4">
-								<div className="mb-4">
+							<div className="w-full max-w-[95%] md:max-w-6xl mx-auto">
+								<div className="mb-2 md:mb-4">
 									<AddEmployeeButton onEmployeeAdded={handleEmployeeAdded} />
 								</div>
 								<CompanyEmployeeTable

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState} from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchEmployees, fetchAllSalaries } from "../../lib/employeeAPI";
 import Header from "../ui/header";
@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import InputField from "../fields/input_field";
 import EmployeeTable from "../tables/EmployeeTable";
+import { useIsDesktop } from "@/lib/context/desktop_context";
 
 // Define the Employee and Salary types
 interface Employee {
@@ -25,6 +26,7 @@ interface Salary {
 }
 
 const InsightPage: React.FC = () => {
+	const isDesktop = useIsDesktop();
 	const [searchTerm, setSearchTerm] = useState("");
 
 	// Fetch employee data
@@ -81,27 +83,11 @@ const InsightPage: React.FC = () => {
 			<div className="relative z-10 flex flex-col h-full">
 				<Header />
 				<div className="flex flex-1 overflow-y-auto pt-14">
-					<Sidebar />
+					{isDesktop && <Sidebar />}
 					<main className="flex-1 p-4 text-black">
 						<h1 className="text-3xl font-bold mb-4 text-center">
 							Employee Insights
 						</h1>
-
-						{/* Search Bar */}
-						<div className="flex justify-center mb-6">
-							<div className="relative w-120">
-								<FontAwesomeIcon
-									icon={faSearch}
-									className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"
-								/>
-								<InputField
-									placeholder="Search employee data..."
-									value={searchTerm}
-									onChange={(e) => setSearchTerm(e.target.value)}
-									className="w-full h-9 pl-10 p-2 text-black bg-white border border-sky-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 mt-4"
-								/>
-							</div>
-						</div>
 
 						{/* Loading */}
 						{isLoading && <p className="text-center">Loading...</p>}
@@ -117,6 +103,21 @@ const InsightPage: React.FC = () => {
 						{/* Employee Table */}
 						{filteredEmployees && filteredEmployees.length > 0 ? (
 							<div className="max-w-6xl mx-auto w-full px-4">
+								{/* Search Bar */}
+								<div className="flex justify-center mb-0 md:mb-6">
+									<div className="relative w-full">
+										<FontAwesomeIcon
+											icon={faSearch}
+											className="absolute left-3 top-[35%] transform -translate-y-1/2 text-gray-500 text-[10px] md:text-base"
+										/>
+										<InputField
+											placeholder="Search employee data..."
+											value={searchTerm}
+											onChange={(e) => setSearchTerm(e.target.value)}
+											className="w-full h-7 md:h-9 pl-6 md:pl-10 p-1.5 md:p-2 text-[10px] md:text-base text-black bg-white border border-sky-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+										/>
+									</div>
+								</div>
 								<EmployeeTable
 									editable={false}
 									data={filteredEmployees.map((e) => ({
