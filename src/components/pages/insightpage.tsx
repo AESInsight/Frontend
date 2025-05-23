@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { fetchEmployees } from "../../lib/employeeAPI";
+import { fetchEmployees, fetchAllSalaries } from "../../lib/employeeAPI";
 import Header from "../ui/header";
 import Sidebar from "../ui/sidebar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,31 +8,27 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import InputField from "../fields/input_field";
 import EmployeeTable from "../tables/EmployeeTable";
 
-// Define the Employee type
+// Define the Employee and Salary types
 interface Employee {
 	employeeID: number;
 	jobTitle: string;
-	salary: number;
+	salary?: number; // optional initially
 	experience: number;
 	gender: string;
 	companyID: number;
 }
 
-function useIsDesktop() {
-	const [isDesktop, setIsDesktop] = useState(false);
-	useEffect(() => {
-		const check = () => setIsDesktop(window.innerWidth >= 768);
-		check();
-		window.addEventListener('resize', check);
-		return () => window.removeEventListener('resize', check);
-	}, []);
-	return isDesktop;
+interface Salary {
+	employeeID: number;
+	salary: number;
+	timestamp: string;
 }
 
 const InsightPage: React.FC = () => {
 	const isDesktop = useIsDesktop();
 	const [searchTerm, setSearchTerm] = useState("");
 
+	// Fetch employee data
 	const {
 		data: employees,
 		isLoading,
@@ -43,18 +39,43 @@ const InsightPage: React.FC = () => {
 		queryFn: fetchEmployees,
 	});
 
-	const filteredEmployees = employees
-		?.filter((employee) => {
-			const search = searchTerm.toLowerCase();
-			return (
-				employee.jobTitle.toLowerCase().includes(search) ||
-				employee.gender.toLowerCase().includes(search) ||
-				String(employee.employeeID).includes(search) ||
-				String(employee.salary).includes(search) ||
-				String(employee.experience).includes(search)
-			);
-		})
-		.sort((a, b) => a.employeeID - b.employeeID); // Sort by EmployeeID
+	// Fetch salary data
+	const { data: salaries } = useQuery<Salary[]>({
+		queryKey: ["salaries"],
+		queryFn: fetchAllSalaries,
+	});
+
+	// Merge salaries into employees
+	const mergedEmployees = employees?.map((employee) => {
+		const latestSalary = salaries
+			?.filter((s) => s.employeeID === employee.employeeID)
+			.sort(
+				(a, b) =>
+					new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+			)[0];
+
+		return {
+			...employee,
+			salary: latestSalary?.salary ?? "N/A",
+		};
+	});
+
+	// Apply search filter
+	const filteredEmployees = mergedEmployees
+	?.filter((employee) => {
+		const search = searchTerm.trim().toLowerCase();
+
+		if (/^\d+$/.test(search)) {
+			return String(employee.employeeID).includes(search);
+		}
+
+		return (
+			employee.jobTitle.toLowerCase().includes(search) ||
+			employee.gender.toLowerCase().includes(search)
+		);
+	})
+	.sort((a, b) => a.employeeID - b.employeeID);
+
 
 	return (
 		<div className="h-screen w-screen flex flex-col relative">
@@ -104,6 +125,7 @@ const InsightPage: React.FC = () => {
 										salary: e.salary,
 										gender: e.gender,
 										experience: e.experience,
+										companyID: e.companyID,
 									}))}
 								/>
 							</div>

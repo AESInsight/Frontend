@@ -12,6 +12,9 @@ import Sidebar from "../ui/sidebar";
 import { useAuth } from "@/lib/context/auth_context";
 import CompanyEmployeeTable from "../tables/CompanyEmployeeTable";
 import AddEmployeeButton from "../buttons/add_employee_button";
+import InputField from "../fields/input_field";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 interface EmployeeUpdateData {
 	jobTitle: string;
@@ -42,6 +45,7 @@ const AdminPage: React.FC = () => {
 	const queryClient = useQueryClient();
 	const [employees, setEmployees] = useState<Employee[]>([]);
 	const isDesktop = useIsDesktop();
+	const [searchTerm, setSearchTerm] = useState("");
 
 	// Fetch employees and salaries
 	const { isLoading } = useQuery({
@@ -56,14 +60,11 @@ const AdminPage: React.FC = () => {
 			const employees = await fetchCompanyEmployees(companyId);
 			const salaries: SalaryEntry[] = await fetchAllSalaries();
 
-			// Merge employees with their latest salary
 			const mergedData = employees.map((employee) => {
 				const latestSalary = salaries
-					.filter(
-						(salary: SalaryEntry) => salary.employeeID === employee.employeeID
-					)
+					.filter((salary) => salary.employeeID === employee.employeeID)
 					.sort(
-						(a: SalaryEntry, b: SalaryEntry) =>
+						(a, b) =>
 							new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
 					)[0];
 
@@ -79,7 +80,6 @@ const AdminPage: React.FC = () => {
 		enabled: !!token,
 	});
 
-	// Handle employee addition
 	const handleEmployeeAdded = async () => {
 		await queryClient.invalidateQueries({
 			queryKey: ["companyEmployees", token],
@@ -98,6 +98,7 @@ const AdminPage: React.FC = () => {
 			const newData = [...employees];
 			newData[index] = { ...newData[index], ...updatedData };
 			setEmployees(newData);
+
 			await queryClient.invalidateQueries({
 				queryKey: ["companyEmployees", token],
 			});
@@ -115,6 +116,7 @@ const AdminPage: React.FC = () => {
 			const newData = [...employees];
 			newData.splice(index, 1);
 			setEmployees(newData);
+
 			await queryClient.invalidateQueries({
 				queryKey: ["companyEmployees", token],
 			});
@@ -122,6 +124,20 @@ const AdminPage: React.FC = () => {
 			console.error("Error deleting employee:", error);
 		}
 	};
+
+	const filteredEmployees = employees.filter((emp) => {
+	const search = searchTerm.trim().toLowerCase();
+
+	if (/^\d+$/.test(search)) {
+		return String(emp.employeeID).includes(search);
+	}
+
+	return (
+		emp.jobTitle.toLowerCase().includes(search) ||
+		emp.gender.toLowerCase().includes(search)
+	);
+});
+
 
 	return (
 		<div className="h-screen w-screen flex flex-col relative">
@@ -131,9 +147,25 @@ const AdminPage: React.FC = () => {
 					{isDesktop && <Sidebar />}
 					<main className="flex-1 p-4 text-black">
 						<h1 className="text-3xl font-bold mb-4 text-center">Admin Page</h1>
-						<p className="mb-6">
+						<p className="mb-6 text-center">
 							Add / Edit / Delete Employees for your Company
 						</p>
+
+						{/* Search Bar */}
+						<div className="flex justify-center mb-6">
+							<div className="relative w-120">
+								<FontAwesomeIcon
+									icon={faSearch}
+									className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+								/>
+								<InputField
+									placeholder="Search employee data..."
+									value={searchTerm}
+									onChange={(e) => setSearchTerm(e.target.value)}
+									className="w-full h-9 pl-10 p-2 text-black bg-white border border-sky-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 mt-4"
+								/>
+							</div>
+						</div>
 
 						{!token && (
 							<div className="text-center text-red-500 mt-4">
@@ -151,14 +183,16 @@ const AdminPage: React.FC = () => {
 						)}
 
 						{isLoading && <p className="text-center">Loading...</p>}
-						{employees.length > 0 ? (
+
+
+						{filteredEmployees.length > 0 ? (
 							<div className="max-w-6xl mx-auto w-full px-4">
 								<div className="mb-4">
 									<AddEmployeeButton onEmployeeAdded={handleEmployeeAdded} />
 								</div>
 								<CompanyEmployeeTable
 									editable={true}
-									data={employees.map((emp) => ({
+									data={filteredEmployees.map((emp) => ({
 										id: emp.employeeID,
 										jobTitle: emp.jobTitle,
 										salary: emp.salary,

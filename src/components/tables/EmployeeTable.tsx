@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import EditButton from "../buttons/edit_button";
-import { fetchAllSalaries, fetchEmployees } from "../../lib/employeeAPI";
 
 export interface TableRow {
 	id?: number | string;
@@ -11,34 +10,21 @@ export interface TableRow {
 	companyID?: number;
 }
 
-interface Employee {
-	employeeID: number;
-	jobTitle: string;
-	gender: string;
-	experience: number;
-	companyID: number;
-}
-
-interface Salary {
-	employeeID: number;
-	salary: number;
-	timestamp: string;
-}
-
 interface EmployeeTableProps {
 	data?: TableRow[];
 	editable?: boolean;
 	onSave?: (index: number, updatedData: TableRow) => void;
 	onDelete?: (index: number) => void;
+	searchText?: string;
 }
 
 const EmployeeTable: React.FC<EmployeeTableProps> = ({
-	data: propData,
+	data = [],
 	editable = true,
 	onSave,
 	onDelete,
+	searchText = "",
 }) => {
-	const [data, setData] = useState<TableRow[]>([]);
 	const [sortConfig, setSortConfig] = useState<{
 		key: keyof TableRow;
 		direction: "asc" | "desc";
@@ -90,59 +76,53 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
 		}));
 	};
 
-	const sortedData = [...data].sort((a, b) => {
+	const getSortIndicator = (key: keyof TableRow) => {
+		if (sortConfig.key !== key) return "";
+		return sortConfig.direction === "asc" ? "↑" : "↓";
+	};
+
+	// Filter rows based on searchText
+	const filteredData = data.filter((row) => {
+		const search = searchText.toLowerCase();
+		return (
+			row.jobTitle.toLowerCase().includes(search) ||
+			row.gender.toLowerCase().includes(search) ||
+			String(row.id).includes(search) ||
+			String(row.salary).includes(search) ||
+			String(row.experience).includes(search)
+		);
+	});
+
+	// Sort filtered data
+	const sortedData = [...filteredData].sort((a, b) => {
 		const { key, direction } = sortConfig;
 
-		const aValue = a[key];
-		const bValue = b[key];
+		const aVal = a[key];
+		const bVal = b[key];
 
 		if (["id", "salary", "experience"].includes(key)) {
-			const aNum =
-				typeof aValue === "string" && aValue === "N/A"
-					? -Infinity
-					: Number(aValue);
-			const bNum =
-				typeof bValue === "string" && bValue === "N/A"
-					? -Infinity
-					: Number(bValue);
+			const aNum = typeof aVal === "string" && aVal === "N/A" ? -Infinity : Number(aVal);
+			const bNum = typeof bVal === "string" && bVal === "N/A" ? -Infinity : Number(bVal);
 			return direction === "asc" ? aNum - bNum : bNum - aNum;
 		}
 
-		const aStr = aValue?.toString() || "";
-		const bStr = bValue?.toString() || "";
+		const aStr = aVal?.toString() || "";
+		const bStr = bVal?.toString() || "";
 		return direction === "asc"
 			? aStr.localeCompare(bStr)
 			: bStr.localeCompare(aStr);
 	});
 
-	// Handle Save
 	const handleSave = async (index: number, updatedData: TableRow) => {
-		setData((prevData) => {
-			const newData = [...prevData];
-			newData[index] = { ...newData[index], ...updatedData };
-			return newData;
-		});
-
-		await loadData();
-
 		if (onSave) {
 			onSave(index, updatedData);
 		}
 	};
 
-	// Handle Delete
 	const handleDelete = async (index: number) => {
-		await loadData();
-
 		if (onDelete) {
 			onDelete(index);
 		}
-	};
-
-	// Render Sort Indicator
-	const getSortIndicator = (key: keyof TableRow) => {
-		if (sortConfig.key !== key) return "";
-		return sortConfig.direction === "asc" ? "↑" : "↓";
 	};
 
 	return (
@@ -208,9 +188,7 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
 									gender={row.gender}
 									experience={row.experience.toString()}
 									companyID={row.companyID || 0}
-									onSave={(updatedData) =>
-										handleSave(index, { ...row, ...updatedData })
-									}
+									onSave={(updatedData) => handleSave(index, { ...row, ...updatedData })}
 									onDelete={() => handleDelete(index)}
 								/>
 							</div>
