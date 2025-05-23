@@ -77,11 +77,10 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
 	useEffect(() => {
 		if (editable) {
 			loadData();
+		} else if (propData) {
+			setData(propData);
 		}
-	}, [editable]);
-
-	// Use propData directly when in non-editable mode
-	const displayData = editable ? data : propData || [];
+	}, [editable, propData]);
 
 	// Handle Sorting
 	const handleSort = (key: keyof TableRow) => {
@@ -91,7 +90,7 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
 		}));
 	};
 
-	const sortedData = [...displayData].sort((a, b) => {
+	const sortedData = [...data].sort((a, b) => {
 		const { key, direction } = sortConfig;
 
 		const aValue = a[key];
