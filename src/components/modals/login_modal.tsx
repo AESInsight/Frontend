@@ -174,6 +174,8 @@ const LoginModal: React.FC<LoginModalProps> = ({
 				fadeIn ? "opacity-100" : "opacity-0"
 			}`}
 			onClick={handleBackdropClick}
+			role="dialog"
+			aria-modal="true"
 		>
 			<div
 				className={`bg-white rounded-2xl shadow-xl p-6 w-80 transform transition-all duration-300 border-2 border-black ${
