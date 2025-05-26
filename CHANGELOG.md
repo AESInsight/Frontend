@@ -1,3 +1,13 @@
+# [2.0.0](https://github.com/AESInsight/Frontend/compare/v1.12.4...v2.0.0) (2025-05-26)
+
+
+* Merge pull request [#255](https://github.com/AESInsight/Frontend/issues/255) from AESInsight/fix/1231234/release-2-0 ([caa4895](https://github.com/AESInsight/Frontend/commit/caa4895331eaca7207c8ff1b799d811ee135d08f))
+
+
+### BREAKING CHANGES
+
+* Release 2.0
+
 ## [1.12.4](https://github.com/AESInsight/Frontend/compare/v1.12.3...v1.12.4) (2025-05-20)
 
 
