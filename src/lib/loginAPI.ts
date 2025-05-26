@@ -25,19 +25,22 @@ interface LoginResponse {
 	companyID: number | null;
 }
 
-export const postLogin = async (email: string, password: string): Promise<LoginResponse> => {
+export const postLogin = async (
+	email: string,
+	password: string
+): Promise<LoginResponse> => {
 	try {
-		console.log('Login request:', { email });
+		console.log("Login request:", { email });
 		const response = await apiClient.post("/Auth/login", { email, password });
-		console.log('Login response data:', response.data);
+		console.log("Login response data:", response.data);
 		return response.data;
 	} catch (error) {
-		console.error('Login error:', error);
+		console.error("Login error:", error);
 		throw error;
 	}
 };
 
-// For requesting a password reset link (only email)
+// For requesting a password reset link (only email).
 export const postReset = async (email: string) => {
 	const response = await apiClient.post("/PasswordReset/request-reset", {
 		email,
