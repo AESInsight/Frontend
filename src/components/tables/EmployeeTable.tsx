@@ -124,7 +124,7 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
 							{row.salary || "N/A"} kr
 						</div>
 						<div data-testid="employee-experience" className="p-1 md:p-4 text-gray-700">
-							{row.experience ? `${row.experience}y` : "-"}
+							{row.experience ? `${row.experience}y` : "N/A"}
 						</div>
 						<div data-testid="employee-gender" className="p-1 md:p-4 text-gray-700">
 							{row.gender || "N/A"}

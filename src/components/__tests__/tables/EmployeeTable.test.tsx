@@ -183,7 +183,7 @@ describe('EmployeeTable', () => {
     const genders = screen.getAllByTestId('employee-gender');
     expect(jobTitles[0]).toHaveTextContent('N/A');
     expect(salaries[0]).toHaveTextContent('N/A');
-    expect(experiences[0]).toHaveTextContent('-');
+    expect(experiences[0]).toHaveTextContent('N/A');
     expect(genders[0]).toHaveTextContent('N/A');
   });
-}); 
+});

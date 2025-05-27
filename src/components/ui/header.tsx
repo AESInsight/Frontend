@@ -15,6 +15,7 @@ const Header: React.FC = () => {
 					src="/aesinsight.png"
 					className="h-10 w-40 md:h-20 md:w-64 object-contain ml-1 cursor-pointer"
 					onClick={() => (window.location.href = "/")}
+					data-testid="header-logo"
 				/>
 			</div>
 
