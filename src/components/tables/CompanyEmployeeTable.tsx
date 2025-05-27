@@ -121,19 +121,20 @@ const CompanyEmployeeTable: React.FC<CompanyEmployeeTableProps> = ({
 				{data.map((employee, index) => (
 					<div
 						key={employee.id}
+						data-testid="employee-row"
 						className="grid grid-cols-[0.7fr_2fr_1.2fr_1fr_1fr_0.7fr] md:grid-cols-[1fr_2fr_1fr_1fr_1fr_0.5fr] border-b border-gray-200 hover:bg-blue-50 text-[8px] md:text-base"
 					>
-						<div className="p-3 md:p-4 text-gray-700">{employee.id}</div>
-						<div className="p-3 md:p-4 text-gray-700">
+						<div data-testid="employee-id" className="p-3 md:p-4 text-gray-700">{employee.id}</div>
+						<div data-testid="employee-job-title" className="p-3 md:p-4 text-gray-700">
 							{employee.jobTitle || "N/A"}
 						</div>
-						<div className="p-3 md:p-4 text-gray-700">
+						<div data-testid="employee-salary" className="p-3 md:p-4 text-gray-700">
 							{employee.salary ? `${employee.salary} kr.` : "N/A"}
 						</div>
-						<div className="p-3 md:p-4 text-gray-700">
+						<div data-testid="employee-experience" className="p-3 md:p-4 text-gray-700">
 							{employee.experience ? `${employee.experience} yrs` : "N/A"}
 						</div>
-						<div className="p-3 md:p-4 text-gray-700">
+						<div data-testid="employee-gender" className="p-3 md:p-4 text-gray-700">
 							{employee.gender || "N/A"}
 						</div>
 						{editable && (

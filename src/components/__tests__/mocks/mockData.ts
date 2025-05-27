@@ -1,3 +1,5 @@
+import { vi } from 'vitest'
+
 // Mock API responses
 export const mockLoginResponse = {
   token: 'mock-jwt-token',

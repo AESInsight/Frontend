@@ -156,8 +156,12 @@ describe('EditModal', () => {
     await waitFor(() => {
       expect(window.confirm).toHaveBeenCalledWith('Are you sure you want to delete this employee?')
       expect(deleteEmployee).toHaveBeenCalledWith(1)
-      expect(screen.getByTestId('status-message')).toHaveTextContent('Failed to delete employee. Please try again.')
     })
+
+    // Check for error message in status modal
+    const statusModal = screen.getByTestId('status-modal')
+    expect(statusModal).toBeInTheDocument()
+    expect(screen.getByTestId('status-message')).toHaveTextContent('Failed to delete employee. Please try again.')
   })
 
   it('does not delete when confirmation is cancelled', async () => {
