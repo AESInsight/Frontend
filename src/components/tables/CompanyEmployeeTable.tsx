@@ -85,34 +85,21 @@ const CompanyEmployeeTable: React.FC<CompanyEmployeeTableProps> = ({
 		<div className="bg-white shadow-lg rounded-xl overflow-hidden w-full">
 			{/* Table Header */}
 			<div className="grid grid-cols-[0.7fr_2fr_1.2fr_1fr_1fr_0.7fr] md:grid-cols-[1fr_2fr_1fr_1fr_1fr_0.5fr] bg-gradient-to-r from-sky-600 to-sky-500 text-white font-bold text-[8px] md:text-base">
-				<div className="p-1 md:p-4 cursor-pointer" onClick={() => handleSort("id")}>
-          ID {getSortIndicator("id")}
-        </div>
-				<div
-          className="p-1 md:p-4 cursor-pointer"
-          onClick={() => handleSort("jobTitle")}
-          >
+				<div className="p-1 md:p-4 cursor-pointer" onClick={() => handleSort("id")} data-testid="header-id">
+					ID {getSortIndicator("id")}
+				</div>
+				<div className="p-1 md:p-4 cursor-pointer" onClick={() => handleSort("jobTitle")} data-testid="header-job">
 					Job {getSortIndicator("jobTitle")}
-        </div>
-      
-				<div
-          className="p-1 md:p-4 cursor-pointer"
-          onClick={() => handleSort("salary")}
-          >
-          Sal {getSortIndicator("salary")}
-        </div>
-				<div
-          className="p-1 md:p-4 cursor-pointer"
-          onClick={() => handleSort("experience")}
-          >
-          Exp {getSortIndicator("experience")}
-        </div>
-				<div
-          className="p-1 md:p-4 cursor-pointer"
-          onClick={() => handleSort("gender")}
-          >
-          Gen {getSortIndicator("gender")}
-        </div>
+				</div>
+				<div className="p-1 md:p-4 cursor-pointer" onClick={() => handleSort("salary")} data-testid="header-salary">
+					Sal {getSortIndicator("salary")}
+				</div>
+				<div className="p-1 md:p-4 cursor-pointer" onClick={() => handleSort("experience")} data-testid="header-experience">
+					Exp {getSortIndicator("experience")}
+				</div>
+				<div className="p-1 md:p-4 cursor-pointer" onClick={() => handleSort("gender")} data-testid="header-gender">
+					Gen {getSortIndicator("gender")}
+				</div>
 				{editable && <div className="p-1 md:p-4 text-center">Edit</div>}
 			</div>
 
