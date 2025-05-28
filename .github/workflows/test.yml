@@ -17,16 +17,16 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '20'
-        cache: 'npm'
+        cache: 'bun'
     
     - name: Install dependencies
-      run: npm ci
+      run: bun ci
     
     - name: Run tests
-      run: npm run test
+      run: bun run test
     
     - name: Run tests with coverage
-      run: npm run test:coverage
+      run: bun run test:coverage
     
     - name: Upload coverage reports
       uses: actions/upload-artifact@v4
