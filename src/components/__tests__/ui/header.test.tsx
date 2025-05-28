@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import Header from '../../ui/header';
+import Header from '../../../components/ui/header';
+import type { Mock } from 'vitest';
 
 // Mock the button components
 vi.mock('../../buttons/header_buttons/login_button', () => ({
@@ -20,7 +21,7 @@ vi.mock('@/lib/context/auth_context', () => ({
 
 import { useAuth } from '@/lib/context/auth_context';
 
-const mockUseAuth = useAuth as unknown as jest.Mock;
+const mockUseAuth = useAuth as unknown as Mock;
 
 describe('Header', () => {
   beforeEach(() => {
@@ -59,12 +60,21 @@ describe('Header', () => {
     mockUseAuth.mockReturnValue({ isAuthenticated: true });
     render(<Header />);
     const logo = screen.getByTestId('header-logo');
+    
     // Mock window.location.href
     const originalLocation = window.location;
-    delete window.location;
-    window.location = { href: '' } as any;
+    Object.defineProperty(window, 'location', {
+      value: { href: '' },
+      writable: true
+    });
+    
     fireEvent.click(logo);
     expect(window.location.href).toBe('/');
-    window.location = originalLocation;
+    
+    // Restore original location
+    Object.defineProperty(window, 'location', {
+      value: originalLocation,
+      writable: true
+    });
   });
 }); 

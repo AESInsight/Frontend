@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from '../../ui/chart';
+import { ChartContainer, ChartTooltipContent } from '../../ui/chart';
 import { LineChart, Line, XAxis, YAxis } from 'recharts';
 
 // Mock ResizeObserver
@@ -58,7 +58,7 @@ describe('Chart', () => {
         <ChartTooltipContent
           active={true}
           payload={mockPayload}
-          config={mockConfig}
+          label="Jan"
         />
       </ChartContainer>
     );
