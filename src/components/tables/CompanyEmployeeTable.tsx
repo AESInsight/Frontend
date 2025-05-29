@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import EditButton from "../buttons/edit_button";
 
 interface EmployeeUpdateData {
@@ -36,10 +36,12 @@ const CompanyEmployeeTable: React.FC<CompanyEmployeeTableProps> = ({
 	}>({ key: "id", direction: "asc" });
 
 	const handleSort = (key: SortKey) => {
-		setSortConfig((prev) => ({
-			key,
-			direction: prev.key === key && prev.direction === "asc" ? "desc" : "asc",
-		}));
+		setSortConfig((prev) => {
+			const newDirection =
+				prev.key === key && prev.direction === "asc" ? "desc" : "asc";
+			console.log(`Sorting by ${key} in ${newDirection} order`); // Debugging log
+			return { key, direction: newDirection };
+		});
 	};
 
 	const getSortIndicator = (key: SortKey) => {
@@ -47,29 +49,33 @@ const CompanyEmployeeTable: React.FC<CompanyEmployeeTableProps> = ({
 		return sortConfig.direction === "asc" ? "↑" : "↓";
 	};
 
-	// Sort data based on sortConfig
-	const sortedData = [...data].sort((a, b) => {
-		const { key, direction } = sortConfig;
+	// Memoize the sorted data to ensure it updates with sortConfig
+	const sortedData = useMemo(() => {
+		console.log("Computing sortedData with sortConfig:", sortConfig); // Debugging log
+		return [...data].sort((a, b) => {
+			const { key, direction } = sortConfig;
+			const aVal = a[key];
+			const bVal = b[key];
 
-		const aVal = a[key];
-		const bVal = b[key];
+			// Handle numeric fields (id, salary, experience)
+			if (["id", "salary", "experience"].includes(key)) {
+				const aNum =
+					aVal === undefined || aVal === null ? -Infinity : Number(aVal);
+				const bNum =
+					bVal === undefined || bVal === null ? -Infinity : Number(bVal);
+				console.log(`Comparing ${key}: ${aNum} vs ${bNum} (${direction})`); // Debugging log
+				return direction === "asc" ? aNum - bNum : bNum - aNum;
+			}
 
-		// Handle numeric fields (id, salary, experience)
-		if (["id", "salary", "experience"].includes(key)) {
-			const aNum =
-				aVal === undefined || aVal === null ? -Infinity : Number(aVal);
-			const bNum =
-				bVal === undefined || bVal === null ? -Infinity : Number(bVal);
-			return direction === "asc" ? aNum - bNum : bNum - aNum;
-		}
-
-		// Handle string fields (jobTitle, gender)
-		const aStr = aVal?.toString() || "";
-		const bStr = bVal?.toString() || "";
-		return direction === "asc"
-			? aStr.localeCompare(bStr)
-			: bStr.localeCompare(aStr);
-	});
+			// Handle string fields (jobTitle, gender)
+			const aStr = aVal?.toString() || "";
+			const bStr = bVal?.toString() || "";
+			console.log(`Comparing ${key}: ${aStr} vs ${bStr} (${direction})`); // Debugging log
+			return direction === "asc"
+				? aStr.localeCompare(bStr)
+				: bStr.localeCompare(aStr);
+		});
+	}, [data, sortConfig]);
 
 	const handleSave = async (index: number, updatedData: EmployeeUpdateData) => {
 		if (onSave) {
