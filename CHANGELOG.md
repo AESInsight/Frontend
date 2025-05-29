@@ -1,3 +1,11 @@
+## [2.0.1](https://github.com/AESInsight/Frontend/compare/v2.0.0...v2.0.1) (2025-05-29)
+
+
+### Bug Fixes
+
+* build erros ([6e53068](https://github.com/AESInsight/Frontend/commit/6e5306835719b1e18139afb56d73d0ec8e6d2204))
+* fixes test workflow, by not caching dependencies ([c275f3f](https://github.com/AESInsight/Frontend/commit/c275f3f83d4d881a352960264e208a81d47dd477))
+
 # [2.0.0](https://github.com/AESInsight/Frontend/compare/v1.12.4...v2.0.0) (2025-05-26)
 
 
