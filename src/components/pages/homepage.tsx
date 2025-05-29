@@ -4,12 +4,23 @@ import Sidebar from "../ui/sidebar";
 import { ChartProvider } from "../charts/context/chart_context";
 import { GroupedCharts } from "../charts/grouped_charts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
+import {
+	faBars,
+	faEnvelope,
+	faInfoCircle,
+	faTimes,
+} from "@fortawesome/free-solid-svg-icons";
 import { useIsDesktop } from "@/lib/context/desktop_context";
+import StyledSidebarButton from "../buttons/styled_sidebar_button";
 
 const Homepage: React.FC = () => {
 	const isDesktop = useIsDesktop();
 	const [showMenu, setShowMenu] = useState(false);
+
+	const handleNavigation = (label: string) => {
+		const path = label === "About Us" ? "/about" : "/contact";
+		window.location.href = path; // Simple navigation; replace with useNavigate if using React Router
+	};
 
 	return (
 		<div className="h-screen w-screen flex flex-col relative">
@@ -34,7 +45,9 @@ const Homepage: React.FC = () => {
 					)}
 					<div className="flex-1 p-2 sm:p-4 md:p-4 text-black ml-0 md:ml-20 mr-0 md:mr-2 max-w-full">
 						<div className="mt-8 md:mt-0 max-w-xs mx-auto text-center">
-							<h1 className="text-xl md:text-3xl font-bold mb-1">Welcome to AES-Insight</h1>
+							<h1 className="text-xl md:text-3xl font-bold mb-1">
+								Welcome to AES-Insight
+							</h1>
 							<p className="mb-4 sm:mb-6 text-sm md:text-base">
 								Your trusted partner in data security and insights.
 							</p>
@@ -42,18 +55,31 @@ const Homepage: React.FC = () => {
 
 						{/* Overlay menu for About and Contact - only on mobile */}
 						{showMenu && (
-							<div className="fixed inset-0 z-40 bg-black bg-opacity-40 flex justify-end md:hidden">
-								<div className="bg-white w-2/3 max-w-xs h-full shadow-lg flex flex-col p-6">
+							<div className="fixed inset-0 z-40 bg-transparent bg-opacity-20 flex md:hidden">
+								<div className="fixed inset-0 top-16 bg-white/5 backdrop-blur-lg shadow-lg flex flex-col p-4 items-center">
 									<button
-										className="self-end mb-6 p-1 text-gray-500 hover:text-gray-700"
+										className="text-black text-xl mb-6 transition-all duration-300 hover:scale-110 self-center"
 										onClick={() => setShowMenu(false)}
 									>
-										<span className="text-xl">×</span>
+										<FontAwesomeIcon icon={faTimes} />
 									</button>
-									<nav className="flex flex-col space-y-4">
-										<a href="/about" className="text-gray-700 hover:text-sky-600 text-lg">About Us</a>
-										<a href="/contact" className="text-gray-700 hover:text-sky-600 text-lg">Contact</a>
-									</nav>
+									<div className="space-y-6 w-full justify-center items-center">
+										{[
+											{ icon: faInfoCircle, label: "About Us", path: "/about" },
+											{ icon: faEnvelope, label: "Contact", path: "/contact" },
+										].map(({ icon, label, path }) => (
+											<StyledSidebarButton
+												key={label}
+												icon={icon}
+												label={label}
+												isCollapsed={false}
+												onClick={() => {
+													handleNavigation(path);
+													setShowMenu(false);
+												}}
+											/>
+										))}
+									</div>
 								</div>
 							</div>
 						)}

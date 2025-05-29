@@ -85,55 +85,76 @@ const CompanyEmployeeTable: React.FC<CompanyEmployeeTableProps> = ({
 		<div className="bg-white shadow-lg rounded-xl overflow-hidden w-full">
 			{/* Table Header */}
 			<div className="grid grid-cols-[0.7fr_2fr_1.2fr_1fr_1fr_0.7fr] md:grid-cols-[1fr_2fr_1fr_1fr_1fr_0.5fr] bg-gradient-to-r from-sky-600 to-sky-500 text-white font-bold text-[8px] md:text-base">
-				<div className="p-1 md:p-4 cursor-pointer" onClick={() => handleSort("id")}>
-          ID {getSortIndicator("id")}
-        </div>
 				<div
-          className="p-1 md:p-4 cursor-pointer"
-          onClick={() => handleSort("jobTitle")}
-          >
-					Job {getSortIndicator("jobTitle")}
-        </div>
-      
+					className="p-1 md:p-4 cursor-pointer"
+					onClick={() => handleSort("id")}
+					data-testid="header-id"
+				>
+					ID {getSortIndicator("id")}
+				</div>
 				<div
-          className="p-1 md:p-4 cursor-pointer"
-          onClick={() => handleSort("salary")}
-          >
-          Sal {getSortIndicator("salary")}
-        </div>
+					className="p-1 md:p-4 cursor-pointer"
+					onClick={() => handleSort("jobTitle")}
+					data-testid="header-job"
+				>
+					Job Title {getSortIndicator("jobTitle")}
+				</div>
 				<div
-          className="p-1 md:p-4 cursor-pointer"
-          onClick={() => handleSort("experience")}
-          >
-          Exp {getSortIndicator("experience")}
-        </div>
+					className="p-1 md:p-4 cursor-pointer"
+					onClick={() => handleSort("salary")}
+					data-testid="header-salary"
+				>
+					Salary {getSortIndicator("salary")}
+				</div>
 				<div
-          className="p-1 md:p-4 cursor-pointer"
-          onClick={() => handleSort("gender")}
-          >
-          Gen {getSortIndicator("gender")}
-        </div>
+					className="p-1 md:p-4 cursor-pointer"
+					onClick={() => handleSort("experience")}
+					data-testid="header-experience"
+				>
+					Experience {getSortIndicator("experience")}
+				</div>
+				<div
+					className="p-1 md:p-4 cursor-pointer"
+					onClick={() => handleSort("gender")}
+					data-testid="header-gender"
+				>
+					Gender {getSortIndicator("gender")}
+				</div>
 				{editable && <div className="p-1 md:p-4 text-center">Edit</div>}
 			</div>
 
 			{/* Table Body */}
-			<div className="overflow-x-auto">
+			<div className="overflow-x-auto max-h-96">
 				{data.map((employee, index) => (
 					<div
 						key={employee.id}
 						className="grid grid-cols-[0.7fr_2fr_1.2fr_1fr_1fr_0.7fr] md:grid-cols-[1fr_2fr_1fr_1fr_1fr_0.5fr] border-b border-gray-200 hover:bg-blue-50 text-[8px] md:text-base"
 					>
-						<div className="p-3 md:p-4 text-gray-700">{employee.id}</div>
-						<div className="p-3 md:p-4 text-gray-700">
+						<div data-testid="employee-id" className="p-3 md:p-4 text-gray-700">
+							{employee.id}
+						</div>
+						<div
+							data-testid="employee-job-title"
+							className="p-3 md:p-4 text-gray-700"
+						>
 							{employee.jobTitle || "N/A"}
 						</div>
-						<div className="p-3 md:p-4 text-gray-700">
+						<div
+							data-testid="employee-salary"
+							className="p-3 md:p-4 text-gray-700"
+						>
 							{employee.salary ? `${employee.salary} kr.` : "N/A"}
 						</div>
-						<div className="p-3 md:p-4 text-gray-700">
+						<div
+							data-testid="employee-experience"
+							className="p-3 md:p-4 text-gray-700"
+						>
 							{employee.experience ? `${employee.experience} yrs` : "N/A"}
 						</div>
-						<div className="p-3 md:p-4 text-gray-700">
+						<div
+							data-testid="employee-gender"
+							className="p-3 md:p-4 text-gray-700"
+						>
 							{employee.gender || "N/A"}
 						</div>
 						{editable && (
