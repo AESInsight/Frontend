@@ -19,9 +19,12 @@ const AddEmployeeButton: React.FC<AddEmployeeButtonProps> = ({
 		<>
 			<button
 				onClick={handleOpen}
-				className="bg-sky-600 text-white px-2 md:px-4 py-1 md:py-2 rounded-lg hover:bg-sky-700 flex items-center space-x-1 md:space-x-2 text-[10px] md:text-base"
+				className="bg-sky-600 text-white px-4 py-2 rounded-lg hover:bg-sky-700 flex items-center space-x-1 md:space-x-2 text-[10px] md:text-base"
 			>
-				<FontAwesomeIcon icon={faUserPlus} className="text-[10px] md:text-base" />
+				<FontAwesomeIcon
+					icon={faUserPlus}
+					className="text-[10px] md:text-base"
+				/>
 				<span>Add Employee</span>
 			</button>
 

@@ -11,7 +11,7 @@ interface InputFieldProps {
 	suffix?: string;
 	maxLength?: number;
 	error?: string;
-	'data-testid'?: string;
+	"data-testid"?: string;
 }
 
 const InputField: React.FC<InputFieldProps> = ({
@@ -24,12 +24,14 @@ const InputField: React.FC<InputFieldProps> = ({
 	suffix,
 	maxLength,
 	error,
-	'data-testid': dataTestId,
+	"data-testid": dataTestId,
 }) => {
 	return (
-		<div className="mb-4">
+		<div className="">
 			{label && (
-				<label className="block mb-1 text-sm text-gray-700 text-left">{label}</label>
+				<label className="block mb-1 text-sm text-gray-700 text-left">
+					{label}
+				</label>
 			)}
 
 			<div className={`flex ${error ? "flex-col" : ""}`}>
