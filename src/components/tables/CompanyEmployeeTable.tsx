@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import EditButton from "../buttons/edit_button";
 
 interface EmployeeUpdateData {
@@ -30,44 +30,46 @@ const CompanyEmployeeTable: React.FC<CompanyEmployeeTableProps> = ({
 	onSave,
 	onDelete,
 }) => {
-	const [, setSortedData] = useState([...data]);
 	const [sortConfig, setSortConfig] = useState<{
 		key: SortKey;
 		direction: "asc" | "desc";
 	}>({ key: "id", direction: "asc" });
 
-	useEffect(() => {
-		handleSort(sortConfig.key, sortConfig.direction); // re-sort on data change
-	}, [data]);
-
-	const handleSort = (key: SortKey, directionOverride?: "asc" | "desc") => {
-		const direction =
-			directionOverride ||
-			(sortConfig.key === key && sortConfig.direction === "asc"
-				? "desc"
-				: "asc");
-
-		const sorted = [...data].sort((a, b) => {
-			const aVal = a[key];
-			const bVal = b[key];
-
-			if (typeof aVal === "number" && typeof bVal === "number") {
-				return direction === "asc" ? aVal - bVal : bVal - aVal;
-			}
-
-			return direction === "asc"
-				? aVal.toString().localeCompare(bVal.toString())
-				: bVal.toString().localeCompare(aVal.toString());
-		});
-
-		setSortedData(sorted);
-		setSortConfig({ key, direction });
+	const handleSort = (key: SortKey) => {
+		setSortConfig((prev) => ({
+			key,
+			direction: prev.key === key && prev.direction === "asc" ? "desc" : "asc",
+		}));
 	};
 
 	const getSortIndicator = (key: SortKey) => {
 		if (sortConfig.key !== key) return "";
 		return sortConfig.direction === "asc" ? "↑" : "↓";
 	};
+
+	// Sort data based on sortConfig
+	const sortedData = [...data].sort((a, b) => {
+		const { key, direction } = sortConfig;
+
+		const aVal = a[key];
+		const bVal = b[key];
+
+		// Handle numeric fields (id, salary, experience)
+		if (["id", "salary", "experience"].includes(key)) {
+			const aNum =
+				aVal === undefined || aVal === null ? -Infinity : Number(aVal);
+			const bNum =
+				bVal === undefined || bVal === null ? -Infinity : Number(bVal);
+			return direction === "asc" ? aNum - bNum : bNum - aNum;
+		}
+
+		// Handle string fields (jobTitle, gender)
+		const aStr = aVal?.toString() || "";
+		const bStr = bVal?.toString() || "";
+		return direction === "asc"
+			? aStr.localeCompare(bStr)
+			: bStr.localeCompare(aStr);
+	});
 
 	const handleSave = async (index: number, updatedData: EmployeeUpdateData) => {
 		if (onSave) {
@@ -125,7 +127,7 @@ const CompanyEmployeeTable: React.FC<CompanyEmployeeTableProps> = ({
 
 			{/* Table Body */}
 			<div className="overflow-x-auto max-h-96">
-				{data.map((employee, index) => (
+				{sortedData.map((employee, index) => (
 					<div
 						key={employee.id}
 						data-testid="employee-row"
