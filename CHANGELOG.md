@@ -1,3 +1,10 @@
+## [2.0.3](https://github.com/AESInsight/Frontend/compare/v2.0.2...v2.0.3) (2025-05-29)
+
+
+### Bug Fixes
+
+* gitignore should exclude coverage folder ([5fd499c](https://github.com/AESInsight/Frontend/commit/5fd499c64fb1ea09fb2e85018a5b43305f0c5809))
+
 ## [2.0.2](https://github.com/AESInsight/Frontend/compare/v2.0.1...v2.0.2) (2025-05-29)
 
 
