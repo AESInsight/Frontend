@@ -67,7 +67,7 @@ const AboutPage: React.FC = () => {
 		<div className="h-screen w-screen flex flex-col relative">
 			<div className="relative z-10 flex flex-col h-full w-full">
 				<Header />
-				<h1 className="text-3xl font-bold m-4 flex justify-center item-center overflow-y-auto pt-14">
+				<h1 className="text-3xl font-bold m-4 flex justify-center item-center pt-14">
 					Contact Us
 				</h1>
 				<div className="flex flex-1 w-full justify-center items-center">

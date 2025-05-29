@@ -1,3 +1,22 @@
+## [2.0.2](https://github.com/AESInsight/Frontend/compare/v2.0.1...v2.0.2) (2025-05-29)
+
+
+### Bug Fixes
+
+* filtering by pressing table header columns ([f852a32](https://github.com/AESInsight/Frontend/commit/f852a32008f86e112adfacd6786c83610807c6ba))
+* fixes test failure (missing testid) ([980cf57](https://github.com/AESInsight/Frontend/commit/980cf577e45a0062f402868c568d8bb2d13750dc))
+* fxies company emp table test error ([83b1507](https://github.com/AESInsight/Frontend/commit/83b150702133400e31091f4c7cec09e9b3510906))
+* remove duplicate search bar ([6dfc651](https://github.com/AESInsight/Frontend/commit/6dfc6514747923db2ac365e5059332eb2b0faf77))
+* Responsiveness and styling fixes for several components ([72de6ca](https://github.com/AESInsight/Frontend/commit/72de6ca9518dace89883d7e11dce363e370f4fcd))
+
+## [2.0.1](https://github.com/AESInsight/Frontend/compare/v2.0.0...v2.0.1) (2025-05-29)
+
+
+### Bug Fixes
+
+* build erros ([6e53068](https://github.com/AESInsight/Frontend/commit/6e5306835719b1e18139afb56d73d0ec8e6d2204))
+* fixes test workflow, by not caching dependencies ([c275f3f](https://github.com/AESInsight/Frontend/commit/c275f3f83d4d881a352960264e208a81d47dd477))
+
 # [2.0.0](https://github.com/AESInsight/Frontend/compare/v1.12.4...v2.0.0) (2025-05-26)
 
 

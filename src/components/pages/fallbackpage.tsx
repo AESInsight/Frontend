@@ -22,6 +22,7 @@ const DefaultComponent: React.FC = () => {
 							icon={faHelmetSafety}
 							size="4x"
 							className="text-yellow-400"
+							data-testid="helmet-icon"
 						/>
 						<p className="text-lg text-black">
 							The Webside is under construction
@@ -29,7 +30,12 @@ const DefaultComponent: React.FC = () => {
 					</div>
 					<div className="flex space-x-4 justify-center">
 						<div className="flex flex-col items-center w-1/2 bg-white p-4 rounded-lg shadow-md">
-							<FontAwesomeIcon icon={faEye} size="2x" className="text-black" />
+							<FontAwesomeIcon 
+                icon={faEye} 
+                size="2x" 
+                className="text-black"
+                data-testid="eye-icon"
+              />
 							<p className="mt-2 text-black text-center">
 								Clear visualization of your pay difference
 							</p>
@@ -40,6 +46,7 @@ const DefaultComponent: React.FC = () => {
 								icon={faPeopleGroup}
 								size="2x"
 								className="text-black"
+                data-testid="people-group-icon"
 							/>
 							<p className="mt-2 text-black text-center">
 								For more information about us, visit our Github

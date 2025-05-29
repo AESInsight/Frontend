@@ -43,8 +43,9 @@ const StatusModal: React.FC<StatusModalProps> = ({
 						<FontAwesomeIcon
 							icon={faSpinner}
 							className="text-sky-600 text-4xl animate-spin"
+							data-testid="spinner-icon"
 						/>
-						<p className="mt-4 text-lg font-semibold text-gray-700">
+						<p className="mt-4 text-lg font-semibold text-gray-700" data-testid="status-message">
 							Processing...
 						</p>
 					</div>
@@ -55,8 +56,9 @@ const StatusModal: React.FC<StatusModalProps> = ({
 						<FontAwesomeIcon
 							icon={faCheckCircle}
 							className="text-green-600 text-4xl"
+							data-testid="check-icon"
 						/>
-						<p className="mt-4 text-lg font-semibold text-green-600">
+						<p className="mt-4 text-lg font-semibold text-green-600" data-testid="status-message">
 							{message || "Changes saved successfully!"}
 						</p>
 					</div>
@@ -67,8 +69,9 @@ const StatusModal: React.FC<StatusModalProps> = ({
 						<FontAwesomeIcon
 							icon={faTimesCircle}
 							className="text-red-600 text-4xl"
+							data-testid="xmark-icon"
 						/>
-						<p className="mt-4 text-lg font-semibold text-red-600">
+						<p className="mt-4 text-lg font-semibold text-red-600" data-testid="status-message">
 							{message || "Failed to save changes. Please try again."}
 						</p>
 					</div>

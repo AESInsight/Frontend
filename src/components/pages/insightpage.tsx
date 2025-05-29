@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchEmployees, fetchAllSalaries } from "../../lib/employeeAPI";
 import Header from "../ui/header";
@@ -63,20 +63,19 @@ const InsightPage: React.FC = () => {
 
 	// Apply search filter
 	const filteredEmployees = mergedEmployees
-	?.filter((employee) => {
-		const search = searchTerm.trim().toLowerCase();
+		?.filter((employee) => {
+			const search = searchTerm.trim().toLowerCase();
 
-		if (/^\d+$/.test(search)) {
-			return String(employee.employeeID).includes(search);
-		}
+			if (/^\d+$/.test(search)) {
+				return String(employee.employeeID).includes(search);
+			}
 
-		return (
-			employee.jobTitle.toLowerCase().includes(search) ||
-			employee.gender.toLowerCase().includes(search)
-		);
-	})
-	.sort((a, b) => a.employeeID - b.employeeID);
-
+			return (
+				employee.jobTitle.toLowerCase().includes(search) ||
+				employee.gender.toLowerCase().includes(search)
+			);
+		})
+		.sort((a, b) => a.employeeID - b.employeeID);
 
 	return (
 		<div className="h-screen w-screen flex flex-col relative">
@@ -100,38 +99,48 @@ const InsightPage: React.FC = () => {
 							</div>
 						)}
 
-						{/* Employee Table */}
-						{filteredEmployees && filteredEmployees.length > 0 ? (
-							<div className="max-w-6xl mx-auto w-full px-4">
-								{/* Search Bar */}
-								<div className="flex justify-center mb-0 md:mb-6">
+						{/* Search Bar and Table/Message */}
+						{!isLoading && !isError && (
+							<div className="w-full max-w-[95%] md:max-w-6xl mx-auto py-4">
+								{/* Always show the search bar */}
+								<div className="flex justify-center mb-2 md:mb-6">
 									<div className="relative w-full">
 										<FontAwesomeIcon
 											icon={faSearch}
-											className="absolute left-3 top-[35%] transform -translate-y-1/2 text-gray-500 text-[10px] md:text-base"
+											className="absolute left-2 md:left-3 top-1/2 -translate-y-1/2 text-gray-500 text-[8px] md:text-base"
 										/>
 										<InputField
+											data-testid="employee-search"
 											placeholder="Search employee data..."
 											value={searchTerm}
 											onChange={(e) => setSearchTerm(e.target.value)}
-											className="w-full h-7 md:h-9 pl-6 md:pl-10 p-1.5 md:p-2 text-[10px] md:text-base text-black bg-white border border-sky-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+											className="w-full h-7 md:h-9 pl-6 md:pl-10 text-[10px] md:text-base text-black bg-white border border-sky-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
 										/>
 									</div>
 								</div>
-								<EmployeeTable
-									editable={false}
-									data={filteredEmployees.map((e) => ({
-										id: e.employeeID,
-										jobTitle: e.jobTitle,
-										salary: e.salary,
-										gender: e.gender,
-										experience: e.experience,
-										companyID: e.companyID,
-									}))}
-								/>
+
+								{/* Conditionally show the table or "No employee data found" message */}
+								{filteredEmployees && filteredEmployees.length > 0 ? (
+									<EmployeeTable
+										editable={false}
+										data={filteredEmployees.map((e) => ({
+											id: e.employeeID,
+											jobTitle: e.jobTitle,
+											salary: e.salary,
+											gender: e.gender,
+											experience: e.experience,
+											companyID: e.companyID,
+										}))}
+									/>
+								) : (
+									<p
+										className="text-center mt-4"
+										data-testid="no-employees-message"
+									>
+										No employee data found.
+									</p>
+								)}
 							</div>
-						) : (
-							!isLoading && <p className="text-center">No employees found.</p>
 						)}
 					</main>
 				</div>

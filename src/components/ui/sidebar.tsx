@@ -45,17 +45,19 @@ const Sidebar: React.FC = () => {
 			}`}
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
+			data-testid="sidebar"
 		>
 			{/* Sidebar Toggle Button */}
 			<button
 				className={`text-black text-xl mb-6 transition-all duration-300 hover:scale-110 self-center ${
 					isCollapsed ? "opacity-100" : "opacity-0"
 				}`}
+				data-testid="sidebar-toggle"
 			>
 				<FontAwesomeIcon icon={faBars} />
 			</button>
 			{/* Navigation Buttons */}
-			<div className="space-y-6 w-full">
+			<div className="space-y-6 w-full" data-testid="sidebar-nav">
 				{[
 					{ icon: faInfoCircle, label: "About" },
 					{ icon: faEnvelope, label: "Contact" },

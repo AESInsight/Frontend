@@ -24,9 +24,10 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
 					checked={checked}
 					onChange={handleChange}
 					className="h-4 w-4 rounded border border-black cursor-pointer"
+					data-testid="checkbox-input"
 					{...props}
 				/>
-				{label && <span className="text-sm">{label}</span>}
+				{label && <span className="text-sm" data-testid="checkbox-label">{label}</span>}
 			</label>
 		);
 	}
