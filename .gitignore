@@ -4,6 +4,10 @@ node_modules/
 ### Build directories ###
 build/
 
+### Coverage ###
+coverage/
+coverage/*
+
 ### Environment files ###
 .env
 .env.local
