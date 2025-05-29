@@ -128,6 +128,7 @@ const CompanyEmployeeTable: React.FC<CompanyEmployeeTableProps> = ({
 				{data.map((employee, index) => (
 					<div
 						key={employee.id}
+						data-testid="employee-row"
 						className="grid grid-cols-[0.7fr_2fr_1.2fr_1fr_1fr_0.7fr] md:grid-cols-[1fr_2fr_1fr_1fr_1fr_0.5fr] border-b border-gray-200 hover:bg-blue-50 text-[8px] md:text-base"
 					>
 						<div data-testid="employee-id" className="p-3 md:p-4 text-gray-700">

@@ -16,7 +16,8 @@ interface PasswordFieldProps {
 	className?: string;
 	error?: string;
 	showValidation?: boolean;
-	showInfoIcon?: boolean; // 👈 NY
+	showInfoIcon?: boolean;
+	'data-testid'?: string;
 }
 
 const PasswordField: React.FC<PasswordFieldProps> = ({
@@ -27,7 +28,8 @@ const PasswordField: React.FC<PasswordFieldProps> = ({
 	className = "",
 	error,
 	showValidation = false,
-	showInfoIcon = true, // 👈 NY default
+	showInfoIcon = true,
+	'data-testid': dataTestId,
 }) => {
 	const [showTooltip, setShowTooltip] = useState(false);
 	const [showPassword, setShowPassword] = useState(false);
@@ -102,6 +104,7 @@ const PasswordField: React.FC<PasswordFieldProps> = ({
 					className={`${className} pr-10 ${
 						isInvalid ? "border-red-500 focus:ring-red-200" : ""
 					}`}
+					data-testid={dataTestId}
 				/>
 				<button
 					type="button"

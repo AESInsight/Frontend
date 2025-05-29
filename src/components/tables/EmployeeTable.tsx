@@ -139,6 +139,7 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
 				{sortedData.map((row, index) => (
 					<div
 						key={row.id ?? index}
+						data-testid="employee-row"
 						className="grid grid-cols-[1fr_2fr_1fr_1fr_1fr_0.5fr] border-b border-gray-200 hover:bg-blue-50 text-[8px] md:text-base"
 					>
 						<div data-testid="employee-id" className="p-1 md:p-4 text-gray-700">

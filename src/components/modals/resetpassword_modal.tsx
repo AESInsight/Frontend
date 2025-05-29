@@ -29,6 +29,7 @@ const ResetPasswordModal: React.FC<ResetPasswordModal> = ({
     return (
         <div
             className="fixed inset-0 bg-transparent bg-opacity-30 backdrop-blur-xs flex items-center justify-center z-60"
+            data-testid="reset-modal-backdrop"
             onClick={(e) => {
                 if (e.target === e.currentTarget) onClose();
             }}

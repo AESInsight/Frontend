@@ -174,6 +174,9 @@ const LoginModal: React.FC<LoginModalProps> = ({
 				fadeIn ? "opacity-100" : "opacity-0"
 			}`}
 			onClick={handleBackdropClick}
+			role="dialog"
+			aria-modal="true"
+			data-testid="modal-backdrop"
 		>
 			<div
 				className={`bg-white rounded-2xl shadow-xl p-6 w-80 transform transition-all duration-300 border-2 border-black ${
@@ -187,12 +190,13 @@ const LoginModal: React.FC<LoginModalProps> = ({
 					}}
 					className="absolute top-3 left-3 text-gray-400 hover:text-black text-xl font-bold focus:outline-none hover:cursor-pointer"
 					aria-label="Close modal"
+					data-testid="close-button"
 				>
 					<FontAwesomeIcon icon={faTimes} size="sm" />
 				</button>
 
 				<h2 className="text-lg font-semibold mb-4 text-center">Login</h2>
-				{error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+				{error && <p className="text-red-500 text-sm mb-4" data-testid="login-error">{error}</p>}
 
 				<InputField
 					label="Email"
@@ -200,6 +204,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
 					value={username}
 					onChange={handleUsernameChange}
 					error={isSubmitted ? validationErrors.email : undefined}
+					data-testid="email-input"
 				/>
 
 				<PasswordField
@@ -207,6 +212,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
 					onChange={handlePasswordChange}
 					showValidation={false}
 					showInfoIcon={false}
+					data-testid="password-input"
 				/>
 
 				<button
@@ -217,6 +223,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
 							? "opacity-50 cursor-not-allowed"
 							: "hover:bg-sky-700 hover:underline hover:cursor-pointer"
 					}`}
+					data-testid="login-button"
 				>
 					{isLoggingIn ? "Logging in..." : "Login"}
 				</button>
@@ -225,6 +232,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
 					<button
 						onClick={() => setShowResetModal(true)}
 						className="text-xs text-sky-600 hover:underline hover:cursor-pointer"
+						data-testid="forgot-password-button"
 					>
 						Forgot Password?
 					</button>

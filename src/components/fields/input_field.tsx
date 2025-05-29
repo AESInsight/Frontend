@@ -24,6 +24,7 @@ const InputField: React.FC<InputFieldProps> = ({
 	suffix,
 	maxLength,
 	error,
+	"data-testid": dataTestId,
 }) => {
 	return (
 		<div className="">
@@ -41,6 +42,7 @@ const InputField: React.FC<InputFieldProps> = ({
 						value={value}
 						onChange={onChange}
 						maxLength={maxLength}
+						data-testid={dataTestId}
 						className={`px-3 py-2 border focus:outline-none focus:ring ${
 							error
 								? "border-red-500 focus:ring-red-200"

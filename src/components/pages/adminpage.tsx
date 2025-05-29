@@ -142,6 +142,23 @@ const AdminPage: React.FC = () => {
 							Add / Edit / Delete Employees for your Company
 						</p>
 
+						{/* Search Bar */}
+						<div className="flex justify-center mb-4 md:mb-6">
+							<div className="relative w-full max-w-[95%] md:max-w-6xl">
+								<FontAwesomeIcon
+									icon={faSearch}
+									className="absolute left-2 md:left-3 top-[45%] md:top-1/2 transform -translate-y-1/2 text-gray-500 text-[8px] md:text-base"
+								/>
+								<InputField
+									data-testid="employee-search"
+									placeholder="Search employee data..."
+									value={searchTerm}
+									onChange={(e) => setSearchTerm(e.target.value)}
+									className="w-full h-7 md:h-9 pl-5 md:pl-10 p-1.5 md:p-2 text-[10px] md:text-base text-black bg-white border border-sky-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 mt-2 md:mt-4"
+								/>
+							</div>
+						</div>
+
 						{!token && (
 							<div className="text-center text-red-500 mt-4">
 								<p>You must be logged in to view this page.</p>
