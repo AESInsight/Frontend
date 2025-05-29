@@ -90,22 +90,22 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
 		<div className="bg-white shadow-lg rounded-xl overflow-hidden w-full">
 			{/* Table Header */}
 			<div className="grid grid-cols-[1fr_2fr_1fr_1fr_1fr_0.5fr] bg-sky-600 text-white font-bold text-[8px] md:text-base">
-				<div className="p-1 md:p-4 cursor-pointer" onClick={() => handleSort("id")}>
+				<div data-testid="header-id" className="p-1 md:p-4 cursor-pointer" onClick={() => handleSort("id")}>
 					ID {getSortIndicator("id")}
 				</div>
-				<div className="p-1 md:p-4 cursor-pointer" onClick={() => handleSort("jobTitle")}>
+				<div data-testid="header-job" className="p-1 md:p-4 cursor-pointer" onClick={() => handleSort("jobTitle")}>
 					Job {getSortIndicator("jobTitle")}
 				</div>
-				<div className="p-1 md:p-4 cursor-pointer" onClick={() => handleSort("salary")}>
+				<div data-testid="header-salary" className="p-1 md:p-4 cursor-pointer" onClick={() => handleSort("salary")}>
 					Sal {getSortIndicator("salary")}
 				</div>
-				<div className="p-1 md:p-4 cursor-pointer" onClick={() => handleSort("experience")}>
+				<div data-testid="header-experience" className="p-1 md:p-4 cursor-pointer" onClick={() => handleSort("experience")}>
 					Exp {getSortIndicator("experience")}
 				</div>
-				<div className="p-1 md:p-4 cursor-pointer" onClick={() => handleSort("gender")}>
+				<div data-testid="header-gender" className="p-1 md:p-4 cursor-pointer" onClick={() => handleSort("gender")}>
 					Gen {getSortIndicator("gender")}
 				</div>
-				{editable && <div className="p-1 md:p-4 text-center">Edit</div>}
+				{editable && <div data-testid="header-edit" className="p-1 md:p-4 text-center">Edit</div>}
 			</div>
 
 			{/* Table Body */}
@@ -113,19 +113,20 @@ const EmployeeTable: React.FC<EmployeeTableProps> = ({
 				{sortedData.map((row, index) => (
 					<div
 						key={row.id ?? index}
+						data-testid="employee-row"
 						className="grid grid-cols-[1fr_2fr_1fr_1fr_1fr_0.5fr] border-b border-gray-200 hover:bg-blue-50 text-[8px] md:text-base"
 					>
-						<div className="p-1 md:p-4 text-gray-700">{row.id ?? "N/A"}</div>
-						<div className="p-1 md:p-4 text-gray-700 truncate">
+						<div data-testid="employee-id" className="p-1 md:p-4 text-gray-700">{row.id ?? "N/A"}</div>
+						<div data-testid="employee-job-title" className="p-1 md:p-4 text-gray-700 truncate">
 							{row.jobTitle || "N/A"}
 						</div>
-						<div className="p-1 md:p-4 text-gray-700">
+						<div data-testid="employee-salary" className="p-1 md:p-4 text-gray-700">
 							{row.salary || "N/A"} kr
 						</div>
-						<div className="p-1 md:p-4 text-gray-700">
-							{row.experience ? `${row.experience}y` : "-"}
+						<div data-testid="employee-experience" className="p-1 md:p-4 text-gray-700">
+							{row.experience ? `${row.experience}y` : "N/A"}
 						</div>
-						<div className="p-1 md:p-4 text-gray-700">
+						<div data-testid="employee-gender" className="p-1 md:p-4 text-gray-700">
 							{row.gender || "N/A"}
 						</div>
 						{editable && (

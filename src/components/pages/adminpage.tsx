@@ -149,6 +149,7 @@ const AdminPage: React.FC = () => {
 									className="absolute left-2 md:left-3 top-[45%] md:top-1/2 transform -translate-y-1/2 text-gray-500 text-[8px] md:text-base"
 								/>
 								<InputField
+									data-testid="employee-search"
 									placeholder="Search employee data..."
 									value={searchTerm}
 									onChange={(e) => setSearchTerm(e.target.value)}
@@ -181,6 +182,7 @@ const AdminPage: React.FC = () => {
 									<AddEmployeeButton onEmployeeAdded={handleEmployeeAdded} />
 								</div>
 								<CompanyEmployeeTable
+									data-testid="employee-table"
 									editable={true}
 									data={filteredEmployees.map((emp) => ({
 										id: emp.employeeID,
@@ -197,7 +199,7 @@ const AdminPage: React.FC = () => {
 						) : (
 							!isLoading && (
 								<>
-									<p className="text-center">No employees found.</p>
+									<p data-testid="no-employees-message" className="text-center">No employees found.</p>
 									<div className="mt-4 flex justify-center items-center">
 										<AddEmployeeButton onEmployeeAdded={handleEmployeeAdded} />
 									</div>

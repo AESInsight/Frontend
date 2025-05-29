@@ -5,17 +5,19 @@ export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
 }
 
-export const setCompanyId = (companyId: number | null) => {
-	if (companyId) {
-		localStorage.setItem('companyId', companyId.toString());
+export function setCompanyId(id: number | null) {
+	if (id !== null) {
+		localStorage.setItem('companyId', id.toString());
 	}
-};
+}
 
-export const getCompanyId = (): number | null => {
-	const companyId = localStorage.getItem('companyId');
-	return companyId ? parseInt(companyId) : null;
-};
+export function getCompanyId(): number | null {
+	const id = localStorage.getItem('companyId');
+	if (!id) return null;
+	const parsedId = parseInt(id, 10);
+	return isNaN(parsedId) ? null : parsedId;
+}
 
-export const clearCompanyId = () => {
+export function clearCompanyId() {
 	localStorage.removeItem('companyId');
-};
+}
