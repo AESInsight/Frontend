@@ -58,17 +58,30 @@ const Homepage: React.FC = () => {
 							<div className="fixed inset-0 z-40 bg-transparent bg-opacity-20 flex md:hidden">
 								<div className="fixed inset-0 top-16 bg-white/5 backdrop-blur-lg shadow-lg flex flex-col p-4 items-center">
 									<button
+										data-testid="close-menu-button"
 										className="text-black text-xl mb-6 transition-all duration-300 hover:scale-110 self-center"
 										onClick={() => setShowMenu(false)}
+										aria-label="Close menu"
 									>
 										<FontAwesomeIcon icon={faTimes} />
 									</button>
 									<div className="space-y-6 w-full justify-center items-center">
 										{[
-											{ icon: faInfoCircle, label: "About Us", path: "/about" },
-											{ icon: faEnvelope, label: "Contact", path: "/contact" },
-										].map(({ icon, label, path }) => (
+											{
+												icon: faInfoCircle,
+												label: "About Us",
+												path: "/about",
+												testId: "about-us-link",
+											},
+											{
+												icon: faEnvelope,
+												label: "Contact",
+												path: "/contact",
+												testId: "contact-link",
+											},
+										].map(({ icon, label, path, testId }) => (
 											<StyledSidebarButton
+												data-testid={testId}
 												key={label}
 												icon={icon}
 												label={label}
